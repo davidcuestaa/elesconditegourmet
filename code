@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Escondite Gourmet – Tienda de vinos y delicatessen en Ruzafa | Valencia</title>
+    <meta name="description" content="Descubre entornos gourmet, selección de vinos y productos delicatessen en El Escondite Gourmet, tu tienda especializada en el corazón de Ruzafa, Valencia.">
+    <meta name="keywords" content="cafetería gourmet Ruzafa, tienda vinos Valencia, productos gourmet Valencia, vinos cerca de mí, delicatessen Ruzafa">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-primary: #f4a442;
+            --color-wood: #8b7355;
+            --color-cream: #f5f1e8;
+            --color-beige: #e8dcc4;
+            --color-dark: #2c2c2c;
+            --color-light: #fafafa;
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            line-height: 1.6;
+            color: var(--color-dark);
+            background-color: var(--color-cream);
+        }
+
+        h1, h2, h3 {
+            font-family: 'Palatino', 'Georgia', serif;
+            font-weight: 600;
+        }
+
+        /* Sticky Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: linear-gradient(135deg, var(--color-dark) 0%, #1a1a1a 100%);
+            padding: 2rem 1.5rem;
+            z-index: 1000;
+            overflow-y: auto;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.2);
+        }
+
+        .sidebar-logo {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid var(--color-primary);
+        }
+
+        .sidebar-logo h3 {
+            color: var(--color-primary);
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-logo p {
+            color: var(--color-beige);
+            font-size: 0.85rem;
+            font-style: italic;
+        }
+
+        .sidebar nav ul {
+            list-style: none;
+        }
+
+        .sidebar nav ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar nav ul li a {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            color: var(--color-cream);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .sidebar nav ul li a:hover {
+            background-color: var(--color-primary);
+            color: var(--color-dark);
+            transform: translateX(5px);
+        }
+
+        .sidebar nav ul li a span {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        .sidebar-footer {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+        }
+
+        .social-links a {
+            display: inline-block;
+            margin: 0 8px;
+            color: var(--color-primary);
+            font-size: 1.5rem;
+            transition: transform 0.3s;
+        }
+
+        .social-links a:hover {
+            transform: scale(1.2);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+        }
+
+        section {
+            padding: 4rem 3rem;
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Hero Section */
+        #home {
+            background: linear-gradient(135deg, rgba(0,0,0,0.5), rgba(244,164,66,0.3)), 
+                        url('https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=1600') center/cover;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .hero-content h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            text-shadow: 3px 3px 10px rgba(0,0,0,0.7);
+            letter-spacing: 2px;
+        }
+
+        .hero-content p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            font-style: italic;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background-color: var(--color-primary);
+            color: var(--color-dark);
+            box-shadow: 0 5px 15px rgba(244,164,66,0.3);
+        }
+
+        .btn-primary:hover {
+            background-color: #e59535;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(244,164,66,0.5);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background-color: white;
+            color: var(--color-dark);
+            transform: translateY(-3px);
+        }
+
+        .hero-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 3rem;
+            max-width: 800px;
+        }
+
+        .hero-gallery img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            transition: transform 0.3s;
+        }
+
+        .hero-gallery img:hover {
+            transform: scale(1.05) rotate(2deg);
+        }
+
+        /* About Section */
+        #sobre-nosotros {
+            background-color: var(--color-light);
+        }
+
+        .about-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            color: var(--color-dark);
+            margin-bottom: 2rem;
+            text-align: center;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background-color: var(--color-primary);
+        }
+
+        .about-content p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .philosophy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .philosophy-item {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .philosophy-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(244,164,66,0.3);
+        }
+
+        .philosophy-item h3 {
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        /* Products Section */
+        #productos {
+            background-color: var(--color-beige);
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(244,164,66,0.3);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 250px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: var(--color-primary);
+            color: var(--color-dark);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.85rem;
+        }
+
+        .product-content {
+            padding: 1.5rem;
+        }
+
+        .product-content h3 {
+            color: var(--color-dark);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .product-content p {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .product-content ul {
+            list-style: none;
+            margin-bottom: 1rem;
+        }
+
+        .product-content ul li {
+            padding: 0.3rem 0;
+            color: #555;
+        }
+
+        .product-content ul li::before {
+            content: "🍷";
+            margin-right: 8px;
+        }
+
+        /* Gallery Section */
+        #galeria {
+            background-color: var(--color-light);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            transition: transform 0.3s;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05) rotate(1deg);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Testimonials Section */
+        #testimonios {
+            background: linear-gradient(135deg, var(--color-dark) 0%, #3a3a3a 100%);
+            color: white;
+        }
+
+        #testimonios h2 {
+            color: white;
+        }
+
+        #testimonios h2::after {
+            background-color: var(--color-primary);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .testimonial-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .testimonial-stars {
+            color: var(--color-primary);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+
+        .testimonial-author {
+            color: var(--color-beige);
+            font-weight: bold;
+        }
+
+        /* Contact Section */
+        #contacto {
+            background-color: var(--color-cream);
+        }
+
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 3rem auto 0;
+        }
+
+        .contact-info {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--color-beige);
+        }
+
+        .contact-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .contact-icon {
+            font-size: 2rem;
+            color: var(--color-primary);
+            margin-right: 1.5rem;
+            min-width: 40px;
+        }
+
+        .contact-details h3 {
+            color: var(--color-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-details p {
+            color: #666;
+            line-height: 1.8;
+        }
+
+        .contact-details a {
+            color: var(--color-primary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .contact-details a:hover {
+            color: var(--color-wood);
+        }
+
+        .map-container {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            height: 500px;
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--color-dark);
+            color: var(--color-cream);
+            text-align: center;
+            padding: 3rem 2rem;
+            margin-left: 280px;
+        }
+
+        .footer-links {
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links a {
+            color: var(--color-beige);
+            text-decoration: none;
+            margin: 0 1rem;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--color-primary);
+        }
+
+        .footer-social {
+            margin: 2rem 0;
+        }
+
+        .footer-social a {
+            color: var(--color-primary);
+            font-size: 1.8rem;
+            margin: 0 1rem;
+            transition: transform 0.3s;
+            display: inline-block;
+        }
+
+        .footer-social a:hover {
+            transform: scale(1.2);
+        }
+
+        /* Mobile Menu Toggle */
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 2000;
+            background-color: var(--color-primary);
+            border: none;
+            padding: 1rem;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: var(--color-dark);
+            margin: 5px 0;
+            transition: 0.3s;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            footer {
+                margin-left: 0;
+            }
+
+            section {
+                padding: 3rem 1.5rem;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-content p {
+                font-size: 1.2rem;
+            }
+
+            .contact-container {
+                grid-template-columns: 1fr;
+            }
+
+            h2 {
+                font-size: 2rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+
+        /* Smooth Scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Rating Stars */
+        .rating-overall {
+            text-align: center;
+            background: var(--color-primary);
+            color: var(--color-dark);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 3rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .rating-overall span {
+            color: #fff;
+            font-size: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Menu Toggle -->
+    <button class="menu-toggle" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <!-- Sticky Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <h3>🍷 El Escondite<br>Gourmet</h3>
+            <p>Ruzafa, Valencia</p>
+        </div>
+        
+        <nav>
+            <ul>
+                <li><a href="#home"><span>🏠</span> Inicio</a></li>
+                <li><a href="#sobre-nosotros"><span>📜</span> Sobre Nosotros</a></li>
+                <li><a href="#productos"><span>📦</span> Nuestros Productos</a></li>
+                <li><a href="#galeria"><span>📸</span> Galería</a></li>
+                <li><a href="#testimonios"><span>🌟</span> Testimonios</a></li>
+                <li><a href="#contacto"><span>📍</span> Contacto</a></li>
+            </ul>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="social-links">
+                <a href="https://instagram.com/elesconditegourmet" target="_blank" title="Instagram">📷</a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section id="home">
+            <div class="hero-content">
+                <h1>El Escondite Gourmet</h1>
+                <p>Tu rincón gourmet en Ruzafa — vinos, sabores y momentos únicos</p>
+                
+                <div class="cta-buttons">
+                    <a href="#productos" class="btn btn-primary">Ver Productos</a>
+                    <a href="#contacto" class="btn btn-secondary">Cómo Llegar</a>
+                    <a href="tel:+34678947545" class="btn btn-secondary">Contactar</a>
+                    <a href="https://instagram.com/elesconditegourmet" target="_blank" class="btn btn-secondary">Instagram</a>
+                </div>
+
+                <div class="hero-gallery">
+                    <img src="https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?w=400" alt="Vinos selectos">
+                    <img src="https://images.unsplash.com/photo-1452195100486-9cc805987862?w=400" alt="Quesos artesanales">
+                    <img src="https://images.unsplash.com/photo-1569529465841-dfecdab7503b?w=400" alt="Vermuts especiales">
+                    <img src="https://images.unsplash.com/photo-1559329007-40df8a9345d8?w=400" alt="Ambiente acogedor">
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="sobre-nosotros">
+            <div class="about-content">
+                <h2>Sobre Nosotros</h2>
+                <p>
+                    En <strong>El Escondite Gourmet</strong> somos amantes del buen producto, el buen vino y los momentos que se convierten en recuerdos. Desde nuestra tienda en Ruzafa / L'Eixample, Valencia, seleccionamos con cariño cada vino, vermut, queso y delicatessen para que cada elección tenga estilo y sabor propio.
+                </p>
+                <p>
+                    Creemos que lo gourmet no tiene por qué ser inalcanzable. Es accesible, cercano y, sobre todo, tiene que ver con disfrutar de la vida y compartir buenos momentos alrededor de una mesa. Por eso, cada producto que encuentras en nuestro local ha sido elegido pensando en ti: en tus gustos, en tus celebraciones, en esas ocasiones especiales que merecen algo más.
+                </p>
+
+                <div class="philosophy-grid">
+                    <div class="philosophy-item">
+                        <h3>🏆 Calidad Suprema</h3>
+                        <p>Seleccionamos cuidadosamente cada producto para garantizar la máxima calidad en cada bocado y cada copa.</p>
+                    </div>
+                    <div class="philosophy-item">
+                        <h3>🤝 Cercanía y Confianza</h3>
+                        <p>Asesoramiento experto y personalizado. Nos encanta ayudarte a encontrar el producto perfecto.</p>
+                    </div>
+                    <div class="philosophy-item">
+                        <h3>✨ Experiencias Únicas</h3>
+                        <p>Cada vino, cada queso, cada conserva es una puerta a nuevos sabores y momentos inolvidables.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Products Section -->
+        <section id="productos">
+            <h2>Nuestros Productos</h2>
+            
+            <div class="products-grid">
+                <!-- Vinos -->
+                <div class="product-card">
+                    <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=600');">
+                        <div class="product-badge">Colección Estrella</div>
+                    </div>
+                    <div class="product-content">
+                        <h3>🍷 Vinos Selectos</h3>
+                        <p>Descubre nuestra cuidada selección de vinos tintos, blancos, rosados y espumosos de las mejores denominaciones.</p>
+                        <ul>
+                            <li>Tintos con cuerpo y carácter</li>
+                            <li>Blancos frescos y aromáticos</li>
+                            <li>Rosados mediterráneos</li>
+                            <li>Cavas y champagnes especiales</li>
+                        </ul>
+                        <p><strong>Desde 8€ - Editable</strong></p>
+                    </div>
+                </div>
+
+                <!-- Vermuts -->
+                <div class="product-card">
+                    <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1569529465841-dfecdab7503b?w=600');">
+                        <div class="product-badge">Artesanal</div>
+                    </div>
+                    <div class="product-content">
+                        <h3>🥂 Vermuts & Copas</h3>
+                        <p>Vermuts artesanales y opciones perfectas para el aperitivo, con sabores únicos y auténticos.</p>
+                        <ul>
+                            <li>Vermuts de producción limitada</li>
+                            <li>Opciones para degustación</li>
+                            <li>Maridajes recomendados</li>
+                            <li>Copas premium</li>
+                        </ul>
+                        <p><strong>Desde 12€ - Editable</strong></p>
+                    </div>
+                </div>
+
+                <!-- Delicatessen -->
+                <div class="product-card">
+                    <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1452195100486-9cc805987862?w=600');">
+                        <div class="product-badge">Premium</div>
+                    </div>
+                    <div class="product-content">
+                        <h3>🧀 Delicatessen</h3>
+                        <p>Quesos especiales, conservas gourmet y acompañamientos perfectos para crear tablas memorables.</p>
+                        <ul>
+                            <li>Quesos artesanales nacionales e internacionales</li>
+                            <li>Conservas de autor</li>
+                            <li>Patés y untables</li>
+                            <li>Aceites y vinagres premium</li>
+                        </ul>
+                        <p><strong>Consultar precios - Editable</strong></p>
+                    </div>
+                </div>
+
+                <!-- Regalos -->
+                <div class="product-card">
+                    <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1549298916-c6c5f85fa167?w=600');">
+                        <div class="product-badge">Ideal Regalo</div>
+                    </div>
+                    <div class="product-content">
+                        <h3>🎁 Regalos & Experiencias</h3>
+                        <p>Sets gourmet perfectos para regalar, con opciones personalizables y experiencias de cata.</p>
+                        <ul>
+                            <li>Cestas gourmet personalizadas</li>
+                            <li>Packs temáticos</li>
+                            <li>Catas y maridajes (próximamente)</li>
+                            <li>Tarjetas regalo</li>
+                        </ul>
+                        <p><strong>Desde 25€ - Editable</strong></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery Section -->
+        <section id="galeria">
+            <h2>Galería</h2>
+            
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=500" alt="Vinos en expositor">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=500" alt="Productos gourmet">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1452195100486-9cc805987862?w=500" alt="Tabla de quesos">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1569529465841-dfecdab7503b?w=500" alt="Vermuts artesanales">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1559329007-40df8a9345d8?w=500" alt="Interior de la tienda">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?w=500" alt="Botellas selectas">
+                </div>
+            </div>
+            
+            <p style="text-align: center; margin-top: 2rem; color: #666; font-style: italic;">
+                📸 Las imágenes son ilustrativas. Puedes sustituirlas con fotos reales de tu local y productos.
+            </p>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section id="testimonios">
+            <h2>Lo Que Dicen Nuestros Clientes</h2>
+            
+            <div class="rating-overall">
+                <span>⭐⭐⭐⭐⭐</span><br>
+                Valoración media: 4.9 / 5.0
+            </div>
+
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">
+                        "Los vinos aquí son excepcionales, y el trato siempre cercano y atento. Es mi tienda de confianza en Ruzafa para cualquier ocasión especial."
+                    </p>
+                    <p class="testimonial-author">— Cliente habitual (Google)</p>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">
+                        "Perfecto para descubrir nuevas botellas y recomendaciones gourmet. El equipo te asesora genial y siempre aciertan con sus sugerencias."
+                    </p>
+                    <p class="testimonial-author">— Visitante de Ruzafa</p>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">
+                        "Ambiente tranquilo y producto de calidad, ideal para regalo también. Tienen una selección de quesos y vermuts que no encuentras en cualquier sitio."
+                    </p>
+                    <p class="testimonial-author">— Cliente de L'Eixample</p>
+                </div>
+            </div>
+
+            <p style="text-align: center; margin-top: 2rem; font-style: italic; opacity: 0.8;">
+                📝 Las reseñas exactas se actualizarán con datos reales de Google Maps.
+            </p>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contacto">
+            <h2>Contacto</h2>
+            
+            <div class="contact-container">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <div class="contact-icon">📍</div>
+                        <div class="contact-details">
+                            <h3>Dirección</h3>
+                            <p>
+                                C/ dels Centelles 22<br>
+                                46006 València, España<br>
+                                <a href="https://maps.google.com/?q=C.+dels+Centelles+22,+46006+València" target="_blank">
+                                    Ver en Google Maps →
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">☎️</div>
+                        <div class="contact-details">
+                            <h3>Teléfono</h3>
+                            <p>
+                                <a href="tel:+34678947545">+34 678 94 75 45</a><br>
+                                <em>Llámanos para consultas o pedidos</em>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">🕐</div>
+                        <div class="contact-details">
+                            <h3>Horario</h3>
+                            <p>
+                                <strong>Lunes - Viernes:</strong> 11:00 - 14:00 | 18:00 - 21:00<br>
+                                <strong>Sábado:</strong> 11:00 - 14:00<br>
+                                <strong>Domingo:</strong> Cerrado
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">📷</div>
+                        <div class="contact-details">
+                            <h3>Síguenos</h3>
+                            <p>
+                                Instagram: <a href="https://instagram.com/elesconditegourmet" target="_blank">@elesconditegourmet</a><br>
+                                <em>Descubre nuestras novedades y promociones</em>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="map-container">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3079.983805276487!2d-0.3690829!3d39.4626517!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd604f4cf0efb06f%3A0xb4a351011f7e1c63!2sCarrer%20dels%20Centelles%2C%2022%2C%20Extramurs%2C%2046006%20Val%C3%A8ncia!5e0!3m2!1sen!2ses!4v1234567890"
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-links">
+            <a href="#home">Inicio</a>
+            <a href="#">Aviso Legal</a>
+            <a href="#">Política de Privacidad</a>
+        </div>
+        
+        <div class="footer-social">
+            <a href="https://instagram.com/elesconditegourmet" target="_blank" title="Instagram">📷</a>
+            <a href="tel:+34678947545" title="Teléfono">📞</a>
+            <a href="https://maps.google.com/?q=C.+dels+Centelles+22,+46006+València" target="_blank" title="Ubicación">📍</a>
+        </div>
+        
+        <p style="margin-top: 2rem; opacity: 0.7;">
+            © 2026 El Escondite Gourmet | Ruzafa, Valencia<br>
+            Diseñado con 🧡 para amantes del buen vino y el buen sabor
+        </p>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        function toggleMenu() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('active');
+        }
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.sidebar nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    document.getElementById('sidebar').classList.remove('active');
+                }
+            });
+        });
+
+        // Smooth scroll enhancement
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add scroll animation to sections
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section').forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(20px)';
+            section.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>
