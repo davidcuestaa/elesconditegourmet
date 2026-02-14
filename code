@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>El Escondite Gourmet – Tienda de vinos y delicatessen en Ruzafa | Valencia</title>
+    <title>El Escondite Gourmet Ruzafa – Un homenaje al barrio</title>
     <meta name="description" content="Descubre entornos gourmet, selección de vinos y productos delicatessen en El Escondite Gourmet, tu tienda especializada en el corazón de Ruzafa, Valencia.">
     <meta name="keywords" content="cafetería gourmet Ruzafa, tienda vinos Valencia, productos gourmet Valencia, vinos cerca de mí, delicatessen Ruzafa">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -21,17 +22,27 @@
             --color-dark: #2c2c2c;
             --color-light: #fafafa;
         }
-
         body {
-            font-family: 'Georgia', 'Times New Roman', serif;
-            line-height: 1.6;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 300;
+            letter-spacing: 0.2px;
+            line-height: 1.7;
             color: var(--color-dark);
             background-color: var(--color-cream);
         }
 
         h1, h2, h3 {
-            font-family: 'Palatino', 'Georgia', serif;
-            font-weight: 600;
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 0.5px;
+        }
+
+        h1 { font-weight: 700; }
+        h2 { font-weight: 600; }
+        h3 { font-weight: 500; }
+        
+        p {
+            font-weight: 300;
+            color: #444;
         }
 
         /* Sticky Sidebar */
@@ -154,9 +165,10 @@
         }
 
         .hero-content p {
-            font-size: 1.5rem;
+            font-size: 1.35rem;
             margin-bottom: 2rem;
-            font-style: italic;
+            font-weight: 300;
+            letter-spacing: 0.5px;
             text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
         }
 
