@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>El Escondite Gourmet Ruzafa – Un homenaje al barrio</title>
+    <title>El Escondite Gourmet – Tienda de vinos y delicatessen en Ruzafa | Valencia</title>
     <meta name="description" content="Descubre entornos gourmet, selección de vinos y productos delicatessen en El Escondite Gourmet, tu tienda especializada en el corazón de Ruzafa, Valencia.">
     <meta name="keywords" content="cafetería gourmet Ruzafa, tienda vinos Valencia, productos gourmet Valencia, vinos cerca de mí, delicatessen Ruzafa">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -22,74 +21,97 @@
             --color-dark: #2c2c2c;
             --color-light: #fafafa;
         }
+
         body {
-            font-family: 'Poppins', sans-serif;
-            font-weight: 300;
-            letter-spacing: 0.2px;
-            line-height: 1.7;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            line-height: 1.6;
             color: var(--color-dark);
             background-color: var(--color-cream);
         }
 
         h1, h2, h3 {
-            font-family: 'Playfair Display', serif;
-            letter-spacing: 0.5px;
+            font-family: 'Palatino', 'Georgia', serif;
+            font-weight: 600;
         }
 
-        h1 { font-weight: 700; }
-        h2 { font-weight: 600; }
-        h3 { font-weight: 500; }
-        
-        p {
-            font-weight: 300;
-            color: #444;
-        }
-
-        /* Sticky Sidebar */
-        .sidebar {
+        /* Dynamic Header */
+        .header {
             position: fixed;
-            left: 0;
             top: 0;
-            width: 280px;
-            height: 100vh;
+            left: 0;
+            right: 0;
             background: linear-gradient(135deg, var(--color-dark) 0%, #1a1a1a 100%);
-            padding: 2rem 1.5rem;
             z-index: 1000;
-            overflow-y: auto;
-            box-shadow: 4px 0 20px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            transform: translateY(-100%);
+            transition: transform 0.4s ease;
         }
 
-        .sidebar-logo {
-            text-align: center;
-            margin-bottom: 2rem;
-            padding-bottom: 2rem;
-            border-bottom: 2px solid var(--color-primary);
+        .header.show {
+            transform: translateY(0);
         }
 
-        .sidebar-logo h3 {
-            color: var(--color-primary);
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .sidebar-logo p {
-            color: var(--color-beige);
-            font-size: 0.85rem;
-            font-style: italic;
-        }
-
-        .sidebar nav ul {
-            list-style: none;
-        }
-
-        .sidebar nav ul li {
-            margin-bottom: 0.5rem;
-        }
-
-        .sidebar nav ul li a {
+        .header-container {
             display: flex;
             align-items: center;
-            padding: 0.75rem 1rem;
+            justify-content: space-between;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex: 1;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .header-logo img {
+            height: 80px;
+            width: auto;
+        }
+
+        .header-brand {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header-brand h1 {
+            color: var(--color-primary);
+            font-size: 1.8rem;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .header-brand p {
+            color: var(--color-beige);
+            font-size: 0.85rem;
+            margin: 0;
+            font-weight: 300;
+        }
+
+        .header nav {
+            flex: 1;
+        }
+
+        .header nav ul {
+            list-style: none;
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-end;
+            margin: 0;
+        }
+
+        .header nav ul li a {
+            display: block;
+            padding: 0.75rem 1.25rem;
             color: var(--color-cream);
             text-decoration: none;
             border-radius: 8px;
@@ -97,39 +119,29 @@
             font-size: 0.95rem;
         }
 
-        .sidebar nav ul li a:hover {
+        .header nav ul li a:hover {
             background-color: var(--color-primary);
             color: var(--color-dark);
-            transform: translateX(5px);
         }
 
-        .sidebar nav ul li a span {
-            margin-right: 10px;
-            font-size: 1.2rem;
+        .header-social {
+            display: flex;
+            gap: 1rem;
+            margin-left: 1rem;
         }
 
-        .sidebar-footer {
-            margin-top: 2rem;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            text-align: center;
-        }
-
-        .social-links a {
-            display: inline-block;
-            margin: 0 8px;
+        .header-social a {
             color: var(--color-primary);
             font-size: 1.5rem;
             transition: transform 0.3s;
         }
 
-        .social-links a:hover {
+        .header-social a:hover {
             transform: scale(1.2);
         }
 
         /* Main Content */
         .main-content {
-            margin-left: 280px;
             min-height: 100vh;
         }
 
@@ -532,7 +544,6 @@
             color: var(--color-cream);
             text-align: center;
             padding: 3rem 2rem;
-            margin-left: 280px;
         }
 
         .footer-links {
@@ -571,7 +582,7 @@
             display: none;
             position: fixed;
             top: 20px;
-            left: 20px;
+            right: 20px;
             z-index: 2000;
             background-color: var(--color-primary);
             border: none;
@@ -590,27 +601,82 @@
             transition: 0.3s;
         }
 
+        /* Mobile Navigation */
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 280px;
+            height: 100vh;
+            background: linear-gradient(135deg, var(--color-dark) 0%, #1a1a1a 100%);
+            padding: 5rem 2rem 2rem;
+            z-index: 1500;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            box-shadow: -4px 0 20px rgba(0,0,0,0.3);
+        }
+
+        .mobile-nav.active {
+            transform: translateX(0);
+        }
+
+        .mobile-nav ul {
+            list-style: none;
+        }
+
+        .mobile-nav ul li {
+            margin-bottom: 1rem;
+        }
+
+        .mobile-nav ul li a {
+            display: block;
+            padding: 1rem;
+            color: var(--color-cream);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-nav ul li a:hover {
+            background-color: var(--color-primary);
+            color: var(--color-dark);
+        }
+
         /* Responsive Design */
-        @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
-                transition: transform 0.3s ease;
+        @media (max-width: 1024px) {
+            .header nav {
+                display: none;
             }
 
-            .sidebar.active {
-                transform: translateX(0);
+            .header-social {
+                display: none;
             }
 
             .menu-toggle {
                 display: block;
             }
 
-            .main-content {
-                margin-left: 0;
+            .mobile-nav {
+                display: block;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                padding: 1rem;
             }
 
-            footer {
-                margin-left: 0;
+            .header-logo img {
+                height: 60px;
+            }
+
+            .header-brand h1 {
+                font-size: 1.3rem;
+            }
+
+            .header-brand p {
+                font-size: 0.75rem;
             }
 
             section {
@@ -622,7 +688,7 @@
             }
 
             .hero-content p {
-                font-size: 1.2rem;
+                font-size: 1.1rem;
             }
 
             .contact-container {
@@ -674,30 +740,47 @@
         <span></span>
     </button>
 
-    <!-- Sticky Sidebar -->
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-logo">
-            <h3>🍷 El Escondite<br>Gourmet</h3>
-            <p>Ruzafa, Valencia</p>
-        </div>
-        
-        <nav>
-            <ul>
-                <li><a href="#home"><span>🏠</span> Inicio</a></li>
-                <li><a href="#sobre-nosotros"><span>📜</span> Sobre Nosotros</a></li>
-                <li><a href="#productos"><span>📦</span> Nuestros Productos</a></li>
-                <li><a href="#galeria"><span>📸</span> Galería</a></li>
-                <li><a href="#testimonios"><span>🌟</span> Testimonios</a></li>
-                <li><a href="#contacto"><span>📍</span> Contacto</a></li>
-            </ul>
-        </nav>
+    <!-- Dynamic Header -->
+    <header class="header" id="header">
+        <div class="header-container">
+            <div class="header-left">
+                <div class="header-logo">
+                    <img src="El_Escondite_RGB-Photoroom.png" alt="El Escondite Gourmet Logo">
+                    <div class="header-brand">
+                        <h1>El Escondite Gourmet</h1>
+                        <p>Ruzafa, Valencia</p>
+                    </div>
+                </div>
+            </div>
+            
+            <nav>
+                <ul>
+                    <li><a href="#home">Inicio</a></li>
+                    <li><a href="#sobre-nosotros">Sobre Nosotros</a></li>
+                    <li><a href="#productos">Productos</a></li>
+                    <li><a href="#galeria">Galería</a></li>
+                    <li><a href="#testimonios">Testimonios</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+            </nav>
 
-        <div class="sidebar-footer">
-            <div class="social-links">
+            <div class="header-social">
                 <a href="https://instagram.com/elesconditegourmet" target="_blank" title="Instagram">📷</a>
             </div>
         </div>
-    </aside>
+    </header>
+
+    <!-- Mobile Navigation -->
+    <nav class="mobile-nav" id="mobileNav">
+        <ul>
+            <li><a href="#home">Inicio</a></li>
+            <li><a href="#sobre-nosotros">Sobre Nosotros</a></li>
+            <li><a href="#productos">Productos</a></li>
+            <li><a href="#galeria">Galería</a></li>
+            <li><a href="#testimonios">Testimonios</a></li>
+            <li><a href="#contacto">Contacto</a></li>
+        </ul>
+    </nav>
 
     <!-- Main Content -->
     <main class="main-content">
@@ -988,18 +1071,38 @@
     </footer>
 
     <script>
+        // Show/hide header on scroll
+        let lastScroll = 0;
+        const header = document.getElementById('header');
+        
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 300) {
+                if (currentScroll > lastScroll) {
+                    // Scrolling down
+                    header.classList.remove('show');
+                } else {
+                    // Scrolling up
+                    header.classList.add('show');
+                }
+            } else {
+                header.classList.remove('show');
+            }
+            
+            lastScroll = currentScroll;
+        });
+
         // Mobile menu toggle
         function toggleMenu() {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('active');
+            const mobileNav = document.getElementById('mobileNav');
+            mobileNav.classList.toggle('active');
         }
 
         // Close mobile menu when clicking on a link
-        document.querySelectorAll('.sidebar nav a').forEach(link => {
+        document.querySelectorAll('.mobile-nav a').forEach(link => {
             link.addEventListener('click', () => {
-                if (window.innerWidth <= 768) {
-                    document.getElementById('sidebar').classList.remove('active');
-                }
+                document.getElementById('mobileNav').classList.remove('active');
             });
         });
 
