@@ -175,17 +175,15 @@
             color: white;
         }
 
-        .cabecera-img {
-            width: 400px;        /* más ancha */
-            max-width: 90%;      /* se adapta al móvil */
-            height: 400px;       /* altura mayor */
-            margin-bottom: 20px; /* espacio entre imagen y título */
-            border-radius: 8px;  /* bordes redondeados opcionales */
-            object-fit: cover;   /* mantiene proporción y recorta si hace falta */
-            display: block;      /* centrada */
-            margin-left: auto;
-            margin-right: auto;
+       .cabecera-img {
+            width: 100%;          /* ocupa todo el ancho disponible */
+            max-width: 600px;     /* límite en pantallas grandes */
+            height: auto;         /* mantiene proporción original */
+            display: block;
+            margin: 0 auto 20px auto;  /* centrada y espacio abajo */
+            border-radius: 0;     /* sin bordes redondeados */
         }
+
 
         .hero-logo img {
             height: 200px;
