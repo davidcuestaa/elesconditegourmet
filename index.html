@@ -164,15 +164,8 @@
         /* Sections */
         section { padding: 5rem 3rem; }
 
-        #home {
-            background-color: #f4a442; /* puedes cambiarlo al color que quieras */
-        
-            background-image: url('cabecera.jpg');
-        
-            background-position: center;
-            background-size: cover;
-            background-repeat: no-repeat;
-        
+     #home {
+            background-color: #f4a442; /* color de fondo fijo */
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -181,7 +174,19 @@
             text-align: center;
             color: white;
         }
-        
+
+        .cabecera-img {
+            width: 200px;             
+            height: auto;             
+            margin-bottom: 20px;      
+            border-radius: 8px;       
+            object-fit: cover;        
+            display: block;           
+            margin-left: auto;
+            margin-right: auto;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.4)); 
+        }
+
 
         .hero-logo img {
             height: 200px;
@@ -578,7 +583,9 @@
 
     <main>
         <section id="home">
-            <div class="hero-logo"><img src="El_Escondite_RGB.jpg" alt="El Escondite Gourmet"></div>
+            <div class="hero-logo">
+                <img src="cabecera.jpg" alt="Cabecera" class="cabecera-img">
+            </div>
             <div class="hero-content">
                 <h1>El Escondite Gourmet</h1>
                 <p>Tu rincón gourmet en Ruzafa — vinos, sabores y momentos únicos</p>
