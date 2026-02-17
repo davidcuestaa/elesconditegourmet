@@ -86,8 +86,10 @@
         .sidebar-header {
             display: flex;
             flex-direction: column;
-            align-items: center;
-            padding: 1.5rem 2rem; /* menos padding que antes */
+            align-items: center; /* centra horizontalmente */
+            justify-content: center; /* centra verticalmente si quieres */
+            padding: 2rem 2rem 1rem 2rem; /* más espacio arriba y abajo */
+            border-bottom: 2px solid var(--color-primary); /* opcional, para separar del menú */
         }
 
 
@@ -105,12 +107,14 @@
             color: var(--color-primary);
             font-size: 1.5rem;
             margin-bottom: 0.5rem;
+            text-align: center;
         }
-
+        
         .sidebar-brand p {
             color: var(--color-beige);
             font-size: 0.9rem;
             font-weight: 300;
+            text-align: center; /* centra el texto "Ruzafa, Valencia" */
         }
 
         .sidebar nav { padding: 2rem 0; }
