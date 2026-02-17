@@ -741,7 +741,7 @@
             link.addEventListener('click', toggleMenu);
         });
 
-        async function loadProducts() {
+      async function loadProducts() {
             const container = document.getElementById('productsContainer');
             if (GOOGLE_SHEETS_CSV_URL === 'YOUR_GOOGLE_SHEETS_CSV_URL_HERE') {
                 container.innerHTML = '<div class="products-error"><h3>⚠️ Configuración Pendiente</h3><p>Configura tu URL de Google Sheets</p></div>';
@@ -752,7 +752,14 @@
                 const csvText = await response.text();
                 const products = csvText.split('\n').slice(1).filter(l => l.trim()).map(line => {
                     const vals = line.split(',').map(v => v.trim());
-                    return vals.length >= 6 ? {id: vals[0], nombre: vals[1], descripcion: vals[2], precio: vals[3], imagen: vals[4], stock: parseInt(vals[5])||0} : null;
+                    return vals.length >= 6 ? {
+                        id: vals[0],
+                        nombre: vals[1],
+                        descripcion: vals[2],
+                        precio: vals[3],
+                        imagen: vals[4],
+                        stock: parseInt(vals[5])||0
+                    } : null;
                 }).filter(p => p);
                 
                 if (!products.length) {
@@ -762,6 +769,7 @@
                 
                 const grid = document.createElement('div');
                 grid.className = 'products-grid';
+                
                 products.forEach(p => {
                     let stockClass = '', stockText = `Stock: ${p.stock} unidades`;
                     if (p.stock === 0) { stockClass = 'out-stock'; stockText = 'Agotado'; }
@@ -769,16 +777,38 @@
                     
                     const card = document.createElement('div');
                     card.className = 'product-card';
-                    card.innerHTML = `<img src="${p.imagen}" alt="${p.nombre}" class="product-image" onerror="this.src='https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=400'">
-                        <div class="product-content"><h3>${p.nombre}</h3><p>${p.descripcion}</p>
-                        <div class="product-footer"><div class="product-price">${p.precio}€</div>
-                        <div class="product-stock ${stockClass}">${stockText}</div></div></div>`;
+                    
+                    card.innerHTML = `
+                        <img src="${p.imagen}" alt="${p.nombre}" class="product-image" onerror="this.src='https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=400'">
+                        <div class="product-content">
+                            <h3>${p.nombre}</h3>
+                            <p>${p.descripcion}</p>
+                            <div class="product-footer">
+                                <div class="product-price">${p.precio}€</div>
+                                <div class="product-stock ${stockClass}">${stockText}</div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // ✅ Crear botón de WhatsApp dinámico
+                    const whatsappBtn = document.createElement('a');
+                    const mensaje = `Hola, quiero comprar el producto "${p.nombre}" del catálogo de El Escondite Gourmet`;
+                    whatsappBtn.href = `https://wa.me/34678947545?text=${encodeURIComponent(mensaje)}`;
+                    whatsappBtn.target = '_blank';
+                    whatsappBtn.className = 'btn btn-primary';
+                    whatsappBtn.style.marginTop = '10px';
+                    whatsappBtn.textContent = '📱 WhatsApp';
+                    
+                    card.querySelector('.product-content').appendChild(whatsappBtn);
+                    
                     grid.appendChild(card);
                 });
+                
                 container.innerHTML = '';
                 container.appendChild(grid);
             } catch (error) {
                 container.innerHTML = '<div class="products-error"><h3>❌ Error al cargar</h3><p>Verifica tu configuración</p></div>';
+                console.error(error);
             }
         }
 
