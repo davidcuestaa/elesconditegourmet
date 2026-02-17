@@ -790,7 +790,7 @@
                         </div>
                     `;
                     
-                    // ✅ Crear botón de WhatsApp dinámico
+                    // ✅ Botón WhatsApp
                     const whatsappBtn = document.createElement('a');
                     const mensaje = `Hola, quiero comprar el producto "${p.nombre}" del catálogo de El Escondite Gourmet`;
                     whatsappBtn.href = `https://wa.me/34678947545?text=${encodeURIComponent(mensaje)}`;
@@ -811,6 +811,7 @@
                 console.error(error);
             }
         }
+
 
         document.addEventListener('DOMContentLoaded', loadProducts);
     </script>
