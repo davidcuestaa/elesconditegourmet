@@ -796,16 +796,26 @@
                     .slice(1)
                     .filter(l => l.trim())
                     .map(line => {
-                        // Separar CSV respetando comas dentro de comillas
                         const vals = line.split(',').map(v => v.trim());
-                        return vals.length >= 6 ? {
+                        if (vals.length < 6) return null;
+
+                        let fotoUrl = vals[4];
+                        // Si el enlace es de Google Drive, lo convertimos a directo
+                        if (fotoUrl.includes('drive.google.com')) {
+                            const driveId = fotoUrl.match(/\/(?:d|file\/d|open\?id=)([\w-]+)/);
+                            if (driveId && driveId[1]) {
+                                fotoUrl = `https://drive.google.com/uc?export=view&id=${driveId[1]}`;
+                            }
+                        }
+
+                        return {
                             id: vals[0],
                             nombre: vals[1],
                             descripcion: vals[2],
                             precio: vals[3],
-                            imagen: vals[4],
+                            imagen: fotoUrl,
                             stock: parseInt(vals[5]) || 0
-                        } : null;
+                        };
                     })
                     .filter(p => p);
 
