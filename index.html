@@ -791,17 +791,24 @@
             try {
                 const response = await fetch(GOOGLE_SHEETS_CSV_URL);
                 const csvText = await response.text();
-                const products = csvText.split('\n').slice(1).filter(l => l.trim()).map(line => {
-                    const vals = line.split(',').map(v => v.trim());
-                    return vals.length >= 6 ? {
-                        id: vals[0],
-                        nombre: vals[1],
-                        descripcion: vals[2],
-                        precio: vals[3],
-                        imagen: vals[4],
-                        stock: parseInt(vals[5])||0
-                    } : null;
-                }).filter(p => p);
+                const products = csvText
+                    .split('\n')
+                    .slice(1)
+                    .filter(l => l.trim())
+                    .map(line => {
+                        // Separar CSV respetando comas dentro de comillas
+                        const vals = line.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g).map(v => v.replace(/^"|"$/g, '').trim());
+                        return vals.length >= 6 ? {
+                            id: vals[0],
+                            nombre: vals[1],
+                            descripcion: vals[2],
+                            precio: vals[3],
+                            imagen: vals[4],
+                            stock: parseInt(vals[5]) || 0
+                        } : null;
+                    })
+                    .filter(p => p);
+
                 
                 if (!products.length) {
                     container.innerHTML = '<div class="products-error"><h3>📦 Sin productos</h3></div>';
