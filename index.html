@@ -797,7 +797,7 @@
                     .filter(l => l.trim())
                     .map(line => {
                         // Separar CSV respetando comas dentro de comillas
-                        const vals = line.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g).map(v => v.replace(/^"|"$/g, '').replace(/""/g, '"').trim());
+                        const vals = line.split(',').map(v => v.trim());
                         return vals.length >= 6 ? {
                             id: vals[0],
                             nombre: vals[1],
