@@ -10,7 +10,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <style>
         * {
             margin: 0;
@@ -558,6 +559,27 @@
         }
 
         html { scroll-behavior: smooth; }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn i {
+            font-size: 16px;
+        }
+        
+        .btn-whatsapp {
+            background-color: #f4a940; /* naranja */
+            color: white;
+            border: none;
+        }
+        
+        .btn-whatsapp:hover {
+            background-color: #e0932f;
+        }
+
     </style>
 </head>
 <body>
@@ -804,7 +826,8 @@
                     whatsappBtn.target = '_blank';
                     whatsappBtn.className = 'btn btn-primary';
                     whatsappBtn.style.marginTop = '10px';
-                    whatsappBtn.textContent = '📱 WhatsApp';
+                    whatsappBtn.innerHTML = '<i class="fab fa-whatsapp"></i> WhatsApp';
+                    whatsappBtn.classList.add('btn-whatsapp');
                     
                     card.querySelector('.product-content').appendChild(whatsappBtn);
                     
