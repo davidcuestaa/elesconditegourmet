@@ -446,9 +446,30 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: auto;
-            padding-top: 1rem;
-            border-top: 1px solid var(--color-beige);
+            margin-top: 14px;
+        }
+        
+        .buy-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--color-primary);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+        
+        .buy-btn i {
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .buy-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 6px 18px rgba(244,164,66,0.4);
         }
 
         .product-price {
@@ -687,27 +708,25 @@
         /* === DESCRIPCIÓN EXPANDIBLE === */
         
         .product-full-desc {
-            max-height: 0;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-            color: #444;
+            display: none;
+            margin-top: 10px;
+            font-size: 0.95rem;
+            color: #555;
+            line-height: 1.5;
         }
         
         .product-full-desc.active {
-            margin-top: 8px;
-            max-height: 300px;
+            display: block;
         }
         
         .view-more-btn {
-            background: #ff6a00;
-            color: white;
+            margin-top: 8px;
+            background: none;
             border: none;
-            padding: 6px 10px;
-            border-radius: 8px;
+            color: var(--color-primary);
+            font-weight: 600;
             cursor: pointer;
-            font-size: 0.8rem;
-            align-self: flex-start;
+            padding: 0;
         }
         
         .view-more-btn:hover {
@@ -1085,7 +1104,13 @@
                                     ${p.descripcion}
                                 </div>
                         
-                                <p class="product-price">${p.precio}€</p>
+                                <div class="product-footer">
+                                    <p class="product-price">${p.precio}€</p>
+                                
+                                    <button class="buy-btn">
+                                        <i class="fas fa-shopping-cart"></i>
+                                    </button>
+                                </div>
                             </div>
                         `;
                         grid.appendChild(card);
@@ -1123,10 +1148,12 @@
     
     document.addEventListener('DOMContentLoaded', loadProducts);
         function toggleDescription(button) {
-        const desc = button.nextElementSibling;
-        desc.classList.toggle("active");
     
-        if (desc.classList.contains("active")) {
+        const fullDesc = button.nextElementSibling;
+    
+        fullDesc.classList.toggle("active");
+    
+        if (fullDesc.classList.contains("active")) {
             button.textContent = "Ocultar descripción";
         } else {
             button.textContent = "Ver descripción";
