@@ -331,43 +331,94 @@
             max-width: 800px;
         }
 
+        /* === PRODUCT LAYOUT OPTIMIZADO === */
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2.5rem;
-            margin-top: 3rem;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
         }
-
+        
         .product-card {
             background: white;
-            border-radius: 15px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            transition: all 0.3s;
-        }
-
-        .product-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(244,164,66,0.3);
-        }
-
-        .product-image {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-        }
-
-        .product-content {
-            padding: 1.5rem;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+            transition: transform 0.18s, box-shadow 0.18s;
             display: flex;
             flex-direction: column;
         }
-
+        
+        .product-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            display: block;
+            background: linear-gradient(180deg,#f5f5f5,#eee);
+        }
+        
+        .product-content {
+            padding: 0.9rem 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            min-height: 120px;
+        }
+        
         .product-content h3 {
-            margin-bottom: 0.75rem;
-            font-size: 1.4rem;
+            font-size: 1.05rem;
+            margin: 0;
+            line-height: 1.1;
+        }
+        
+        .product-content p {
+            font-size: 0.92rem;
+            color: #444;
+            margin: 0;
+            max-height: 3.6rem;
+            overflow: hidden;
         }
 
+        /* Secciones por Tipo */
+        .products-section { margin-bottom: 2rem; }
+        
+        .products-section h3.section-title {
+            margin: 0 0 0.8rem 0;
+            font-size: 1.35rem;
+            color: var(--color-dark);
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:10px;
+        }
+        
+        .section-count {
+            font-size:0.9rem;
+            color:#666;
+            font-weight:600;
+        }
+        
+        /* Controles filtro y búsqueda */
+        .products-controls {
+            display:flex;
+            gap:8px;
+            align-items:center;
+            margin-bottom:1rem;
+            flex-wrap:wrap;
+        }
+        
+        .products-controls input[type="search"],
+        .products-controls select {
+            padding:8px 10px;
+            border-radius:8px;
+            border:1px solid #ddd;
+        }
+        
         .product-footer {
             display: flex;
             justify-content: space-between;
@@ -791,109 +842,231 @@
     </footer>
 
     <script>
-        const GOOGLE_SHEETS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQrPJ_mZxHk8o2n2TsDSzDkA3spmYcquFs7-Gi5mj2a7J_HHZ9RDWPWKJvk9wbbgCsQNhczrzjrw4r1/pub?gid=0&single=true&output=csv';
-
-        function toggleMenu() {
-            document.getElementById('sidebar').classList.toggle('active');
-            document.getElementById('overlay').classList.toggle('active');
-            document.getElementById('menuToggle').classList.toggle('active');
+    const GOOGLE_SHEETS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQrPJ_mZxHk8o2n2TsDSzDkA3spmYcquFs7-Gi5mj2a7J_HHZ9RDWPWKJvk9wbbgCsQNhczrzjrw4r1/pub?gid=0&single=true&output=csv';
+    
+    /* --- CSV parser simple pero robusto (maneja comillas, comas internas) --- */
+    function parseCSV(text) {
+        const rows = [];
+        let cur = '';
+        let inQuotes = false;
+        let row = [];
+        for (let i = 0; i < text.length; i++) {
+            const ch = text[i];
+            const next = text[i+1];
+    
+            if (ch === '"' ) {
+                if (inQuotes && next === '"') { // doble comilla -> escapado
+                    cur += '"'; i++;
+                } else {
+                    inQuotes = !inQuotes;
+                }
+                continue;
+            }
+            if (ch === ',' && !inQuotes) {
+                row.push(cur);
+                cur = '';
+                continue;
+            }
+            if ((ch === '\n' || ch === '\r') && !inQuotes) {
+                if (cur !== '' || row.length) {
+                    row.push(cur);
+                    rows.push(row);
+                }
+                row = [];
+                cur = '';
+                // skip possible \r\n
+                if (ch === '\r' && text[i+1] === '\n') i++;
+                continue;
+            }
+            cur += ch;
         }
-
-        document.querySelectorAll('.sidebar nav a').forEach(link => {
-            link.addEventListener('click', toggleMenu);
-        });
-
-      async function loadProducts() {
-            const container = document.getElementById('productsContainer');
-            if (GOOGLE_SHEETS_CSV_URL === 'YOUR_GOOGLE_SHEETS_CSV_URL_HERE') {
-                container.innerHTML = '<div class="products-error"><h3>⚠️ Configuración Pendiente</h3><p>Configura tu URL de Google Sheets</p></div>';
+        if (cur !== '' || row.length) {
+            row.push(cur);
+            rows.push(row);
+        }
+        return rows;
+    }
+    
+    /* convierte enlaces de Drive a enlace directo si detecta patrón */
+    function driveToView(url) {
+        if (!url) return url;
+        // match id from /d/ID or open?id=ID
+        const m = url.match(/\/d\/([a-zA-Z0-9_-]{10,})/) || url.match(/[?&]id=([a-zA-Z0-9_-]{10,})/);
+        if (m && m[1]) return `https://drive.google.com/uc?export=view&id=${m[1]}`;
+        return url;
+    }
+    
+    /* truncador simple */
+    function shortText(text, chars=130) {
+        if (!text) return '';
+        if (text.length <= chars) return text;
+        return text.slice(0, chars).trim() + '…';
+    }
+    
+    async function loadProducts() {
+        const container = document.getElementById('productsContainer');
+        container.innerHTML = '<div class="products-loading">Cargando productos…</div>';
+        if (!GOOGLE_SHEETS_CSV_URL || GOOGLE_SHEETS_CSV_URL.includes('YOUR_GOOGLE_SHEETS_CSV_URL_HERE')) {
+            container.innerHTML = '<div class="products-error"><h3>⚠️ Configuración Pendiente</h3><p>Configura tu URL de Google Sheets</p></div>';
+            return;
+        }
+        try {
+            const res = await fetch(GOOGLE_SHEETS_CSV_URL);
+            const csvText = await res.text();
+            const rows = parseCSV(csvText);
+            if (!rows || rows.length < 2) {
+                container.innerHTML = '<div class="products-error"><h3>📦 Sin productos</h3></div>';
                 return;
             }
-            try {
-                const response = await fetch(GOOGLE_SHEETS_CSV_URL);
-                const csvText = await response.text();
-                const products = csvText
-                    .split('\n')
-                    .slice(1)
-                    .filter(l => l.trim())
-                    .map(line => {
-                        const vals = line.split(',').map(v => v.trim());
-                        if (vals.length < 6) return null;
-
-                        let fotoUrl = vals[4];
-                        // Si el enlace es de Google Drive, lo convertimos a directo
-                        if (fotoUrl.includes('drive.google.com')) {
-                            const driveId = fotoUrl.match(/\/(?:d|file\/d|open\?id=)([\w-]+)/);
-                            if (driveId && driveId[1]) {
-                                fotoUrl = `https://drive.google.com/uc?export=view&id=${driveId[1]}`;
-                            }
-                        }
-
-                        return {
-                            id: vals[0],
-                            nombre: vals[1],
-                            descripcion: vals[2],
-                            precio: vals[3],
-                            imagen: fotoUrl,
-                            stock: parseInt(vals[5]) || 0
-                        };
-                    })
-                    .filter(p => p);
-
-                
-                if (!products.length) {
-                    container.innerHTML = '<div class="products-error"><h3>📦 Sin productos</h3></div>';
-                    return;
+            const headers = rows[0].map(h => (h||'').trim());
+            const dataRows = rows.slice(1).filter(r => r.some(c => (c||'').trim().length));
+            const products = dataRows.map(r => {
+                const obj = {};
+                for (let i=0;i<headers.length;i++){
+                    const key = (headers[i]||('col_'+i)).trim();
+                    obj[key] = r[i] !== undefined ? r[i].trim() : '';
                 }
-                
-                const grid = document.createElement('div');
-                grid.className = 'products-grid';
-                
-                products.forEach(p => {
-                    let stockClass = '', stockText = `Stock: ${p.stock} unidades`;
-                    if (p.stock === 0) { stockClass = 'out-stock'; stockText = 'Agotado'; }
-                    else if (p.stock <= 3) { stockClass = 'low-stock'; stockText = `¡Últimas ${p.stock} unidades!`; }
-                    
-                    const card = document.createElement('div');
-                    card.className = 'product-card';
-                    
-                    card.innerHTML = `
-                        <img src="${p.imagen}" alt="${p.nombre}" class="product-image" onerror="this.src='https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=400'">
-                        <div class="product-content">
-                            <h3>${p.nombre}</h3>
-                            <p>${p.descripcion}</p>
-                            <div class="product-footer">
-                                <div class="product-price">${p.precio}€</div>
-                                <div class="product-stock ${stockClass}">${stockText}</div>
-                            </div>
-                        </div>
-                    `;
-                    
-                    // ✅ Botón WhatsApp
-                    const whatsappBtn = document.createElement('a');
-                    const mensaje = `Hola, quiero comprar el producto "${p.nombre}" del catálogo de El Escondite Gourmet`;
-                    whatsappBtn.href = `https://wa.me/34678947545?text=${encodeURIComponent(mensaje)}`;
-                    whatsappBtn.target = '_blank';
-                    whatsappBtn.className = 'btn btn-primary';
-                    whatsappBtn.style.marginTop = '10px';
-                    whatsappBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Comprar';
-                    whatsappBtn.classList.add('btn-whatsapp');
-                    
-                    card.querySelector('.product-content').appendChild(whatsappBtn);
-                    
-                    grid.appendChild(card);
-                });
-                
-                container.innerHTML = '';
-                container.appendChild(grid);
-            } catch (error) {
-                container.innerHTML = '<div class="products-error"><h3>❌ Error al cargar</h3><p>Verifica tu configuración</p></div>';
-                console.error(error);
+                return obj;
+            });
+    
+            // Normalize mapping: intenta encontrar columnas clave en español
+            function findKey(candidates) {
+                for (const c of candidates) {
+                    const idx = headers.findIndex(h => h.toLowerCase().replace(/\s+/g,'') === c.toLowerCase().replace(/\s+/g,''));
+                    if (idx !== -1) return headers[idx];
+                }
+                return null;
             }
+    
+            const keyId = findKey(['id','numero','numerodecajaeimagen','numero de caja e imagen']) || headers[0];
+            const keyTipo = findKey(['tipo','category','categoria']) || headers[1] || 'Tipo';
+            const keyNombre = findKey(['nombre','name']) || 'Nombre';
+            const keyDesc = findKey(['descripcion','contenido','description']) || 'Contenido';
+            const keyPrecio = findKey(['precio','price']) || 'Precio';
+            const keyImagen = findKey(['imagen','imagen de referencia','image','imageurl','link fotos','unnamed: 8']) || headers.includes('Imagen de Referencia') ? 'Imagen de Referencia' : headers[5];
+            const keyStock = findKey(['stock','cantidad']) || null;
+    
+            // Build normalized product objects
+            const normalized = products.map((p, i) => {
+                const precioRaw = (p[keyPrecio]||'').replace('€','').replace(',', '.').trim();
+                return {
+                    id: p[keyId] || String(i+1),
+                    tipo: (p[keyTipo]||'Sin categoría').trim() || 'Sin categoría',
+                    nombre: p[keyNombre] || 'Sin nombre',
+                    descripcion: p[keyDesc] || '',
+                    precio: (precioRaw ? precioRaw : (p[keyPrecio]||'')),
+                    imagen: driveToView(p[keyImagen] || p['Unnamed: 8'] || ''),
+                    stock: keyStock ? parseInt(p[keyStock]) || 0 : null
+                };
+            });
+    
+            // Agrupar por tipo
+            const groups = {};
+            normalized.forEach(prod => {
+                const t = prod.tipo || 'Sin categoría';
+                if (!groups[t]) groups[t] = [];
+                groups[t].push(prod);
+            });
+    
+            // Controles: selector de tipo + búsqueda
+            container.innerHTML = '';
+            const controls = document.createElement('div');
+            controls.className = 'products-controls';
+            controls.innerHTML = `
+                <input type="search" id="productsSearch" placeholder="Buscar por nombre o descripción…">
+                <select id="productsFilter"><option value="__all__">Mostrar todo</option></select>
+            `;
+            container.appendChild(controls);
+    
+            const filterSelect = controls.querySelector('#productsFilter');
+            Object.keys(groups).sort().forEach(t => {
+                const opt = document.createElement('option');
+                opt.value = t;
+                opt.textContent = t + ` (${groups[t].length})`;
+                filterSelect.appendChild(opt);
+            });
+    
+            const sectionsHolder = document.createElement('div');
+            container.appendChild(sectionsHolder);
+    
+            function renderSections(filter = '__all__', q = '') {
+                sectionsHolder.innerHTML = '';
+                const query = (q||'').toLowerCase().trim();
+                const typesOrder = Object.keys(groups).sort((a,b) => a.localeCompare(b,'es'));
+                typesOrder.forEach(tipo => {
+                    if (filter !== '__all__' && tipo !== filter) return;
+                    const prods = groups[tipo].filter(p => {
+                        if (!query) return true;
+                        return (p.nombre||'').toLowerCase().includes(query) || (p.descripcion||'').toLowerCase().includes(query);
+                    });
+                    if (!prods.length) return;
+                    const section = document.createElement('div');
+                    section.className = 'products-section';
+                    const header = document.createElement('h3');
+                    header.className = 'section-title';
+                    header.innerHTML = `<span>${tipo}</span><span class="section-count">${prods.length} producto(s)</span>`;
+                    section.appendChild(header);
+    
+                    const grid = document.createElement('div');
+                    grid.className = 'products-grid';
+    
+                    prods.forEach(p => {
+                        const stockClass = (p.stock === 0 ? 'out-stock' : (p.stock && p.stock <= 3 ? 'low-stock' : ''));
+                        const stockText = (p.stock === null ? '' : (p.stock === 0 ? 'Agotado' : (p.stock <=3 ? `¡Últimas ${p.stock}!` : `Stock: ${p.stock}`)));
+                        const card = document.createElement('div');
+                        card.className = 'product-card';
+    
+                        const imgSrc = p.imagen && p.imagen.length ? p.imagen : 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=800';
+                        card.innerHTML = `
+                            <img loading="lazy" src="${imgSrc}" alt="${p.nombre}" class="product-image" onerror="this.src='https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=800'">
+                            <div class="product-content">
+                                <h3>${p.nombre}</h3>
+                                <p class="desc-short">${shortText((p.descripcion||'').replace(/\\n/g,' '), 140)}</p>
+                                <div class="product-footer">
+                                    <div>
+                                        <div class="product-price">${p.precio ? p.precio + (String(p.precio).includes('€') ? '' : '€') : ''}</div>
+                                        <div class="product-stock ${stockClass}" style="font-size:0.9rem">${stockText}</div>
+                                    </div>
+                                    <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end;">
+                                        <a class="btn btn-whatsapp" href="https://wa.me/34678947545?text=${encodeURIComponent('Hola, quiero comprar: '+p.nombre)}" target="_blank"><i class="fab fa-whatsapp"></i> Comprar</a>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        grid.appendChild(card);
+                    });
+    
+                    section.appendChild(grid);
+                    sectionsHolder.appendChild(section);
+                });
+    
+                if (!sectionsHolder.querySelector('.products-section')) {
+                    sectionsHolder.innerHTML = '<div class="products-error"><h3>🔍 No se han encontrado productos</h3></div>';
+                }
+            }
+    
+            // Inicial render
+            renderSections();
+    
+            // Event listeners filters
+            filterSelect.addEventListener('change', () => {
+                const val = filterSelect.value;
+                const q = document.getElementById('productsSearch').value;
+                renderSections(val, q);
+            });
+            document.getElementById('productsSearch').addEventListener('input', (e) => {
+                const q = e.target.value;
+                const val = filterSelect.value;
+                renderSections(val, q);
+            });
+    
+        } catch (err) {
+            console.error(err);
+            container.innerHTML = '<div class="products-error"><h3>❌ Error al cargar</h3><p>Verifica tu configuración</p></div>';
         }
-
-
-        document.addEventListener('DOMContentLoaded', loadProducts);
+    }
+    
+    document.addEventListener('DOMContentLoaded', loadProducts);
     </script>
 </body>
 </html>
