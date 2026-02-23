@@ -962,9 +962,10 @@
         if (!url) return url;
         // match id from /d/ID or open?id=ID
         const m = url.match(/\/d\/([a-zA-Z0-9_-]{10,})/) || url.match(/[?&]id=([a-zA-Z0-9_-]{10,})/);
-        if (m && m[1]) return `https://drive.google.com/uc?export=view&id=${m[1]}`;
+        if (m && m[1]) return `https://lh3.googleusercontent.com/d/${m[1]}`; // Este formato es más fiable para Web
         return url;
     }
+
     
     /* truncador simple */
     function shortText(text, chars=130) {
@@ -1081,35 +1082,52 @@
                     grid.className = 'products-grid';
     
                     prods.forEach(p => {
+                        // 1. Configuración de WhatsApp
+                        const telefono = "34678947545"; 
+                        const mensajeTexto = `Hola! Me interesa este producto: 
+                    *${p.nombre}* Precio: ${p.precio}€`;
+                        const whatsappUrl = `https://wa.me/${telefono}?text=${encodeURIComponent(mensajeTexto)}`;
+                    
+                        // 2. Lógica de Stock
                         const stockClass = (p.stock === 0 ? 'out-stock' : (p.stock && p.stock <= 3 ? 'low-stock' : ''));
-                        const stockText = (p.stock === null ? '' : (p.stock === 0 ? 'Agotado' : (p.stock <=3 ? `¡Últimas ${p.stock}!` : `Stock: ${p.stock}`)));
+                        const stockText = (p.stock === null ? '' : (p.stock === 0 ? 'Agotado' : (p.stock <= 3 ? `¡Últimas ${p.stock}!` : `Stock: ${p.stock}`)));
+                    
                         const card = document.createElement('div');
                         card.className = 'product-card';
-    
-                        const imgSrc = p.imagen && p.imagen.length ? p.imagen : 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=800';
+                    
+                        // 3. Limpieza de URL de imagen (Asegura que use el ID de Drive para visualización directa)
+                        let finalImg = 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=800';
+                        if (p.imagen && p.imagen.includes('drive.google.com')) {
+                            finalImg = driveToView(p.imagen);
+                        } else if (p.imagen) {
+                            finalImg = p.imagen;
+                        }
+                    
                         card.innerHTML = `
-                            <img src="${imgSrc}" class="product-image">
+                            <img src="${finalImg}" class="product-image" onerror="this.src='https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=800'">
                             <div class="product-content">
-                                <h3>${p.nombre}</h3>
-                        
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                    <h3>${p.nombre}</h3>
+                                    ${stockText ? `<span class="product-stock ${stockClass}" style="font-size: 0.8rem;">${stockText}</span>` : ''}
+                                </div>
+                    
                                 <p class="product-short-desc">
                                     ${shortText(p.descripcion, 120)}
                                 </p>
-                        
+                    
                                 <button class="view-more-btn" onclick="toggleDescription(this)">
                                     Ver descripción
                                 </button>
-                        
+                    
                                 <div class="product-full-desc">
-                                    ${p.descripcion}
+                                    ${p.descripcion.replace(/\n/g, '<br>')}
                                 </div>
-                        
+                    
                                 <div class="product-footer">
                                     <p class="product-price">${p.precio}€</p>
-                                
-                                    <button class="buy-btn">
-                                        <i class="fas fa-shopping-cart"></i>
-                                    </button>
+                                    <a href="${whatsappUrl}" target="_blank" class="buy-btn" style="text-decoration: none;">
+                                        <i class="fab fa-whatsapp"></i>
+                                    </a>
                                 </div>
                             </div>
                         `;
