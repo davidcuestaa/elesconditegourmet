@@ -259,21 +259,39 @@
             color: var(--color-dark);
         }
 
-        #sobre-nosotros { background-color: #fafafa; }
-
-        .about-content {
-            max-width: 900px;
-            margin: 0 auto;
+        #sobre-nosotros { 
+            background-color: #fafafa; 
+            padding: 6rem 1.5rem; /* Espacio amplio para que respire */
         }
-
+        
+        .about-content {
+            max-width: 800px; /* Ancho ideal para lectura ligera */
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .about-text-wrapper {
+            margin-top: 2rem;
+        }
+        
+        /* Única regla para el párrafo: centrada, grande y limpia */
+        .about-content p {
+            font-size: 1.2rem; 
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            text-align: center; 
+            color: #444;
+        }
+        
+        /* Título con la línea naranja debajo */
         h2 {
             font-size: 2.5rem;
-            margin-bottom: 2.5rem;
+            margin-bottom: 3rem;
             text-align: center;
             position: relative;
             padding-bottom: 1rem;
         }
-
+        
         h2::after {
             content: '';
             position: absolute;
@@ -284,40 +302,6 @@
             height: 4px;
             background-color: var(--color-primary);
             border-radius: 2px;
-        }
-
-        .about-content p {
-            font-size: 1.05rem;
-            margin-bottom: 1.5rem;
-            text-align: justify;
-            line-height: 1.8;
-        }
-
-        .philosophy-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .philosophy-item {
-            background: white;
-            padding: 2.5rem 2rem;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            text-align: center;
-            transition: all 0.3s;
-        }
-
-        .philosophy-item:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 30px rgba(244,164,66,0.3);
-        }
-
-        .philosophy-item h3 {
-            color: var(--color-primary);
-            margin-bottom: 1rem;
-            font-size: 1.3rem;
         }
 
         #productos { background-color: var(--color-beige); }
@@ -366,8 +350,9 @@
             display: flex;
             flex-direction: column;
             gap: 8px;
+            flex: 1;
         }
-        
+
         .product-content h3 {
             font-size: 1.05rem;
             margin: 0;
@@ -446,7 +431,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 14px;
+            margin-top: auto;
+            padding-top:10px;
         }
         
         .buy-btn {
@@ -847,24 +833,20 @@
             </div>
         </section>
 
-        <section id="sobre-nosotros">
+       <section id="sobre-nosotros">
             <div class="about-content">
                 <h2>Sobre Nosotros</h2>
-                <p>En <strong>El Escondite Gourmet</strong> somos amantes del buen producto, el buen vino y los momentos que se convierten en recuerdos. Desde nuestra tienda en Ruzafa / L'Eixample, Valencia, seleccionamos con cariño cada vino, vermut, queso y delicatessen para que cada elección tenga estilo y sabor propio.</p>
-                <p>Creemos que lo gourmet no tiene por qué ser inalcanzable. Es accesible, cercano y, sobre todo, tiene que ver con disfrutar de la vida y compartir buenos momentos alrededor de una mesa.</p>
-                <div class="philosophy-grid">
-                    <div class="philosophy-item">
-                        <h3>Calidad Suprema</h3>
-                        <p>Seleccionamos cuidadosamente cada producto para garantizar la máxima calidad en cada bocado y cada copa.</p>
-                    </div>
-                    <div class="philosophy-item">
-                        <h3>Cercanía y Confianza</h3>
-                        <p>Asesoramiento experto y personalizado. Nos encanta ayudarte a encontrar el producto perfecto.</p>
-                    </div>
-                    <div class="philosophy-item">
-                        <h3>Experiencias Únicas</h3>
-                        <p>Cada vino, cada queso, cada conserva es una puerta a nuevos sabores y momentos inolvidables.</p>
-                    </div>
+                <div class="about-text-wrapper">
+                    <p>
+                        En El Escondite Gourmet creemos que el buen vivir no debería tener secretos. 
+                        Ubicados en el alma de Ruzafa, somos un refugio para los amantes del buen vino 
+                        y los productos con historia.
+                    </p>
+                    <p>
+                        Aquí no solo encontrarás una selección impecable de quesos y delicatessen, sino también la 
+                        cercanía de quien conoce y ama lo que vende. Calidad sin pretensiones y experiencias 
+                        para compartir en el corazón de nuestro barrio favorito.
+                    </p>
                 </div>
             </div>
         </section>
@@ -954,6 +936,7 @@
                         <div class="contact-details">
                             <h3>Síguenos</h3>
                             <p>Instagram: <a href="https://instagram.com/elesconditegourmet" target="_blank">@elesconditegourmet</a></p>
+                            <p> TikTok: <a href="https://www.tiktok.com/@el.escondite.gourmet" target="_blank">@el.escondite.gourmet</a></p>
                         </div>
                     </div>
                 </div>
@@ -1195,8 +1178,12 @@
                     prods.forEach(p => {
                         // 1. Configuración de WhatsApp
                         const telefono = "34678947545"; 
-                        const mensajeTexto = `Buenas! Me gustaría comprar el producto: 
-                    *${p.nombre}*`;
+                        const mensajeTexto = `¡Hola! 👋 He visto este producto en vuestra web y me interesa:
+                        
+                        🛍️ *Producto:* ${p.nombre}
+                        💰 *Precio:* ${p.precio}€
+                        
+                        ¿Lo tenéis disponible? ¡Gracias!`;
                         const whatsappUrl = `https://wa.me/${telefono}?text=${encodeURIComponent(mensajeTexto)}`;
                     
                         // 2. Lógica de Stock
