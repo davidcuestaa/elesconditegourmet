@@ -707,16 +707,20 @@
 
         /* === DESCRIPCIÓN EXPANDIBLE === */
         
-        .product-full-desc {
-            display: none;
-            margin-top: 10px;
-            font-size: 0.95rem;
-            color: #555;
-            line-height: 1.5;
+       .product-full-desc {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: 
+                max-height 0.4s ease,
+                opacity 0.3s ease;
+            margin-top: 0;
         }
         
         .product-full-desc.active {
-            display: block;
+            max-height: 500px; /* suficiente para el contenido */
+            opacity: 1;
+            margin-top: 10px;
         }
         
         .view-more-btn {
@@ -1045,7 +1049,18 @@
             controls.className = 'products-controls';
             controls.innerHTML = `
                 <input type="search" id="productsSearch" placeholder="Buscar por nombre o descripción…">
-                <select id="productsFilter"><option value="__all__">Mostrar todo</option></select>
+            
+                <select id="productsFilter">
+                    <option value="__all__">Mostrar todo</option>
+                </select>
+            
+                <select id="productsSort">
+                    <option value="default">Ordenar por...</option>
+                    <option value="price-asc">Precio: menor a mayor</option>
+                    <option value="price-desc">Precio: mayor a menor</option>
+                    <option value="name-asc">Nombre A-Z</option>
+                    <option value="featured">Más destacados</option>
+                </select>
             `;
             container.appendChild(controls);
     
@@ -1060,7 +1075,7 @@
             const sectionsHolder = document.createElement('div');
             container.appendChild(sectionsHolder);
     
-            function renderSections(filter = '__all__', q = '') {
+            function renderSections(filter = '__all__', q = '', sort = 'default') {
                 sectionsHolder.innerHTML = '';
                 const query = (q||'').toLowerCase().trim();
                 const typesOrder = Object.keys(groups).sort((a,b) => a.localeCompare(b,'es'));
@@ -1070,6 +1085,22 @@
                         if (!query) return true;
                         return (p.nombre||'').toLowerCase().includes(query) || (p.descripcion||'').toLowerCase().includes(query);
                     });
+                    // ORDENACIÓN
+                    if (sort === 'price-asc') {
+                        prods.sort((a, b) => parseFloat(a.precio) - parseFloat(b.precio));
+                    }
+                    
+                    if (sort === 'price-desc') {
+                        prods.sort((a, b) => parseFloat(b.precio) - parseFloat(a.precio));
+                    }
+                    
+                    if (sort === 'name-asc') {
+                        prods.sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
+                    }
+                    
+                    if (sort === 'featured') {
+                        prods.sort((a, b) => (b.stock || 0) - (a.stock || 0));
+                    }
                     if (!prods.length) return;
                     const section = document.createElement('div');
                     section.className = 'products-section';
@@ -1111,10 +1142,6 @@
                                     ${stockText ? `<span class="product-stock ${stockClass}" style="font-size: 0.8rem;">${stockText}</span>` : ''}
                                 </div>
                     
-                                <p class="product-short-desc">
-                                    ${shortText(p.descripcion, 120)}
-                                </p>
-                    
                                 <button class="view-more-btn" onclick="toggleDescription(this)">
                                     Ver descripción
                                 </button>
@@ -1145,19 +1172,36 @@
     
             // Inicial render
             renderSections();
-    
-            // Event listeners filters
+            
+            // Referencias
+            const sortSelect = document.getElementById('productsSort');
+            const searchInput = document.getElementById('productsSearch');
+            
+            // Event listeners
             filterSelect.addEventListener('change', () => {
-                const val = filterSelect.value;
-                const q = document.getElementById('productsSearch').value;
-                renderSections(val, q);
+                renderSections(
+                    filterSelect.value,
+                    searchInput.value,
+                    sortSelect.value
+                );
             });
-            document.getElementById('productsSearch').addEventListener('input', (e) => {
-                const q = e.target.value;
-                const val = filterSelect.value;
-                renderSections(val, q);
+            
+            searchInput.addEventListener('input', () => {
+                renderSections(
+                    filterSelect.value,
+                    searchInput.value,
+                    sortSelect.value
+                );
             });
-    
+            
+            sortSelect.addEventListener('change', () => {
+                renderSections(
+                    filterSelect.value,
+                    searchInput.value,
+                    sortSelect.value
+                );
+            });
+                
         } catch (err) {
             console.error(err);
             container.innerHTML = '<div class="products-error"><h3>❌ Error al cargar</h3><p>Verifica tu configuración</p></div>';
@@ -1176,6 +1220,15 @@
         } else {
             button.textContent = "Ver descripción";
         }
+    }
+        function toggleMenu() {
+        const sidebar = document.getElementById("sidebar");
+        const overlay = document.getElementById("overlay");
+        const menuToggle = document.getElementById("menuToggle");
+    
+        sidebar.classList.toggle("active");
+        overlay.classList.toggle("active");
+        menuToggle.classList.toggle("active");
     }
     </script>
 </body>
