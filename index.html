@@ -974,24 +974,28 @@
         <p style="margin-top: 2rem; opacity: 0.7;">© 2026 El Escondite Gourmet | Ruzafa, Valencia</p>
     </footer>
 
-    const socialToggle = document.getElementById('socialToggle');
-    const socialDropdown = document.getElementById('socialDropdown');
-    
-    if (socialToggle && socialDropdown) {
-    
-        socialToggle.addEventListener('click', function(e) {
-            e.stopPropagation();
-            socialDropdown.classList.toggle('show');
-        });
-    
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('.social-wrapper')) {
-                socialDropdown.classList.remove('show');
-            }
-        });
-    
-    }
     <script>
+    // --- LÓGICA DEL BOTÓN REDES SOCIALES ---
+    document.addEventListener('DOMContentLoaded', function() {
+        const socialToggle = document.getElementById('socialToggle');
+        const socialDropdown = document.getElementById('socialDropdown');
+        
+        if (socialToggle && socialDropdown) {
+            socialToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                socialDropdown.classList.toggle('show');
+            });
+        
+            // Cerrar al hacer clic fuera
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.social-wrapper')) {
+                    socialDropdown.classList.remove('show');
+                }
+            });
+        }
+    });
+    
     const GOOGLE_SHEETS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRZIDPWr-VIJEfaITAzxJ6WZo5e1volpt21j139RN6Tmrwm1BwI4hAorJ-XL2p6ZOgnSOMaBd2E7l1E/pub?gid=0&single=true&output=csv';
     
     /* --- CSV parser simple pero robusto (maneja comillas, comas internas) --- */
