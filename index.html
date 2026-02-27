@@ -886,26 +886,72 @@
 
         <section id="testimonios">
             <h2>Lo Que Dicen Nuestros Clientes</h2>
-            <div class="rating-overall">⭐⭐⭐⭐⭐<br>Valoración: 4.9/5.0</div>
-            <div class="testimonials-grid">
-                <div class="testimonial-card">
-                    <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
-                    <p class="testimonial-text">"Los vinos aquí son excepcionales, y el trato siempre cercano y atento. Mi tienda de confianza en Ruzafa."</p>
-                    <p class="testimonial-author">— Cliente habitual</p>
-                </div>
-                <div class="testimonial-card">
-                    <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
-                    <p class="testimonial-text">"Perfecto para descubrir nuevas botellas. El equipo te asesora genial y siempre aciertan con sus sugerencias."</p>
-                    <p class="testimonial-author">— Visitante de Ruzafa</p>
-                </div>
-                <div class="testimonial-card">
-                    <div class="testimonial-stars">⭐⭐⭐⭐</div>
-                    <p class="testimonial-text">"Ambiente tranquilo y producto de calidad. Tienen una selección de quesos y vermuts única."</p>
-                    <p class="testimonial-author">— Cliente de L'Eixample</p>
-                </div>
+            <div class="rating-overall" id="ratingOverall">⭐⭐⭐⭐⭐<br>Valoración: 0/5.0</div>
+            <div class="testimonials-grid" id="testimonialsGrid">
+                <p>Cargando reseñas…</p>
             </div>
+        
+            <script>
+            async function loadReviews() {
+                const grid = document.getElementById('testimonialsGrid');
+                const ratingEl = document.getElementById('ratingOverall');
+        
+                if (!grid || !ratingEl) return;
+        
+                grid.innerHTML = '<p>Cargando reseñas…</p>';
+        
+                try {
+                    const res = await fetch('/api/review');
+                    const data = await res.json();
+        
+                    if (!data || !data.result || !data.result.reviews) {
+                        grid.innerHTML = '<p>No hay reseñas disponibles.</p>';
+                        return;
+                    }
+        
+                    const reviews = data.result.reviews;
+        
+                    // Valoración promedio
+                    let totalRating = 0;
+                    let count = 0;
+                    reviews.forEach(r => {
+                        if (r.starRating) {
+                            totalRating += r.starRating;
+                            count++;
+                        }
+                    });
+                    const avgRating = count ? (totalRating / count).toFixed(1) : '0';
+                    const stars = '⭐⭐⭐⭐⭐'.slice(0, Math.round(avgRating));
+                    ratingEl.innerHTML = `${stars}<br>Valoración: ${avgRating}/5.0`;
+        
+                    // Limpiar grid
+                    grid.innerHTML = '';
+        
+                    reviews.forEach(r => {
+                        const card = document.createElement('div');
+                        card.className = 'testimonial-card';
+        
+                        const starCount = Math.round(r.starRating || 0);
+                        const starsText = '⭐'.repeat(starCount);
+        
+                        card.innerHTML = `
+                            <div class="testimonial-stars">${starsText}</div>
+                            <p class="testimonial-text">"${r.text || 'Sin comentario'}"</p>
+                            <p class="testimonial-author">— ${r.authorName || 'Anónimo'}</p>
+                        `;
+        
+                        grid.appendChild(card);
+                    });
+        
+                } catch (err) {
+                    console.error(err);
+                    grid.innerHTML = '<p>Error cargando reseñas.</p>';
+                }
+            }
+        
+            document.addEventListener('DOMContentLoaded', loadReviews);
+            </script>
         </section>
-
         <section id="contacto">
             <h2>Contacto</h2>
             <div class="contact-container">
@@ -1178,12 +1224,7 @@
                     prods.forEach(p => {
                         // 1. Configuración de WhatsApp
                         const telefono = "34678947545"; 
-                        const mensajeTexto = `¡Hola! 👋 He visto este producto en vuestra web y me interesa:
-                        
-                        🛍️ *Producto:* ${p.nombre}
-                        💰 *Precio:* ${p.precio}€
-                        
-                        ¿Lo tenéis disponible? ¡Gracias!`;
+                        const mensajeTexto = `¡Hola! 👋 He visto este producto en vuestra web y me interesa: ${p.nombre}. ¿Lo tenéis disponible? ¡Gracias!`;
                         const whatsappUrl = `https://wa.me/${telefono}?text=${encodeURIComponent(mensajeTexto)}`;
                     
                         // 2. Lógica de Stock
@@ -1297,6 +1338,59 @@
         overlay.classList.toggle("active");
         menuToggle.classList.toggle("active");
     }
+
+    async function loadReviews() {
+        const grid = document.getElementById('testimonialsGrid');
+        const overall = document.getElementById('ratingOverall');
+    
+        try {
+            const res = await fetch('/api/review'); // tu handler de Next.js
+            const data = await res.json();
+    
+            if (!data.reviews || !data.reviews.length) {
+                grid.innerHTML = '<p>No hay reseñas disponibles.</p>';
+                return;
+            }
+    
+            // Actualizar valoración general
+            const avgRating = data.rating.toFixed(1);
+            const stars = '⭐'.repeat(Math.round(data.rating));
+            overall.innerHTML = `${stars}<br>Valoración: ${avgRating}/5.0`;
+    
+            // Limpiar grid
+            grid.innerHTML = '';
+    
+            data.reviews.forEach(r => {
+                const card = document.createElement('div');
+                card.className = 'testimonial-card';
+    
+                const starsDiv = document.createElement('div');
+                starsDiv.className = 'testimonial-stars';
+                starsDiv.textContent = '⭐'.repeat(r.rating);
+    
+                const text = document.createElement('p');
+                text.className = 'testimonial-text';
+                text.textContent = r.text;
+    
+                const author = document.createElement('p');
+                author.className = 'testimonial-author';
+                author.textContent = `— ${r.author_name}`;
+    
+                card.appendChild(starsDiv);
+                card.appendChild(text);
+                card.appendChild(author);
+    
+                grid.appendChild(card);
+            });
+    
+        } catch (err) {
+            console.error(err);
+            grid.innerHTML = '<p>Error cargando reseñas.</p>';
+        }
+    }
+    
+    // Llamar a la función cuando cargue la página
+    document.addEventListener('DOMContentLoaded', loadReviews);
     </script>
 </body>
 </html>
