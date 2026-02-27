@@ -3,9 +3,9 @@ export default async function handler(req, res) {
     // Pon aquí el Place ID de tu negocio
     const placeId = "ChIJo4jZfvxJYA0Rp0Gs3k1swMs";
 
-    // Llamada a la API clásica de Google Places
+    // Única llamada a la API con el idioma forzado a español (&language=es)
     const response = await fetch(
-      `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=name,rating,user_ratings_total,reviews&key=${process.env.GOOGLE_API_KEY}`
+      `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=name,rating,user_ratings_total,reviews&language=es&key=${process.env.GOOGLE_API_KEY}`
     );
 
     const data = await response.json();
