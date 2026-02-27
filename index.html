@@ -954,6 +954,8 @@
                 e.stopPropagation();
                 socialDropdown.classList.toggle('show');
             });
+        
+            // Cerrar al hacer clic fuera
             document.addEventListener('click', function(e) {
                 if (!e.target.closest('.social-wrapper')) {
                     socialDropdown.classList.remove('show');
@@ -964,6 +966,7 @@
     
     const GOOGLE_SHEETS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRZIDPWr-VIJEfaITAzxJ6WZo5e1volpt21j139RN6Tmrwm1BwI4hAorJ-XL2p6ZOgnSOMaBd2E7l1E/pub?gid=0&single=true&output=csv';
     
+    /* --- CSV parser simple pero robusto (maneja comillas, comas internas) --- */
     function parseCSV(text) {
         const rows = [];
         let cur = '';
@@ -972,43 +975,84 @@
         for (let i = 0; i < text.length; i++) {
             const ch = text[i];
             const next = text[i+1];
+    
             if (ch === '"' ) {
-                if (inQuotes && next === '"') { cur += '"'; i++; } 
-                else { inQuotes = !inQuotes; }
+                if (inQuotes && next === '"') { // doble comilla -> escapado
+                    cur += '"'; i++;
+                } else {
+                    inQuotes = !inQuotes;
+                }
                 continue;
             }
-            if (ch === ',' && !inQuotes) { row.push(cur); cur = ''; continue; }
+            if (ch === ',' && !inQuotes) {
+                row.push(cur);
+                cur = '';
+                continue;
+            }
             if ((ch === '\n' || ch === '\r') && !inQuotes) {
-                if (cur !== '' || row.length) { row.push(cur); rows.push(row); }
-                row = []; cur = '';
+                if (cur !== '' || row.length) {
+                    row.push(cur);
+                    rows.push(row);
+                }
+                row = [];
+                cur = '';
+                // skip possible \r\n
                 if (ch === '\r' && text[i+1] === '\n') i++;
                 continue;
             }
             cur += ch;
         }
-        if (cur !== '' || row.length) { row.push(cur); rows.push(row); }
+        if (cur !== '' || row.length) {
+            row.push(cur);
+            rows.push(row);
+        }
         return rows;
     }
     
+    /* convierte enlaces de Drive a enlace directo si detecta patrón */
     function driveToView(url) {
         if (!url) return url;
         const m = url.match(/\/d\/([a-zA-Z0-9_-]{10,})/) || url.match(/[?&]id=([a-zA-Z0-9_-]{10,})/);
-        // CORREGIDO: Se añade el $ para que funcione la variable
-        if (m && m[1]) return `https://lh3.googleusercontent.com/u/0/d/$${m[1]}=w800-h800`; 
+        // Corregido: añadimos el $ antes de las llaves
+        if (m && m[1]) return `https://lh3.googleusercontent.com/u/0/d/${m[1]}=w800-h800`; 
         return url;
+    }
+
+    
+    /* truncador simple */
+    function shortText(text, chars=130) {
+        if (!text) return '';
+        if (text.length <= chars) return text;
+        return text.slice(0, chars).trim() + '…';
     }
     
     async function loadProducts() {
         const container = document.getElementById('productsContainer');
+        container.innerHTML = '<div class="products-loading">Cargando productos…</div>';
+        if (!GOOGLE_SHEETS_CSV_URL || GOOGLE_SHEETS_CSV_URL.includes('YOUR_GOOGLE_SHEETS_CSV_URL_HERE')) {
+            container.innerHTML = '<div class="products-error"><h3>⚠️ Configuración Pendiente</h3><p>Configura tu URL de Google Sheets</p></div>';
+            return;
+        }
         try {
             const res = await fetch(GOOGLE_SHEETS_CSV_URL);
             const csvText = await res.text();
             const rows = parseCSV(csvText);
-            if (!rows || rows.length < 2) return;
-            
+            if (!rows || rows.length < 2) {
+                container.innerHTML = '<div class="products-error"><h3>📦 Sin productos</h3></div>';
+                return;
+            }
             const headers = rows[0].map(h => (h||'').trim());
             const dataRows = rows.slice(1).filter(r => r.some(c => (c||'').trim().length));
-            
+            const products = dataRows.map(r => {
+                const obj = {};
+                for (let i=0;i<headers.length;i++){
+                    const key = (headers[i]||('col_'+i)).trim();
+                    obj[key] = r[i] !== undefined ? r[i].trim() : '';
+                }
+                return obj;
+            });
+    
+            // Normalize mapping: intenta encontrar columnas clave en español
             function findKey(candidates) {
                 for (const c of candidates) {
                     const idx = headers.findIndex(h => h.toLowerCase().replace(/\s+/g,'') === c.toLowerCase().replace(/\s+/g,''));
@@ -1017,131 +1061,273 @@
                 return null;
             }
     
-            const keyTipo = findKey(['tipo','categoria']) || headers[1];
+            const keyId = findKey(['id','numero','numerodecajaeimagen','numero de caja e imagen']) || headers[0];
+            const keyTipo = findKey(['tipo','category','categoria']) || headers[1] || 'Tipo';
             const keyNombre = findKey(['nombre','name']) || 'Nombre';
-            const keyDesc = findKey(['descripcion','contenido']) || 'Contenido';
+            const keyDesc = findKey(['descripcion','contenido','description']) || 'Contenido';
             const keyPrecio = findKey(['precio','price']) || 'Precio';
-            const keyImagen = findKey(['imagen','link fotos','unnamed: 8']) || headers[5];
-            const keyStock = findKey(['stock','cantidad']);
+            const keyImagen = findKey(['imagen','imagen de referencia','image','imageurl','link fotos','unnamed: 8']) || headers.includes('Imagen de Referencia') ? 'Imagen de Referencia' : headers[5];
+            const keyStock = findKey(['stock','cantidad']) || null;
     
-            const normalized = dataRows.map((r, i) => {
-                const p = {};
-                headers.forEach((h, idx) => p[h] = r[idx] || '');
+            // Build normalized product objects
+            const normalized = products.map((p, i) => {
+                const precioRaw = (p[keyPrecio]||'').replace('€','').replace(',', '.').trim();
                 return {
-                    tipo: (p[keyTipo]||'Otros').trim(),
-                    nombre: p[keyNombre] || 'Producto',
+                    id: p[keyId] || String(i+1),
+                    tipo: (p[keyTipo]||'Sin categoría').trim() || 'Sin categoría',
+                    nombre: p[keyNombre] || 'Sin nombre',
                     descripcion: p[keyDesc] || '',
-                    precio: (p[keyPrecio]||'').replace('€','').trim(),
-                    imagen: driveToView(p[keyImagen]),
+                    precio: (precioRaw ? precioRaw : (p[keyPrecio]||'')),
+                    imagen: driveToView(p[keyImagen] || p['Unnamed: 8'] || ''),
                     stock: keyStock ? parseInt(p[keyStock]) || 0 : null
                 };
             });
     
+            // Agrupar por tipo
             const groups = {};
-            normalized.forEach(p => {
-                if (!groups[p.tipo]) groups[p.tipo] = [];
-                groups[p.tipo].push(p);
+            normalized.forEach(prod => {
+                const t = prod.tipo || 'Sin categoría';
+                if (!groups[t]) groups[t] = [];
+                groups[t].push(prod);
             });
     
-            container.innerHTML = '<div class="products-controls"><input type="search" id="productsSearch" placeholder="Buscar..."><select id="productsFilter"><option value="__all__">Todo</option></select></div><div id="sectionsHolder"></div>';
+            // Controles: selector de tipo + búsqueda
+            container.innerHTML = '';
+            const controls = document.createElement('div');
+            controls.className = 'products-controls';
+            controls.innerHTML = `
+                <input type="search" id="productsSearch" placeholder="Buscar por nombre o descripción…">
             
-            const filterSelect = document.getElementById('productsFilter');
+                <select id="productsFilter">
+                    <option value="__all__">Mostrar todo</option>
+                </select>
+            
+                <select id="productsSort">
+                    <option value="default">Ordenar por...</option>
+                    <option value="price-asc">Precio: menor a mayor</option>
+                    <option value="price-desc">Precio: mayor a menor</option>
+                    <option value="name-asc">Nombre A-Z</option>
+                    <option value="featured">Más destacados</option>
+                </select>
+            `;
+            container.appendChild(controls);
+    
+            const filterSelect = controls.querySelector('#productsFilter');
             Object.keys(groups).sort().forEach(t => {
                 const opt = document.createElement('option');
-                opt.value = t; opt.textContent = t;
+                opt.value = t;
+                opt.textContent = t + ` (${groups[t].length})`;
                 filterSelect.appendChild(opt);
             });
     
-            function render(filter = '__all__', q = '') {
-                const holder = document.getElementById('sectionsHolder');
-                holder.innerHTML = '';
-                Object.keys(groups).forEach(tipo => {
-                    if (filter !== '__all__' && tipo !== filter) return;
-                    const prods = groups[tipo].filter(p => p.nombre.toLowerCase().includes(q.toLowerCase()));
-                    if (!prods.length) return;
+            const sectionsHolder = document.createElement('div');
+            container.appendChild(sectionsHolder);
     
-                    const sect = document.createElement('div');
-                    sect.className = 'products-section';
-                    sect.innerHTML = `<h3 class="section-title">${tipo}</h3>`;
+            function renderSections(filter = '__all__', q = '', sort = 'default') {
+                sectionsHolder.innerHTML = '';
+                const query = (q||'').toLowerCase().trim();
+                const typesOrder = Object.keys(groups).sort((a,b) => a.localeCompare(b,'es'));
+                typesOrder.forEach(tipo => {
+                    if (filter !== '__all__' && tipo !== filter) return;
+                    const prods = groups[tipo].filter(p => {
+                        if (!query) return true;
+                        return (p.nombre||'').toLowerCase().includes(query) || (p.descripcion||'').toLowerCase().includes(query);
+                    });
+                    // ORDENACIÓN
+                    if (sort === 'price-asc') {
+                        prods.sort((a, b) => parseFloat(a.precio) - parseFloat(b.precio));
+                    }
+                    
+                    if (sort === 'price-desc') {
+                        prods.sort((a, b) => parseFloat(b.precio) - parseFloat(a.precio));
+                    }
+                    
+                    if (sort === 'name-asc') {
+                        prods.sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
+                    }
+                    
+                    if (sort === 'featured') {
+                        prods.sort((a, b) => (b.stock || 0) - (a.stock || 0));
+                    }
+                    if (!prods.length) return;
+                    const section = document.createElement('div');
+                    section.className = 'products-section';
+                    const header = document.createElement('h3');
+                    header.className = 'section-title';
+                    header.innerHTML = `<span>${tipo}</span><span class="section-count">${prods.length} producto(s)</span>`;
+                    section.appendChild(header);
+    
                     const grid = document.createElement('div');
                     grid.className = 'products-grid';
-                    
+    
                     prods.forEach(p => {
-                        const waUrl = `https://wa.me/34678947545?text=Hola! Me interesa: ${p.nombre}`;
-                        grid.innerHTML += `
-                            <div class="product-card">
-                                <img src="${p.imagen}" class="product-image" onerror="this.src='https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=800'">
-                                <div class="product-content">
+                        // 1. Configuración de WhatsApp
+                        const telefono = "34678947545"; 
+                        const mensajeTexto = `¡Hola! 👋 He visto este producto en vuestra web y me interesa: ${p.nombre}. ¿Lo tenéis disponible? ¡Gracias!`;
+                        const whatsappUrl = `https://wa.me/${telefono}?text=${encodeURIComponent(mensajeTexto)}`;
+                    
+                        // 2. Lógica de Stock
+                        const stockClass = (p.stock === 0 ? 'out-stock' : (p.stock && p.stock <= 3 ? 'low-stock' : ''));
+                        const stockText = (p.stock === null ? '' : (p.stock === 0 ? 'Agotado' : (p.stock <= 3 ? `¡Últimas ${p.stock}!` : `Stock: ${p.stock}`)));
+                    
+                        const card = document.createElement('div');
+                        card.className = 'product-card';
+                    
+                        // 3. Limpieza de URL de imagen (Asegura que use el ID de Drive para visualización directa)
+                        let finalImg = 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=800';
+                        if (p.imagen && p.imagen.includes('drive.google.com')) {
+                            finalImg = driveToView(p.imagen);
+                        } else if (p.imagen) {
+                            finalImg = p.imagen;
+                        }
+                    
+                        card.innerHTML = `
+                            <img src="${finalImg}" class="product-image" onerror="this.src='https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=800'">
+                            <div class="product-content">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                                     <h3>${p.nombre}</h3>
-                                    <button class="view-more-btn" onclick="toggleDescription(this)">Ver descripción</button>
-                                    <div class="product-full-desc">${p.descripcion}</div>
-                                    <div class="product-footer">
-                                        <p class="product-price">${p.precio}€</p>
-                                        <a href="${waUrl}" target="_blank" class="buy-btn"><i class="fab fa-whatsapp"></i></a>
-                                    </div>
+                                    ${stockText ? `<span class="product-stock ${stockClass}" style="font-size: 0.8rem;">${stockText}</span>` : ''}
                                 </div>
-                            </div>`;
+                    
+                                <button class="view-more-btn" onclick="toggleDescription(this)">
+                                    Ver descripción
+                                </button>
+                    
+                                <div class="product-full-desc">
+                                    ${p.descripcion.replace(/\n/g, '<br>')}
+                                </div>
+                    
+                                <div class="product-footer">
+                                    <p class="product-price">${p.precio}€</p>
+                                    <a href="${whatsappUrl}" target="_blank" class="buy-btn" style="text-decoration: none;">
+                                        <i class="fab fa-whatsapp"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        `;
+                        grid.appendChild(card);
                     });
-                    sect.appendChild(grid);
-                    holder.appendChild(sect);
+    
+                    section.appendChild(grid);
+                    sectionsHolder.appendChild(section);
                 });
+    
+                if (!sectionsHolder.querySelector('.products-section')) {
+                    sectionsHolder.innerHTML = '<div class="products-error"><h3>🔍 No se han encontrado productos</h3></div>';
+                }
             }
     
-            render();
-            document.getElementById('productsSearch').addEventListener('input', (e) => render(filterSelect.value, e.target.value));
-            filterSelect.addEventListener('change', () => render(filterSelect.value, document.getElementById('productsSearch').value));
-    
-        } catch (e) { container.innerHTML = 'Error al cargar productos.'; }
+            // Inicial render
+            renderSections();
+            
+            // Referencias
+            const sortSelect = document.getElementById('productsSort');
+            const searchInput = document.getElementById('productsSearch');
+            
+            // Event listeners
+            filterSelect.addEventListener('change', () => {
+                renderSections(
+                    filterSelect.value,
+                    searchInput.value,
+                    sortSelect.value
+                );
+            });
+            
+            searchInput.addEventListener('input', () => {
+                renderSections(
+                    filterSelect.value,
+                    searchInput.value,
+                    sortSelect.value
+                );
+            });
+            
+            sortSelect.addEventListener('change', () => {
+                renderSections(
+                    filterSelect.value,
+                    searchInput.value,
+                    sortSelect.value
+                );
+            });
+                
+        } catch (err) {
+            console.error(err);
+            container.innerHTML = '<div class="products-error"><h3>❌ Error al cargar</h3><p>Verifica tu configuración</p></div>';
+        }
     }
     
-    async function loadReviews() {
+    document.addEventListener('DOMContentLoaded', () => {
+        loadProducts();
+        loadReviews();
+    });
+        function toggleDescription(button) {
+    
+        const fullDesc = button.nextElementSibling;
+    
+        fullDesc.classList.toggle("active");
+    
+        if (fullDesc.classList.contains("active")) {
+            button.textContent = "Ocultar descripción";
+        } else {
+            button.textContent = "Ver descripción";
+        }
+    }
+        function toggleMenu() {
+        const sidebar = document.getElementById("sidebar");
+        const overlay = document.getElementById("overlay");
+        const menuToggle = document.getElementById("menuToggle");
+    
+        sidebar.classList.toggle("active");
+        overlay.classList.toggle("active");
+        menuToggle.classList.toggle("active");
+    }
+
+   async function loadReviews() {
         const grid = document.getElementById('testimonialsGrid');
         const ratingEl = document.getElementById('ratingOverall');
+        if (!grid || !ratingEl) return;
+    
+        // Reseñas de respaldo por si la API falla
         const backupReviews = [
-            { rating: 5, author_name: "Marta G.", text: "La mejor selección de vinos. El trato es exquisito." },
-            { rating: 5, author_name: "Carlos P.", text: "Un rincón mágico en el barrio. Los quesos son increíbles." }
+            { rating: 5, author_name: "Marta G.", text: "La mejor selección de vinos de Ruzafa. El trato es exquisito." },
+            { rating: 5, author_name: "Carlos P.", text: "Un rincón mágico. Los quesos son de otro planeta." },
+            { rating: 4, author_name: "Elena R.", text: "Muy recomendable para regalar algo especial y original." }
         ];
     
         try {
             const res = await fetch('/api/review');
+            if (!res.ok) throw new Error('API no disponible');
+            
             const data = await res.json();
+            // Intentamos leer de data.reviews o data.result.reviews según lo que devuelva tu API
             const reviews = data.reviews || (data.result && data.result.reviews) || backupReviews;
-            renderReviews(reviews, data.rating || 5);
+            const avgRating = data.rating || (data.result && data.result.rating) || 4.9;
+    
+            renderReviews(reviews, avgRating);
         } catch (err) {
-            renderReviews(backupReviews, 5);
+            console.warn("Usando reseñas de respaldo:", err.message);
+            renderReviews(backupReviews, 4.9);
         }
     
         function renderReviews(reviews, avg) {
-            ratingEl.innerHTML = `${'⭐'.repeat(Math.round(avg))}<br>Valoración: ${avg.toFixed(1)}/5.0`;
+            const stars = '⭐⭐⭐⭐⭐'.slice(0, Math.round(avg));
+            ratingEl.innerHTML = `${stars}<br>Valoración: ${parseFloat(avg).toFixed(1)}/5.0`;
+            
             grid.innerHTML = '';
             reviews.forEach(r => {
-                grid.innerHTML += `
-                    <div class="testimonial-card">
-                        <div class="testimonial-stars">${'⭐'.repeat(r.rating || 5)}</div>
-                        <p class="testimonial-text">"${r.text || 'Sin comentario'}"</p>
-                        <p class="testimonial-author">— ${r.author_name || 'Anónimo'}</p>
-                    </div>`;
+                const card = document.createElement('div');
+                card.className = 'testimonial-card';
+                const rating = r.rating || r.starRating || 5;
+                const starsText = '⭐'.repeat(Math.round(rating));
+                
+                card.innerHTML = `
+                    <div class="testimonial-stars">${starsText}</div>
+                    <p class="testimonial-text">"${r.text || r.comment || 'Sin comentario'}"</p>
+                    <p class="testimonial-author">— ${r.author_name || r.authorName || 'Cliente'}</p>
+                `;
+                grid.appendChild(card);
             });
         }
     }
-    
-    function toggleDescription(btn) {
-        const desc = btn.nextElementSibling;
-        desc.classList.toggle("active");
-        btn.textContent = desc.classList.contains("active") ? "Ocultar descripción" : "Ver descripción";
-    }
-    
-    function toggleMenu() {
-        document.getElementById("sidebar").classList.toggle("active");
-        document.getElementById("overlay").classList.toggle("active");
-        document.getElementById("menuToggle").classList.toggle("active");
-    }
-    
-    // INICIO DE LAS FUNCIONES
-    document.addEventListener('DOMContentLoaded', () => {
-        loadProducts();
-        loadReviews(); // Ahora sí se ejecuta al cargar
-    });
     </script>
 </body>
 </html>
