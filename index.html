@@ -1341,56 +1341,55 @@
 
     async function loadReviews() {
         const grid = document.getElementById('testimonialsGrid');
-        const overall = document.getElementById('ratingOverall');
+        const ratingEl = document.getElementById('ratingOverall');
+    
+        if (!grid || !ratingEl) return;
     
         try {
-            const res = await fetch('/api/review'); // tu handler de Next.js
+            const res = await fetch('/api/review');
             const data = await res.json();
+            
+            // Esto te ayudará a ver la estructura en la consola (F12 -> Console)
+            console.log("Datos recibidos de la API:", data);
     
-            if (!data.reviews || !data.reviews.length) {
-                grid.innerHTML = '<p>No hay reseñas disponibles.</p>';
+            // Ajustamos para que acepte tanto data.reviews como data.result.reviews
+            const reviews = data.reviews || (data.result && data.result.reviews);
+            const avgRating = data.rating || (data.result && data.result.rating) || 5;
+    
+            if (!reviews || reviews.length === 0) {
+                grid.innerHTML = '<p>No hay reseñas disponibles en este momento.</p>';
                 return;
             }
     
-            // Actualizar valoración general
-            const avgRating = data.rating.toFixed(1);
-            const stars = '⭐'.repeat(Math.round(data.rating));
-            overall.innerHTML = `${stars}<br>Valoración: ${avgRating}/5.0`;
+            // 1. Actualizar el marcador de estrellas general
+            const stars = '⭐⭐⭐⭐⭐'.slice(0, Math.round(avgRating));
+            ratingEl.innerHTML = `${stars}<br>Valoración: ${parseFloat(avgRating).toFixed(1)}/5.0`;
     
-            // Limpiar grid
+            // 2. Limpiar y llenar el grid
             grid.innerHTML = '';
-    
-            data.reviews.forEach(r => {
+            reviews.forEach(r => {
                 const card = document.createElement('div');
                 card.className = 'testimonial-card';
     
-                const starsDiv = document.createElement('div');
-                starsDiv.className = 'testimonial-stars';
-                starsDiv.textContent = '⭐'.repeat(r.rating);
+                // Adaptamos nombres de campos comunes (Google Places API usa rating y author_name)
+                const rating = r.rating || r.starRating || 5;
+                const author = r.author_name || r.authorName || 'Cliente Gourmet';
+                const text = r.text || 'Sin comentario.';
+                const starsText = '⭐'.repeat(Math.round(rating));
     
-                const text = document.createElement('p');
-                text.className = 'testimonial-text';
-                text.textContent = r.text;
-    
-                const author = document.createElement('p');
-                author.className = 'testimonial-author';
-                author.textContent = `— ${r.author_name}`;
-    
-                card.appendChild(starsDiv);
-                card.appendChild(text);
-                card.appendChild(author);
-    
+                card.innerHTML = `
+                    <div class="testimonial-stars">${starsText}</div>
+                    <p class="testimonial-text">"${text}"</p>
+                    <p class="testimonial-author">— ${author}</p>
+                `;
                 grid.appendChild(card);
             });
     
         } catch (err) {
-            console.error(err);
-            grid.innerHTML = '<p>Error cargando reseñas.</p>';
+            console.error("Error cargando reseñas:", err);
+            grid.innerHTML = '<p>Error al conectar con el servidor de reseñas.</p>';
         }
     }
-    
-    // Llamar a la función cuando cargue la página
-    document.addEventListener('DOMContentLoaded', loadReviews);
     </script>
 </body>
 </html>
