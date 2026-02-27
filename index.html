@@ -1294,7 +1294,7 @@
         ];
     
         try {
-            const res = await fetch('/api/review');
+            const res = await fetch('/api/reviews');
             if (!res.ok) throw new Error('API no disponible');
             
             const data = await res.json();
