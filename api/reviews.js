@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
   try {
-    const placeId = "TU_PLACE_ID_AQUI";
+    const placeId = "ChIJo4jZfvxJYA0Rp0Gs3k1swMs";
 
     const response = await fetch(
       `https://places.googleapis.com/v1/places/${placeId}?fields=reviews,rating,userRatingCount&key=${process.env.GOOGLE_API_KEY}`
