@@ -410,38 +410,50 @@
             display: flex;
             gap: 16px;
             align-items: center;
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
             flex-wrap: wrap;
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.06);
         }
         
-        .products-controls input[type="search"] {
+        .products-controls input[type="search"],
+        .products-controls select {
             flex: 1;
             padding: 14px 18px;
-            border-radius: 14px;
-            border: 1px solid #ddd;
+            border-radius: 12px;
+            border: 2px solid #f0f0f0;
             font-size: 1rem;
-            transition: all 0.25s ease;
-        }
-        
-        .products-controls input[type="search"]:focus {
-            outline: none;
-            border-color: var(--color-primary);
-            box-shadow: 0 0 0 3px rgba(244,164,66,0.2);
+            font-family: 'Poppins', sans-serif;
+            background: #fafafa;
+            color: var(--color-dark);
+            transition: all 0.3s ease;
         }
         
         .products-controls select {
-            padding: 14px 18px;
-            border-radius: 14px;
-            border: 1px solid #ddd;
-            font-size: 1rem;
-            background: white;
             cursor: pointer;
-            transition: all 0.25s ease;
+            appearance: none;
+            /* Flecha naranja personalizada */
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23f4a442%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem top 50%;
+            background-size: 0.8rem auto;
+            padding-right: 2.5rem;
         }
         
+        .products-controls input[type="search"]:focus,
         .products-controls select:focus {
             outline: none;
             border-color: var(--color-primary);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(244,164,66,0.15);
+        }
+
+        @media (max-width: 768px) {
+            .products-controls { padding: 1rem; }
+            .products-controls input[type="search"],
+            .products-controls select { flex: 100%; min-width: 100%; }
         }
         
         .product-footer {
@@ -1278,57 +1290,70 @@
             const sectionsHolder = document.createElement('div');
             container.appendChild(sectionsHolder);
     
-            function renderSections(filter = '__all__', q = '', sort = 'default') {
+function renderSections(filter = '__all__', q = '', sort = 'default') {
                 sectionsHolder.innerHTML = '';
                 const query = (q||'').toLowerCase().trim();
-                const typesOrder = Object.keys(groups).sort((a,b) => a.localeCompare(b,'es'));
+                
+                let dataToRender = {};
+
+                // LA MAGIA: Si muestras todo y ordenas, junta todo en un solo grupo
+                if (filter === '__all__' && sort !== 'default') {
+                    let allProds = [];
+                    Object.values(groups).forEach(arr => allProds.push(...arr));
+                    dataToRender['Todos los productos'] = allProds;
+                } else if (filter !== '__all__') {
+                    if (groups[filter]) dataToRender[filter] = groups[filter];
+                } else {
+                    dataToRender = groups;
+                }
+
+                const typesOrder = Object.keys(dataToRender).sort((a,b) => a.localeCompare(b,'es'));
+
                 typesOrder.forEach(tipo => {
-                    if (filter !== '__all__' && tipo !== filter) return;
-                    const prods = groups[tipo].filter(p => {
+                    let prods = [...dataToRender[tipo]]; // Copiar el array
+
+                    prods = prods.filter(p => {
                         if (!query) return true;
                         return (p.nombre||'').toLowerCase().includes(query) || (p.descripcion||'').toLowerCase().includes(query);
                     });
+
                     // ORDENACIÓN
                     if (sort === 'price-asc') {
-                        prods.sort((a, b) => parseFloat(a.precio) - parseFloat(b.precio));
+                        prods.sort((a, b) => parseFloat(a.precio.replace(',','.')) - parseFloat(b.precio.replace(',','.')));
                     }
-                    
                     if (sort === 'price-desc') {
-                        prods.sort((a, b) => parseFloat(b.precio) - parseFloat(a.precio));
+                        prods.sort((a, b) => parseFloat(b.precio.replace(',','.')) - parseFloat(a.precio.replace(',','.')));
                     }
-                    
                     if (sort === 'name-asc') {
                         prods.sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
                     }
-                    
                     if (sort === 'featured') {
                         prods.sort((a, b) => (b.stock || 0) - (a.stock || 0));
                     }
+
                     if (!prods.length) return;
+
                     const section = document.createElement('div');
                     section.className = 'products-section';
                     const header = document.createElement('h3');
                     header.className = 'section-title';
                     header.innerHTML = `<span>${tipo}</span><span class="section-count">${prods.length} producto(s)</span>`;
                     section.appendChild(header);
-    
+
                     const grid = document.createElement('div');
                     grid.className = 'products-grid';
-    
+
                     prods.forEach(p => {
-                        // 1. Configuración de WhatsApp
                         const telefono = "34678947545"; 
                         const mensajeTexto = `¡Hola! 👋 He visto este producto en vuestra web y me interesa: ${p.nombre}. ¿Lo tenéis disponible? ¡Gracias!`;
                         const whatsappUrl = `https://wa.me/${telefono}?text=${encodeURIComponent(mensajeTexto)}`;
                     
-                        // 2. Lógica de Stock
                         const stockClass = (p.stock === 0 ? 'out-stock' : (p.stock && p.stock <= 3 ? 'low-stock' : ''));
                         const stockText = (p.stock === null ? '' : (p.stock === 0 ? 'Agotado' : (p.stock <= 3 ? `¡Últimas ${p.stock}!` : `Stock: ${p.stock}`)));
                     
                         const card = document.createElement('div');
                         card.className = 'product-card';
                     
-                        // 3. Limpieza de URL de imagen (Asegura que use el ID de Drive para visualización directa)
                         let finalImg = 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=800';
                         if (p.imagen && p.imagen.includes('drive.google.com')) {
                             finalImg = driveToView(p.imagen);
@@ -1362,11 +1387,11 @@
                         `;
                         grid.appendChild(card);
                     });
-    
+
                     section.appendChild(grid);
                     sectionsHolder.appendChild(section);
                 });
-    
+
                 if (!sectionsHolder.querySelector('.products-section')) {
                     sectionsHolder.innerHTML = '<div class="products-error"><h3>🔍 No se han encontrado productos</h3></div>';
                 }
