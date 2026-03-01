@@ -1558,10 +1558,10 @@
         const politicaContainer = document.getElementById('politicaContainer');
         const cerrarPoliticaBtn = document.getElementById('cerrarPolitica');
         const contenidoPolitica = document.getElementById('contenidoPolitica');
-    
-        // Cambia esta URL por la raw correcta de tu repo
-        const rawUrl = 'https://github.com/davidcuestaa/elesconditegourmet/blob/main/politica-devoluciones.txt';
-    
+
+        // URL CORREGIDA: Usando raw.githubusercontent.com
+        const rawUrl = 'https://raw.githubusercontent.com/davidcuestaa/elesconditegourmet/30f52c2b2cf4bdcc2d20ffd096371ba3d58d0ac0/politica-devoluciones.txt';
+
         if (verPoliticaBtn && politicaContainer && contenidoPolitica) {
             verPoliticaBtn.addEventListener('click', async function (e) {
                 e.preventDefault();
@@ -1572,27 +1572,27 @@
                     contenidoPolitica.innerText = texto;
                 } catch (err) {
                     contenidoPolitica.innerText = '⚠️ No se pudo cargar la política. Intenta más tarde.';
-                    console.error(err);
+                    console.error("Error cargando la política:", err);
                 }
                 politicaContainer.style.display = 'flex';
-                // opcional: focus para accesibilidad
-                cerrarPoliticaBtn && cerrarPoliticaBtn.focus();
+                // Opcional: focus para accesibilidad
+                if (cerrarPoliticaBtn) cerrarPoliticaBtn.focus();
             });
         }
-    
+
         if (cerrarPoliticaBtn && politicaContainer) {
             cerrarPoliticaBtn.addEventListener('click', function () {
                 politicaContainer.style.display = 'none';
             });
         }
-    
+
         // Cerrar al clicar fuera del contenido
         if (politicaContainer) {
             politicaContainer.addEventListener('click', function (e) {
                 if (e.target === this) this.style.display = 'none';
             });
         }
-    
+
         // Cerrar con ESC cuando el modal esté abierto
         document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape' && politicaContainer && politicaContainer.style.display === 'flex') {
