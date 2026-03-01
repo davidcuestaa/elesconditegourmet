@@ -416,43 +416,86 @@
             font-weight:600;
         }
         
-        /* Controles filtro y búsqueda */
+        /* === CONTROLES DE PRODUCTOS PRO === */
         .products-controls {
             display: flex;
-            gap: 16px;
+            gap: 1.2rem;
             align-items: center;
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
             flex-wrap: wrap;
-        }
-        
-        .products-controls input[type="search"] {
-            flex: 1;
-            padding: 14px 18px;
-            border-radius: 14px;
-            border: 1px solid #ddd;
-            font-size: 1rem;
-            transition: all 0.25s ease;
-        }
-        
-        .products-controls input[type="search"]:focus {
-            outline: none;
-            border-color: var(--color-primary);
-            box-shadow: 0 0 0 3px rgba(244,164,66,0.2);
-        }
-        
-        .products-controls select {
-            padding: 14px 18px;
-            border-radius: 14px;
-            border: 1px solid #ddd;
-            font-size: 1rem;
             background: white;
-            cursor: pointer;
-            transition: all 0.25s ease;
+            padding: 1.5rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.06);
         }
-        
+
+        .search-wrapper, .select-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-wrapper {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .select-wrapper {
+            min-width: 220px;
+        }
+
+        /* Iconos interiores */
+        .search-wrapper i.fa-magnifying-glass,
+        .select-wrapper i.fa-filter,
+        .select-wrapper i.fa-arrow-down-a-z {
+            position: absolute;
+            left: 18px;
+            color: var(--color-primary);
+            font-size: 1.1rem;
+            pointer-events: none;
+        }
+
+        /* Flecha personalizada para los select */
+        .select-wrapper i.arrow {
+            position: absolute;
+            right: 18px;
+            color: #888;
+            font-size: 0.9rem;
+            pointer-events: none;
+        }
+
+        .products-controls input[type="search"],
+        .products-controls select {
+            width: 100%;
+            padding: 14px 18px 14px 48px;
+            border-radius: 12px;
+            border: 2px solid #f0f0f0;
+            font-size: 1rem;
+            background: #fafafa;
+            color: var(--color-dark);
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+            appearance: none;
+        }
+
+        .products-controls input[type="search"]:focus,
         .products-controls select:focus {
             outline: none;
             border-color: var(--color-primary);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(244,164,66,0.15);
+        }
+
+        .products-controls select {
+            cursor: pointer;
+            padding-right: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .search-wrapper, .select-wrapper {
+                width: 100%;
+                min-width: 100%;
+            }
         }
         
         .product-footer {
@@ -1192,74 +1235,9 @@
         return text.slice(0, chars).trim() + '…';
     }
     
-    async function loadProducts() {
-        const container = document.getElementById('productsContainer');
-        container.innerHTML = '<div class="products-loading">Cargando productos…</div>';
-        if (!GOOGLE_SHEETS_CSV_URL || GOOGLE_SHEETS_CSV_URL.includes('YOUR_GOOGLE_SHEETS_CSV_URL_HERE')) {
-            container.innerHTML = '<div class="products-error"><h3>⚠️ Configuración Pendiente</h3><p>Configura tu URL de Google Sheets</p></div>';
-            return;
-        }
-        try {
-            const res = await fetch(GOOGLE_SHEETS_CSV_URL);
-            const csvText = await res.text();
-            const rows = parseCSV(csvText);
-            if (!rows || rows.length < 2) {
-                container.innerHTML = '<div class="products-error"><h3>📦 Sin productos</h3></div>';
-                return;
-            }
-            const headers = rows[0].map(h => (h||'').trim());
-            const dataRows = rows.slice(1).filter(r => r.some(c => (c||'').trim().length));
-            const products = dataRows.map(r => {
-                const obj = {};
-                for (let i=0;i<headers.length;i++){
-                    const key = (headers[i]||('col_'+i)).trim();
-                    obj[key] = r[i] !== undefined ? r[i].trim() : '';
-                }
-                return obj;
-            });
-    
-            // Normalize mapping: intenta encontrar columnas clave en español
-            function findKey(candidates) {
-                for (const c of candidates) {
-                    const idx = headers.findIndex(h => h.toLowerCase().replace(/\s+/g,'') === c.toLowerCase().replace(/\s+/g,''));
-                    if (idx !== -1) return headers[idx];
-                }
-                return null;
-            }
-    
-            const keyId = findKey(['id','numero','numerodecajaeimagen','numero de caja e imagen']) || headers[0];
-            const keyTipo = findKey(['tipo','category','categoria']) || headers[1] || 'Tipo';
-            const keyNombre = findKey(['nombre','name']) || 'Nombre';
-            const keyDesc = findKey(['descripcion','contenido','description']) || 'Contenido';
-            const keyPrecio = findKey(['precio','price']) || 'Precio';
-            const keyImagen = findKey(['imagen','imagen de referencia','image','imageurl','link fotos','unnamed: 8']) || headers.includes('Imagen de Referencia') ? 'Imagen de Referencia' : headers[5];
-            const keyStock = findKey(['stock','cantidad']) || null;
-    
-            // Build normalized product objects
-            const normalized = products.map((p, i) => {
-                const precioRaw = (p[keyPrecio]||'').replace('€','').replace(',', '.').trim();
-                return {
-                    id: p[keyId] || String(i+1),
-                    tipo: (p[keyTipo]||'Sin categoría').trim() || 'Sin categoría',
-                    nombre: p[keyNombre] || 'Sin nombre',
-                    descripcion: p[keyDesc] || '',
-                    precio: (precioRaw ? precioRaw : (p[keyPrecio]||'')),
-                    imagen: driveToView(p[keyImagen] || p['Unnamed: 8'] || ''),
-                    stock: keyStock ? parseInt(p[keyStock]) || 0 : null
-                };
-            });
-    
-            // Agrupar por tipo
-            const groups = {};
-            normalized.forEach(prod => {
-                const t = prod.tipo || 'Sin categoría';
-                if (!groups[t]) groups[t] = [];
-                groups[t].push(prod);
-            });
-    
-            // Controles: selector de tipo + búsqueda
+    // Controles: selector de tipo + búsqueda
             container.innerHTML = '';
-            // Banner informativo
+            
             const infoBanner = document.createElement('div');
             infoBanner.className = 'products-info-banner';
             infoBanner.innerHTML = `
@@ -1271,25 +1249,36 @@
                 </p>
             `;
             container.appendChild(infoBanner);
+
+            // Nuevos controles PRO con iconos
             const controls = document.createElement('div');
             controls.className = 'products-controls';
             controls.innerHTML = `
-                <input type="search" id="productsSearch" placeholder="Buscar por nombre o descripción…">
-            
-                <select id="productsFilter">
-                    <option value="__all__">Mostrar todo</option>
-                </select>
-            
-                <select id="productsSort">
-                    <option value="default">Ordenar por...</option>
-                    <option value="price-asc">Precio: menor a mayor</option>
-                    <option value="price-desc">Precio: mayor a menor</option>
-                    <option value="name-asc">Nombre A-Z</option>
-                    <option value="featured">Más destacados</option>
-                </select>
+                <div class="search-wrapper">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="search" id="productsSearch" placeholder="Buscar por nombre o descripción…">
+                </div>
+                <div class="select-wrapper">
+                    <i class="fa-solid fa-filter"></i>
+                    <select id="productsFilter">
+                        <option value="__all__">Todas las categorías</option>
+                    </select>
+                    <i class="fa-solid fa-chevron-down arrow"></i>
+                </div>
+                <div class="select-wrapper">
+                    <i class="fa-solid fa-arrow-down-a-z"></i>
+                    <select id="productsSort">
+                        <option value="default">Ordenar por defecto</option>
+                        <option value="price-asc">Precio: de menor a mayor</option>
+                        <option value="price-desc">Precio: de mayor a menor</option>
+                        <option value="name-asc">Nombre (A-Z)</option>
+                        <option value="featured">Más destacados (Stock)</option>
+                    </select>
+                    <i class="fa-solid fa-chevron-down arrow"></i>
+                </div>
             `;
             container.appendChild(controls);
-    
+
             const filterSelect = controls.querySelector('#productsFilter');
             Object.keys(groups).sort().forEach(t => {
                 const opt = document.createElement('option');
@@ -1297,47 +1286,64 @@
                 opt.textContent = t + ` (${groups[t].length})`;
                 filterSelect.appendChild(opt);
             });
-    
+
             const sectionsHolder = document.createElement('div');
             container.appendChild(sectionsHolder);
-    
+
             function renderSections(filter = '__all__', q = '', sort = 'default') {
                 sectionsHolder.innerHTML = '';
                 const query = (q||'').toLowerCase().trim();
-                const typesOrder = Object.keys(groups).sort((a,b) => a.localeCompare(b,'es'));
+                
+                let groupedData = {};
+
+                // LA MAGIA DE LA ORDENACIÓN GLOBAL: 
+                // Si está en "Mostrar todo" y hay un orden específico, lo juntamos todo
+                if (filter === '__all__' && sort !== 'default') {
+                    let allProds = [];
+                    Object.values(groups).forEach(arr => allProds.push(...arr));
+                    groupedData['Todos los productos'] = allProds;
+                } else if (filter !== '__all__') {
+                    if (groups[filter]) groupedData[filter] = groups[filter];
+                } else {
+                    groupedData = groups;
+                }
+
+                const typesOrder = Object.keys(groupedData).sort((a,b) => a.localeCompare(b,'es'));
+
                 typesOrder.forEach(tipo => {
-                    if (filter !== '__all__' && tipo !== filter) return;
-                    const prods = groups[tipo].filter(p => {
+                    let prods = [...groupedData[tipo]]; // Copiamos el array para no romper el original
+
+                    prods = prods.filter(p => {
                         if (!query) return true;
                         return (p.nombre||'').toLowerCase().includes(query) || (p.descripcion||'').toLowerCase().includes(query);
                     });
-                    // ORDENACIÓN
+
+                    // ORDENACIÓN APLICADA AL GRUPO O A LA LISTA GLOBAL
                     if (sort === 'price-asc') {
-                        prods.sort((a, b) => parseFloat(a.precio) - parseFloat(b.precio));
+                        prods.sort((a, b) => parseFloat(a.precio.replace(',','.')) - parseFloat(b.precio.replace(',','.')));
                     }
-                    
                     if (sort === 'price-desc') {
-                        prods.sort((a, b) => parseFloat(b.precio) - parseFloat(a.precio));
+                        prods.sort((a, b) => parseFloat(b.precio.replace(',','.')) - parseFloat(a.precio.replace(',','.')));
                     }
-                    
                     if (sort === 'name-asc') {
                         prods.sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
                     }
-                    
                     if (sort === 'featured') {
                         prods.sort((a, b) => (b.stock || 0) - (a.stock || 0));
                     }
+
                     if (!prods.length) return;
+
                     const section = document.createElement('div');
                     section.className = 'products-section';
                     const header = document.createElement('h3');
                     header.className = 'section-title';
                     header.innerHTML = `<span>${tipo}</span><span class="section-count">${prods.length} producto(s)</span>`;
                     section.appendChild(header);
-    
+
                     const grid = document.createElement('div');
                     grid.className = 'products-grid';
-    
+
                     prods.forEach(p => {
                         // 1. Configuración de WhatsApp
                         const telefono = "34678947545"; 
@@ -1351,7 +1357,7 @@
                         const card = document.createElement('div');
                         card.className = 'product-card';
                     
-                        // 3. Limpieza de URL de imagen (Asegura que use el ID de Drive para visualización directa)
+                        // 3. Limpieza de URL de imagen
                         let finalImg = 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=800';
                         if (p.imagen && p.imagen.includes('drive.google.com')) {
                             finalImg = driveToView(p.imagen);
@@ -1385,16 +1391,16 @@
                         `;
                         grid.appendChild(card);
                     });
-    
+
                     section.appendChild(grid);
                     sectionsHolder.appendChild(section);
                 });
-    
+
                 if (!sectionsHolder.querySelector('.products-section')) {
-                    sectionsHolder.innerHTML = '<div class="products-error"><h3>🔍 No se han encontrado productos</h3></div>';
+                    sectionsHolder.innerHTML = '<div class="products-error" style="text-align:center; padding: 2rem;"><h3>🔍 No hemos encontrado lo que buscas</h3><p>Prueba con otras palabras.</p></div>';
                 }
             }
-    
+
             // Inicial render
             renderSections();
             
@@ -1404,27 +1410,15 @@
             
             // Event listeners
             filterSelect.addEventListener('change', () => {
-                renderSections(
-                    filterSelect.value,
-                    searchInput.value,
-                    sortSelect.value
-                );
+                renderSections(filterSelect.value, searchInput.value, sortSelect.value);
             });
             
             searchInput.addEventListener('input', () => {
-                renderSections(
-                    filterSelect.value,
-                    searchInput.value,
-                    sortSelect.value
-                );
+                renderSections(filterSelect.value, searchInput.value, sortSelect.value);
             });
             
             sortSelect.addEventListener('change', () => {
-                renderSections(
-                    filterSelect.value,
-                    searchInput.value,
-                    sortSelect.value
-                );
+                renderSections(filterSelect.value, searchInput.value, sortSelect.value);
             });
                 
         } catch (err) {
@@ -1559,8 +1553,17 @@
         const cerrarPoliticaBtn = document.getElementById('cerrarPolitica');
         const contenidoPolitica = document.getElementById('contenidoPolitica');
 
-        // URL CORREGIDA: Usando raw.githubusercontent.com
         const rawUrl = 'https://raw.githubusercontent.com/davidcuestaa/elesconditegourmet/30f52c2b2cf4bdcc2d20ffd096371ba3d58d0ac0/politica-devoluciones.txt';
+
+        // Función para convertir los # en títulos y ** en negritas
+        function formatearTexto(texto) {
+            return texto
+                .replace(/^### (.*$)/gim, '<h4 style="color: var(--color-primary); margin-top: 15px;">$1</h4>') // ### Título pequeño
+                .replace(/^## (.*$)/gim, '<h3 style="color: var(--color-primary); margin-top: 20px;">$1</h3>') // ## Título mediano
+                .replace(/^# (.*$)/gim, '<h2 style="color: var(--color-dark); margin-bottom: 20px;">$1</h2>')  // # Título grande
+                .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>') // **Negritas**
+                .replace(/\n/gim, '<br>'); // Respeta los saltos de línea
+        }
 
         if (verPoliticaBtn && politicaContainer && contenidoPolitica) {
             verPoliticaBtn.addEventListener('click', async function (e) {
@@ -1568,14 +1571,17 @@
                 try {
                     const response = await fetch(rawUrl);
                     if (!response.ok) throw new Error('No se pudo cargar el archivo: ' + response.status);
-                    const texto = await response.text();
-                    contenidoPolitica.innerText = texto;
+                    
+                    const textoRaw = await response.text();
+                    
+                    // Aquí usamos innerHTML y nuestra nueva función
+                    contenidoPolitica.innerHTML = formatearTexto(textoRaw);
+                    
                 } catch (err) {
-                    contenidoPolitica.innerText = '⚠️ No se pudo cargar la política. Intenta más tarde.';
+                    contenidoPolitica.innerHTML = '<p>⚠️ No se pudo cargar la política. Intenta más tarde.</p>';
                     console.error("Error cargando la política:", err);
                 }
                 politicaContainer.style.display = 'flex';
-                // Opcional: focus para accesibilidad
                 if (cerrarPoliticaBtn) cerrarPoliticaBtn.focus();
             });
         }
@@ -1586,14 +1592,12 @@
             });
         }
 
-        // Cerrar al clicar fuera del contenido
         if (politicaContainer) {
             politicaContainer.addEventListener('click', function (e) {
                 if (e.target === this) this.style.display = 'none';
             });
         }
 
-        // Cerrar con ESC cuando el modal esté abierto
         document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape' && politicaContainer && politicaContainer.style.display === 'flex') {
                 politicaContainer.style.display = 'none';
