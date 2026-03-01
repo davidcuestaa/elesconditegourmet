@@ -314,6 +314,34 @@
             margin: 2rem auto;
             max-width: 800px;
         }
+        
+        /* === MENSAJE PERSONALIZACIÓN Y ENVÍOS === */
+        .products-info-banner {
+            background: white;
+            border-left: 6px solid var(--color-primary);
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            border-radius: 14px;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.06);
+        }
+        
+        .products-info-banner h4 {
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+            color: var(--color-dark);
+        }
+        
+        .products-info-banner p {
+            margin: 0;
+            font-size: 1rem;
+            color: #555;
+            line-height: 1.6;
+        }
+        
+        .products-info-banner i {
+            color: var(--color-primary);
+            margin-right: 8px;
+        }
 
         /* === PRODUCT LAYOUT OPTIMIZADO === */
         .products-grid {
@@ -820,6 +848,10 @@
         .social-dropdown.show {
             display: flex;
         }
+        /* Iconos específicos del dropdown contacto */
+        #contactDropdown a i {
+            color: var(--color-primary);
+        }
         /* === BOTÓN VER MÁS EN GOOGLE === */
         .btn-google {
             background-color: white;
@@ -896,8 +928,24 @@
                 <p>Tu rincón gourmet en Ruzafa — vinos, sabores y momentos únicos</p>
                 <div class="cta-buttons">
                     <a href="#productos" class="btn btn-primary">Ver Productos</a>
-                    <a href="#contacto" class="btn btn-secondary">Cómo Llegar</a>
-                    <a href="tel:+34678947545" class="btn btn-secondary">Contactar</a>
+                    <a href="https://www.google.com/maps/dir/?api=1&destination=C.+dels+Centelles+22,+46006+València" target="_blank" class="btn btn-secondary">
+                        Cómo Llegar
+                    </a>
+                    <div class="social-wrapper">
+                        <button class="btn btn-secondary" id="contactToggle">
+                            <i class="fa-solid fa-phone"></i> Contactar
+                        </button>
+                    
+                        <div class="social-dropdown" id="contactDropdown">
+                            <a href="tel:+34678947545">
+                                <i class="fa-solid fa-phone"></i> Llamar
+                            </a>
+                    
+                            <a href="https://wa.me/34678947545" target="_blank">
+                                <i class="fab fa-whatsapp"></i> WhatsApp
+                            </a>
+                        </div>
+                    </div>
                     <div class="social-wrapper">
                         <button class="btn btn-secondary" id="socialToggle">
                             <i class="fa-solid fa-share-nodes"></i> Redes Sociales
@@ -938,6 +986,10 @@
         <section id="productos">
             <h2>Nuestros Productos</h2>
             <div id="productsContainer"><div class="products-loading">Cargando productos...</div></div>
+            <!-- Enlace para Política de Cambios y Devoluciones -->
+            <a href="#" id="verPolitica" style="display:inline-block; margin-top:2rem; color: var(--color-primary); font-weight:600; cursor:pointer;">
+                Política de Cambios y Devoluciones
+            </a>
         </section>
 
         <section id="galeria">
@@ -1034,25 +1086,48 @@
     </footer>
 
     <script>
-    // --- LÓGICA DEL BOTÓN REDES SOCIALES ---
-    document.addEventListener('DOMContentLoaded', function() {
+    // === LÓGICA UNIFICADA PARA DROPDOWNS (Redes / Contacto) ===
+    document.addEventListener('DOMContentLoaded', function () {
         const socialToggle = document.getElementById('socialToggle');
         const socialDropdown = document.getElementById('socialDropdown');
-        
-        if (socialToggle && socialDropdown) {
-            socialToggle.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                socialDropdown.classList.toggle('show');
-            });
-        
-            // Cerrar al hacer clic fuera
-            document.addEventListener('click', function(e) {
-                if (!e.target.closest('.social-wrapper')) {
-                    socialDropdown.classList.remove('show');
-                }
+        const contactToggle = document.getElementById('contactToggle');
+        const contactDropdown = document.getElementById('contactDropdown');
+    
+        function closeOtherDropdowns(currentDropdown) {
+            document.querySelectorAll('.social-dropdown.show').forEach(dd => {
+                if (dd !== currentDropdown) dd.classList.remove('show');
             });
         }
+    
+        // Helper: toggle button generic
+        function wireToggle(toggleBtn, dropdownEl) {
+            if (!toggleBtn || !dropdownEl) return;
+            toggleBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                closeOtherDropdowns(dropdownEl);
+                dropdownEl.classList.toggle('show');
+            });
+        }
+    
+        wireToggle(socialToggle, socialDropdown);
+        wireToggle(contactToggle, contactDropdown);
+    
+        // Cerrar dropdowns al hacer clic fuera de su .social-wrapper correspondiente
+        document.addEventListener('click', function (e) {
+            // Recorre dropdowns abiertos y ciérralos si el clic NO está dentro del wrapper correspondiente
+            document.querySelectorAll('.social-dropdown.show').forEach(dd => {
+                const wrapper = dd.closest('.social-wrapper');
+                if (wrapper && !wrapper.contains(e.target)) dd.classList.remove('show');
+            });
+        });
+    
+        // (Opcional, mejora accesibilidad) cerrar con ESC
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.social-dropdown.show').forEach(dd => dd.classList.remove('show'));
+            }
+        });
     });
     
     const GOOGLE_SHEETS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRZIDPWr-VIJEfaITAzxJ6WZo5e1volpt21j139RN6Tmrwm1BwI4hAorJ-XL2p6ZOgnSOMaBd2E7l1E/pub?gid=0&single=true&output=csv';
@@ -1184,6 +1259,19 @@
     
             // Controles: selector de tipo + búsqueda
             container.innerHTML = '';
+            // Banner informativo
+            const infoBanner = document.createElement('div');
+            infoBanner.className = 'products-info-banner';
+            infoBanner.innerHTML = `
+                <h4><i class="fa-solid fa-gift"></i> Cajas personalizadas a tu gusto</h4>
+                <p>
+                    Todas nuestras cajas gourmet pueden modificarse con los productos que prefieras. 
+                    Creamos combinaciones totalmente personalizadas para regalos, eventos o detalles especiales.
+                    <br><br>
+                    <i class="fa-solid fa-truck"></i> Realizamos envíos a toda España.
+                </p>
+            `;
+            container.appendChild(infoBanner);
             const controls = document.createElement('div');
             controls.className = 'products-controls';
             controls.innerHTML = `
@@ -1454,6 +1542,65 @@
             });
         }
     }
+    </script>
+    <!-- Modal de Política -->
+    <div id="politicaContainer" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; 
+        background:rgba(0,0,0,0.7); z-index:2000; justify-content:center; align-items:center; padding:1rem;">
+        <div style="background:white; padding:2rem; border-radius:15px; max-width:700px; max-height:80vh; 
+            overflow-y:auto; position:relative;">
+            <button id="cerrarPolitica" style="position:absolute; top:10px; right:10px; border:none; background:none; font-size:1.5rem; cursor:pointer;">×</button>
+            <div id="contenidoPolitica" style="white-space: pre-line; color:#333; font-size:1rem;"></div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const verPoliticaBtn = document.getElementById('verPolitica');
+        const politicaContainer = document.getElementById('politicaContainer');
+        const cerrarPoliticaBtn = document.getElementById('cerrarPolitica');
+        const contenidoPolitica = document.getElementById('contenidoPolitica');
+    
+        // Cambia esta URL por la raw correcta de tu repo
+        const rawUrl = 'https://raw.githubusercontent.com/davidcuestaa/elesconditegourmet/main/politica-devoluciones.txt';
+    
+        if (verPoliticaBtn && politicaContainer && contenidoPolitica) {
+            verPoliticaBtn.addEventListener('click', async function (e) {
+                e.preventDefault();
+                try {
+                    const response = await fetch(rawUrl);
+                    if (!response.ok) throw new Error('No se pudo cargar el archivo: ' + response.status);
+                    const texto = await response.text();
+                    contenidoPolitica.innerText = texto;
+                } catch (err) {
+                    contenidoPolitica.innerText = '⚠️ No se pudo cargar la política. Intenta más tarde.';
+                    console.error(err);
+                }
+                politicaContainer.style.display = 'flex';
+                // opcional: focus para accesibilidad
+                cerrarPoliticaBtn && cerrarPoliticaBtn.focus();
+            });
+        }
+    
+        if (cerrarPoliticaBtn && politicaContainer) {
+            cerrarPoliticaBtn.addEventListener('click', function () {
+                politicaContainer.style.display = 'none';
+            });
+        }
+    
+        // Cerrar al clicar fuera del contenido
+        if (politicaContainer) {
+            politicaContainer.addEventListener('click', function (e) {
+                if (e.target === this) this.style.display = 'none';
+            });
+        }
+    
+        // Cerrar con ESC cuando el modal esté abierto
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && politicaContainer && politicaContainer.style.display === 'flex') {
+                politicaContainer.style.display = 'none';
+            }
+        });
+    });
     </script>
 </body>
 </html>
