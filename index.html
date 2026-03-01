@@ -1,1609 +1,1615 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>El Escondite Gourmet – Tienda de vinos y delicatessen en Ruzafa | Valencia</title>
-    <meta name="description" content="Descubre entornos gourmet, selección de vinos y productos delicatessen en El Escondite Gourmet, tu tienda especializada en el corazón de Ruzafa, Valencia.">
-    
-    <!-- Google Fonts - Poppins -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --color-primary: #f4a442;
-            --color-dark: #2c2c2c;
-            --color-cream: #f5f1e8;
-            --color-beige: #e8dcc4;
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            font-weight: 400;
-            line-height: 1.6;
-            color: var(--color-dark);
-            background-color: var(--color-cream);
-        }
-
-        h1, h2, h3 { font-weight: 700; }
-
-        /* Menu Toggle Button */
-        .menu-toggle {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 2000;
-            background-color: var(--color-primary);
-            border: none;
-            padding: 1rem;
-            border-radius: 12px;
-            cursor: pointer;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-            transition: all 0.3s;
-        }
-
-        .menu-toggle:hover { transform: scale(1.05); }
-
-        .menu-toggle span {
-            display: block;
-            width: 25px;
-            height: 3px;
-            background-color: var(--color-dark);
-            margin: 5px 0;
-            transition: 0.3s;
-            border-radius: 2px;
-        }
-
-        .menu-toggle.active span:nth-child(1) { transform: rotate(-45deg) translate(-5px, 6px); }
-        .menu-toggle.active span:nth-child(2) { opacity: 0; }
-        .menu-toggle.active span:nth-child(3) { transform: rotate(45deg) translate(-5px, -6px); }
-
-        /* Sidebar */
-        .sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 300px;
-            height: 100vh;
-            background: linear-gradient(135deg, var(--color-dark) 0%, #1a1a1a 100%);
-            z-index: 1500;
-            transform: translateX(-100%);
-            transition: transform 0.3s;
-            box-shadow: 5px 0 30px rgba(0,0,0,0.5);
-            overflow-y: auto;
-        }
-
-        .sidebar.active { transform: translateX(0); }
-
-        .sidebar-header {
-            display: flex;
-            flex-direction: column;
-            align-items: center; /* centra horizontalmente */
-            justify-content: center; /* centra verticalmente si quieres */
-            padding: 2rem 2rem 1rem 2rem; /* más espacio arriba y abajo */
-            border-bottom: 2px solid var(--color-primary); /* opcional, para separar del menú */
-        }
-
-
-
-        .sidebar-logo {
-            width: auto;         /* permite mantener proporción */
-            max-width: 120px;    /* máximo ancho */
-            height: 80px;        /* altura fija para que no se desborde */
-            display: block;
-            margin: 0 auto 1rem auto; /* centrado */
-        }
-
-
-        .sidebar-brand h2 {
-            color: var(--color-primary);
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-            text-align: center;
-        }
-        
-        .sidebar-brand p {
-            color: var(--color-beige);
-            font-size: 0.9rem;
-            font-weight: 300;
-            text-align: center; /* centra el texto "Ruzafa, Valencia" */
-        }
-
-        .sidebar nav { padding: 2rem 0; }
-        .sidebar nav ul { list-style: none; }
-        .sidebar nav ul li { margin-bottom: 0.5rem; }
-
-        .sidebar nav ul li a {
-            display: block;
-            padding: 1rem 2rem;
-            color: var(--color-cream);
-            text-decoration: none;
-            transition: all 0.3s;
-            border-left: 4px solid transparent;
-        }
-
-        .sidebar nav ul li a:hover {
-            background-color: rgba(244, 164, 66, 0.1);
-            border-left-color: var(--color-primary);
-            color: var(--color-primary);
-        }
-
-        .sidebar-footer {
-            padding: 2rem;
-            text-align: center;
-            border-top: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .sidebar-social a {
-            display: inline-block;
-            margin: 0 10px;
-            color: var(--color-primary);
-            font-size: 1.5rem;
-            text-decoration: none;
-            transition: transform 0.3s;
-        }
-
-        .sidebar-social a:hover { transform: scale(1.2); }
-
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1400;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s;
-        }
-
-        .overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        /* Sections */
-        section { padding: 5rem 3rem; }
-
-     #home {
-            background-color: #f4a442; /* color de fondo fijo */
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            color: white;
-        }
-
-       .cabecera-img {
-            width: 100%;          /* ocupa todo el ancho disponible */
-            max-width: 600px;     /* límite en pantallas grandes */
-            height: auto;         /* mantiene proporción original */
-            display: block;
-            margin: 0 auto 20px auto;  /* centrada y espacio abajo */
-            border-radius: 0;     /* sin bordes redondeados */
-        }
-
-
-        .hero-logo img {
-            height: 45vh;           /* tamaño protagonista equilibrado */
-            max-height: 550px;      /* límite en pantallas grandes */
-            width: auto;
-            display: block;
-            margin: 0 auto 1.5rem auto;
-            filter: none !important;
-            box-shadow: none !important;
-        }
-
-
-        .hero-content h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-        }
-        
-        .hero-content p {
-            font-size: 1.35rem;
-            margin-bottom: 2.5rem;
-            font-weight: 300;
-        }
-
-        .cta-buttons {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .btn {
-            padding: 1rem 2.5rem;
-            border: none;
-            border-radius: 50px;
-            font-size: 1rem;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.3s;
-            font-weight: 600;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .btn-primary {
-            background-color: white;
-            color: var(--color-dark);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        
-        .btn-primary:hover {
-            background-color: #f5f5f5;
-            transform: translateY(-3px);
-        }
-
-        .btn-secondary {
-            background-color: transparent;
-            color: white;
-            border: 2px solid white;
-        }
-
-        .btn-secondary:hover {
-            background-color: white;
-            color: var(--color-dark);
-        }
-
-        #sobre-nosotros { 
-            background-color: #fafafa; 
-            padding: 6rem 1.5rem; /* Espacio amplio para que respire */
-        }
-        
-        .about-content {
-            max-width: 800px; /* Ancho ideal para lectura ligera */
-            margin: 0 auto;
-            text-align: center;
-        }
-        
-        .about-text-wrapper {
-            margin-top: 2rem;
-        }
-        
-        /* Única regla para el párrafo: centrada, grande y limpia */
-        .about-content p {
-            font-size: 1.2rem; 
-            line-height: 1.8;
-            margin-bottom: 1.5rem;
-            text-align: center; 
-            color: #444;
-        }
-        
-        /* Título con la línea naranja debajo */
-        h2 {
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-            text-align: center;
-            position: relative;
-            padding-bottom: 1rem;
-        }
-        
-        h2::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 4px;
-            background-color: var(--color-primary);
-            border-radius: 2px;
-        }
-
-        #productos { background-color: var(--color-beige); }
-
-        .sheets-setup {
-            background: #fff3cd;
-            border: 2px solid #ffc107;
-            border-radius: 10px;
-            padding: 2rem;
-            margin: 2rem auto;
-            max-width: 800px;
-        }
-        
-        /* === MENSAJE PERSONALIZACIÓN Y ENVÍOS === */
-        .products-info-banner {
-            background: white;
-            border-left: 6px solid var(--color-primary);
-            padding: 1.5rem 2rem;
-            margin-bottom: 2rem;
-            border-radius: 14px;
-            box-shadow: 0 5px 18px rgba(0,0,0,0.06);
-        }
-        
-        .products-info-banner h4 {
-            margin-bottom: 0.5rem;
-            font-size: 1.2rem;
-            color: var(--color-dark);
-        }
-        
-        .products-info-banner p {
-            margin: 0;
-            font-size: 1rem;
-            color: #555;
-            line-height: 1.6;
-        }
-        
-        .products-info-banner i {
-            color: var(--color-primary);
-            margin-right: 8px;
-        }
-
-        /* === PRODUCT LAYOUT OPTIMIZADO === */
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-        
-        .product-card {
-            background: white;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.08);
-            transition: all 0.25s ease;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-        }
-        
-        .product-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 22px rgba(0,0,0,0.12);
-        }
-        
-        .product-image {
-            width: 100%;
-            height: 220px;
-            object-fit: cover;
-        }
-        
-        .product-content {
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            flex: 1;
-        }
-
-        .product-content h3 {
-            font-size: 1.05rem;
-            margin: 0;
-            line-height: 1.2;
-        }
-        
-        .product-short-desc {
-            font-size: 0.9rem;
-            color: #666;
-        }
-        
-        .product-price {
-            font-weight: bold;
-            font-size: 1rem;
-            margin-top: auto;
-        }
-        /* Secciones por Tipo */
-        .products-section { margin-bottom: 2rem; }
-        
-        .products-section h3.section-title {
-            margin: 0 0 0.8rem 0;
-            font-size: 1.35rem;
-            color: var(--color-dark);
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            gap:10px;
-        }
-        
-        .section-count {
-            font-size:0.9rem;
-            color:#666;
-            font-weight:600;
-        }
-        
-        /* === CONTROLES DE PRODUCTOS PRO === */
-        .products-controls {
-            display: flex;
-            gap: 1.2rem;
-            align-items: center;
-            margin-bottom: 2.5rem;
-            flex-wrap: wrap;
-            background: white;
-            padding: 1.5rem;
-            border-radius: 16px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.06);
-        }
-
-        .search-wrapper, .select-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-
-        .search-wrapper {
-            flex: 1;
-            min-width: 250px;
-        }
-
-        .select-wrapper {
-            min-width: 220px;
-        }
-
-        /* Iconos interiores */
-        .search-wrapper i.fa-magnifying-glass,
-        .select-wrapper i.fa-filter,
-        .select-wrapper i.fa-arrow-down-a-z {
-            position: absolute;
-            left: 18px;
-            color: var(--color-primary);
-            font-size: 1.1rem;
-            pointer-events: none;
-        }
-
-        /* Flecha personalizada para los select */
-        .select-wrapper i.arrow {
-            position: absolute;
-            right: 18px;
-            color: #888;
-            font-size: 0.9rem;
-            pointer-events: none;
-        }
-
-        .products-controls input[type="search"],
-        .products-controls select {
-            width: 100%;
-            padding: 14px 18px 14px 48px;
-            border-radius: 12px;
-            border: 2px solid #f0f0f0;
-            font-size: 1rem;
-            background: #fafafa;
-            color: var(--color-dark);
-            font-family: 'Poppins', sans-serif;
-            transition: all 0.3s ease;
-            appearance: none;
-        }
-
-        .products-controls input[type="search"]:focus,
-        .products-controls select:focus {
-            outline: none;
-            border-color: var(--color-primary);
-            background: white;
-            box-shadow: 0 0 0 4px rgba(244,164,66,0.15);
-        }
-
-        .products-controls select {
-            cursor: pointer;
-            padding-right: 40px;
-        }
-
-        @media (max-width: 768px) {
-            .search-wrapper, .select-wrapper {
-                width: 100%;
-                min-width: 100%;
-            }
-        }
-        
-        .product-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: auto;
-            padding-top:10px;
-        }
-        
-        .buy-btn {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: var(--color-primary);
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.25s ease;
-        }
-        
-        .buy-btn i {
-            color: white;
-            font-size: 1rem;
-        }
-        
-        .buy-btn:hover {
-            transform: scale(1.08);
-            box-shadow: 0 6px 18px rgba(244,164,66,0.4);
-        }
-
-        .product-price {
-            font-size: 1.6rem;
-            color: var(--color-primary);
-            font-weight: 700;
-        }
-
-        .product-stock.low-stock { color: #d9534f; font-weight: 600; }
-        .product-stock.out-stock { color: #999; font-weight: 600; }
-
-        #galeria { background-color: #fafafa; }
-
-        .gallery-intro {
-            text-align: center;
-            max-width: 700px;
-            margin: 0 auto 3rem;
-            font-size: 1.1rem;
-            color: #666;
-        }
-
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .gallery-item {
-            position: relative;
-            overflow: hidden;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            transition: all 0.3s;
-            height: 400px;
-        }
-
-        .gallery-item:hover {
-            transform: scale(1.03);
-            box-shadow: 0 15px 40px rgba(244,164,66,0.3);
-        }
-
-        .gallery-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .gallery-caption {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-            color: white;
-            padding: 2rem 1.5rem 1.5rem;
-        }
-
-        .gallery-caption h3 { font-size: 1.3rem; margin-bottom: 0.5rem; }
-
-        #testimonios {
-            background: linear-gradient(135deg, var(--color-dark) 0%, #3a3a3a 100%);
-            color: white;
-        }
-
-        #testimonios h2 { color: white; }
-
-        .rating-overall {
-            text-align: center;
-            background: var(--color-primary);
-            color: var(--color-dark);
-            padding: 1.5rem;
-            border-radius: 15px;
-            margin-bottom: 3rem;
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        /* === CARRUSEL DE RESEÑAS === */
-        .testimonials-grid {
-            display: flex;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            gap: 2rem;
-            margin-top: 3rem;
-            padding-bottom: 1.5rem; /* Espacio para la barra de scroll */
-            
-            /* Estilos de la barra de scroll */
-            scrollbar-width: thin;
-            scrollbar-color: var(--color-primary) transparent;
-        }
-        
-        .testimonials-grid::-webkit-scrollbar {
-            height: 8px;
-        }
-        .testimonials-grid::-webkit-scrollbar-track {
-            background: rgba(255,255,255,0.1);
-            border-radius: 10px;
-        }
-        .testimonials-grid::-webkit-scrollbar-thumb {
-            background-color: var(--color-primary);
-            border-radius: 10px;
-        }
-        
-        .testimonial-card {
-            /* Muestra exactamente 3 tarjetas por defecto */
-            flex: 0 0 calc(33.333% - 1.34rem); 
-            scroll-snap-align: start;
-            background: rgba(255,255,255,0.1);
-            padding: 2rem;
-            border-radius: 15px;
-            border: 1px solid rgba(255,255,255,0.2);
-            display: flex;
-            flex-direction: column;
-        }
-        
-        /* Cabecera de la reseña: Foto, Nombre y Fecha */
-        .testimonial-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-        
-        .testimonial-photo {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-        
-        .testimonial-info h4 {
-            margin: 0;
-            font-size: 1.1rem;
-            color: var(--color-primary);
-        }
-        
-        .testimonial-time {
-            font-size: 0.85rem;
-            color: #ccc;
-            margin: 0;
-        }
-        
-        /* Responsive: 2 en tablets, 1 en móviles */
-        @media (max-width: 992px) {
-            .testimonial-card { flex: 0 0 calc(50% - 1rem); }
-        }
-        @media (max-width: 768px) {
-            .testimonial-card { flex: 0 0 100%; }
-        }
-
-        #contacto { background-color: var(--color-cream); }
-
-        .contact-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            max-width: 1200px;
-            margin: 3rem auto 0;
-        }
-
-        .contact-info {
-            background: white;
-            padding: 2.5rem;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-        }
-
-        .contact-item {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 2rem;
-            padding-bottom: 2rem;
-            border-bottom: 1px solid var(--color-beige);
-        }
-
-        .contact-item:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
-
-        .contact-icon {
-            font-size: 2rem;
-            margin-right: 1.5rem;
-            min-width: 40px;
-        }
-
-        .contact-details h3 { margin-bottom: 0.5rem; }
-
-        .contact-details a {
-            color: var(--color-primary);
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .map-container {
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            height: 500px;
-        }
-
-        .map-container iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        footer {
-            background-color: var(--color-dark);
-            color: var(--color-cream);
-            text-align: center;
-            padding: 3rem 2rem;
-        }
-
-        .footer-social a {
-            color: var(--color-primary);
-            font-size: 1.8rem;
-            margin: 0 1rem;
-            text-decoration: none;
-            transition: transform 0.3s;
-            display: inline-block;
-        }
-
-        .footer-social a:hover { transform: scale(1.2); }
-
-        @media (max-width: 768px) {
-            section { padding: 3rem 1.5rem; }
-            .hero-logo img { height: 35vh; }
-            .hero-content h1 { font-size: 2.5rem; }
-            .contact-container, .gallery-grid { grid-template-columns: 1fr; }
-            .gallery-item { height: 300px; }
-        }
-
-        html { scroll-behavior: smooth; }
-        
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .btn i {
-            font-size: 18px;
-        }
-        
-        .btn-whatsapp {
-            background-color: #f4a940;
-            color: white;
-            border: none;
-        
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-        
-            width: 100%;
-            padding: 12px 0;
-        
-            font-weight: 600;
-            text-align: center;
-        }
-
-        
-        .btn-whatsapp:hover {
-            background-color: #e0932f;
-        }
-
-        .sidebar-social a, .footer-social a {
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background-color: var(--color-primary);
-            color: white;
-            font-size: 20px;
-            transition: transform 0.3s;
-        }
-        
-        .sidebar-social a:hover, .footer-social a:hover {
-            transform: scale(1.2);
-            color: white;
-        }
-
-        /* === DESCRIPCIÓN EXPANDIBLE === */
-        
-       .product-full-desc {
-            max-height: 0;
-            overflow: hidden;
-            opacity: 0;
-            transition: 
-                max-height 0.4s ease,
-                opacity 0.3s ease;
-            margin-top: 0;
-        }
-        
-        .product-full-desc.active {
-            max-height: 500px; /* suficiente para el contenido */
-            opacity: 1;
-            margin-top: 10px;
-        }
-        
-        .view-more-btn {
-            margin-top: 8px;
-            background: none;
-            border: none;
-            color: var(--color-primary);
-            font-weight: 600;
-            cursor: pointer;
-            padding: 0;
-        }
-        
-        .view-more-btn:hover {
-            opacity: 0.9;
-        }
-        /* === DROPDOWN REDES SOCIALES === */
-        
-        .social-wrapper {
-            position: relative;
-            display: inline-block;
-        }
-        
-        .social-dropdown {
-            position: absolute;
-            top: 110%;
-            left: 0;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            padding: 8px;
-            display: none;
-            flex-direction: column;
-            min-width: 180px;
-            z-index: 1000;
-        }
-        
-        .social-dropdown a {
-            padding: 10px;
-            text-decoration: none;
-            color: var(--color-dark);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border-radius: 8px;
-            transition: 0.2s;
-            font-weight: 600;
-        }
-        
-        .social-dropdown a i {
-            color: var(--color-primary);  /* ICONO NARANJA */
-            font-size: 18px;
-        }
-        
-        .social-dropdown a:hover {
-            background: var(--color-cream);
-        }
-        
-        .social-dropdown.show {
-            display: flex;
-        }
-        /* Iconos específicos del dropdown contacto */
-        #contactDropdown a i {
-            color: var(--color-primary);
-        }
-        /* === BOTÓN VER MÁS EN GOOGLE === */
-        .btn-google {
-            background-color: white;
-            color: var(--color-dark);
-            border: 2px solid white;
-            font-weight: 600;
-            padding: 1rem 2.5rem;
-            border-radius: 50px;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 1.05rem;
-        }
-        
-        .btn-google i {
-            color: var(--color-primary); /* Ahora es naranja corporativo */
-            font-size: 1.3rem;
-        }
-                
-        .btn-google:hover {
-            background-color: transparent;
-            color: white;
-            transform: translateY(-4px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-        }
-        
-        .btn-google:hover i {
-            color: white; /* El icono se vuelve blanco al hacer hover */
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Escondite Gourmet – Tienda de vinos y delicatessen en Ruzafa | Valencia</title>
+    <meta name="description" content="Descubre entornos gourmet, selección de vinos y productos delicatessen en El Escondite Gourmet, tu tienda especializada en el corazón de Ruzafa, Valencia.">
+    
+    <!-- Google Fonts - Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-primary: #f4a442;
+            --color-dark: #2c2c2c;
+            --color-cream: #f5f1e8;
+            --color-beige: #e8dcc4;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+            line-height: 1.6;
+            color: var(--color-dark);
+            background-color: var(--color-cream);
+        }
+
+        h1, h2, h3 { font-weight: 700; }
+
+        /* Menu Toggle Button */
+        .menu-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 2000;
+            background-color: var(--color-primary);
+            border: none;
+            padding: 1rem;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+        }
+
+        .menu-toggle:hover { transform: scale(1.05); }
+
+        .menu-toggle span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: var(--color-dark);
+            margin: 5px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+
+        .menu-toggle.active span:nth-child(1) { transform: rotate(-45deg) translate(-5px, 6px); }
+        .menu-toggle.active span:nth-child(2) { opacity: 0; }
+        .menu-toggle.active span:nth-child(3) { transform: rotate(45deg) translate(-5px, -6px); }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 300px;
+            height: 100vh;
+            background: linear-gradient(135deg, var(--color-dark) 0%, #1a1a1a 100%);
+            z-index: 1500;
+            transform: translateX(-100%);
+            transition: transform 0.3s;
+            box-shadow: 5px 0 30px rgba(0,0,0,0.5);
+            overflow-y: auto;
+        }
+
+        .sidebar.active { transform: translateX(0); }
+
+        .sidebar-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* centra horizontalmente */
+            justify-content: center; /* centra verticalmente si quieres */
+            padding: 2rem 2rem 1rem 2rem; /* más espacio arriba y abajo */
+            border-bottom: 2px solid var(--color-primary); /* opcional, para separar del menú */
+        }
+
+
+
+        .sidebar-logo {
+            width: auto;         /* permite mantener proporción */
+            max-width: 120px;    /* máximo ancho */
+            height: 80px;        /* altura fija para que no se desborde */
+            display: block;
+            margin: 0 auto 1rem auto; /* centrado */
+        }
+
+
+        .sidebar-brand h2 {
+            color: var(--color-primary);
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+        
+        .sidebar-brand p {
+            color: var(--color-beige);
+            font-size: 0.9rem;
+            font-weight: 300;
+            text-align: center; /* centra el texto "Ruzafa, Valencia" */
+        }
+
+        .sidebar nav { padding: 2rem 0; }
+        .sidebar nav ul { list-style: none; }
+        .sidebar nav ul li { margin-bottom: 0.5rem; }
+
+        .sidebar nav ul li a {
+            display: block;
+            padding: 1rem 2rem;
+            color: var(--color-cream);
+            text-decoration: none;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+        }
+
+        .sidebar nav ul li a:hover {
+            background-color: rgba(244, 164, 66, 0.1);
+            border-left-color: var(--color-primary);
+            color: var(--color-primary);
+        }
+
+        .sidebar-footer {
+            padding: 2rem;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-social a {
+            display: inline-block;
+            margin: 0 10px;
+            color: var(--color-primary);
+            font-size: 1.5rem;
+            text-decoration: none;
+            transition: transform 0.3s;
+        }
+
+        .sidebar-social a:hover { transform: scale(1.2); }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1400;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Sections */
+        section { padding: 5rem 3rem; }
+
+     #home {
+            background-color: #f4a442; /* color de fondo fijo */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+        }
+
+       .cabecera-img {
+            width: 100%;          /* ocupa todo el ancho disponible */
+            max-width: 600px;     /* límite en pantallas grandes */
+            height: auto;         /* mantiene proporción original */
+            display: block;
+            margin: 0 auto 20px auto;  /* centrada y espacio abajo */
+            border-radius: 0;     /* sin bordes redondeados */
+        }
+
+
+        .hero-logo img {
+            height: 45vh;           /* tamaño protagonista equilibrado */
+            max-height: 550px;      /* límite en pantallas grandes */
+            width: auto;
+            display: block;
+            margin: 0 auto 1.5rem auto;
+            filter: none !important;
+            box-shadow: none !important;
+        }
+
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero-content p {
+            font-size: 1.35rem;
+            margin-bottom: 2.5rem;
+            font-weight: 300;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn-primary {
+            background-color: white;
+            color: var(--color-dark);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .btn-primary:hover {
+            background-color: #f5f5f5;
+            transform: translateY(-3px);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background-color: white;
+            color: var(--color-dark);
+        }
+
+        #sobre-nosotros { 
+            background-color: #fafafa; 
+            padding: 6rem 1.5rem; /* Espacio amplio para que respire */
+        }
+        
+        .about-content {
+            max-width: 800px; /* Ancho ideal para lectura ligera */
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .about-text-wrapper {
+            margin-top: 2rem;
+        }
+        
+        /* Única regla para el párrafo: centrada, grande y limpia */
+        .about-content p {
+            font-size: 1.2rem; 
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            text-align: center; 
+            color: #444;
+        }
+        
+        /* Título con la línea naranja debajo */
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+        
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background-color: var(--color-primary);
+            border-radius: 2px;
+        }
+
+        #productos { background-color: var(--color-beige); }
+
+        .sheets-setup {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 2rem;
+            margin: 2rem auto;
+            max-width: 800px;
+        }
+        
+        /* === MENSAJE PERSONALIZACIÓN Y ENVÍOS === */
+        .products-info-banner {
+            background: white;
+            border-left: 6px solid var(--color-primary);
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            border-radius: 14px;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.06);
+        }
+        
+        .products-info-banner h4 {
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+            color: var(--color-dark);
+        }
+        
+        .products-info-banner p {
+            margin: 0;
+            font-size: 1rem;
+            color: #555;
+            line-height: 1.6;
+        }
+        
+        .products-info-banner i {
+            color: var(--color-primary);
+            margin-right: 8px;
+        }
+
+        /* === PRODUCT LAYOUT OPTIMIZADO === */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+            transition: all 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 22px rgba(0,0,0,0.12);
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+        }
+        
+        .product-content {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .product-content h3 {
+            font-size: 1.05rem;
+            margin: 0;
+            line-height: 1.2;
+        }
+        
+        .product-short-desc {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .product-price {
+            font-weight: bold;
+            font-size: 1rem;
+            margin-top: auto;
+        }
+        /* Secciones por Tipo */
+        .products-section { margin-bottom: 2rem; }
+        
+        .products-section h3.section-title {
+            margin: 0 0 0.8rem 0;
+            font-size: 1.35rem;
+            color: var(--color-dark);
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:10px;
+        }
+        
+        .section-count {
+            font-size:0.9rem;
+            color:#666;
+            font-weight:600;
+        }
+        
+        /* Controles filtro y búsqueda */
+        .products-controls {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .products-controls input[type="search"] {
+            flex: 1;
+            padding: 14px 18px;
+            border-radius: 14px;
+            border: 1px solid #ddd;
+            font-size: 1rem;
+            transition: all 0.25s ease;
+        }
+        
+        .products-controls input[type="search"]:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(244,164,66,0.2);
+        }
+        
+        .products-controls select {
+            padding: 14px 18px;
+            border-radius: 14px;
+            border: 1px solid #ddd;
+            font-size: 1rem;
+            background: white;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+        
+        .products-controls select:focus {
+            outline: none;
+            border-color: var(--color-primary);
+        }
+        
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+            padding-top:10px;
+        }
+        
+        .buy-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--color-primary);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+        
+        .buy-btn i {
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .buy-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 6px 18px rgba(244,164,66,0.4);
+        }
+
+        .product-price {
+            font-size: 1.6rem;
+            color: var(--color-primary);
+            font-weight: 700;
+        }
+
+        .product-stock.low-stock { color: #d9534f; font-weight: 600; }
+        .product-stock.out-stock { color: #999; font-weight: 600; }
+
+        #galeria { background-color: #fafafa; }
+
+        .gallery-intro {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            font-size: 1.1rem;
+            color: #666;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            transition: all 0.3s;
+            height: 400px;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.03);
+            box-shadow: 0 15px 40px rgba(244,164,66,0.3);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .gallery-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            color: white;
+            padding: 2rem 1.5rem 1.5rem;
+        }
+
+        .gallery-caption h3 { font-size: 1.3rem; margin-bottom: 0.5rem; }
+
+        #testimonios {
+            background: linear-gradient(135deg, var(--color-dark) 0%, #3a3a3a 100%);
+            color: white;
+        }
+
+        #testimonios h2 { color: white; }
+
+        .rating-overall {
+            text-align: center;
+            background: var(--color-primary);
+            color: var(--color-dark);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 3rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        /* === CARRUSEL DE RESEÑAS === */
+        .testimonials-grid {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            gap: 2rem;
+            margin-top: 3rem;
+            padding-bottom: 1.5rem; /* Espacio para la barra de scroll */
+            
+            /* Estilos de la barra de scroll */
+            scrollbar-width: thin;
+            scrollbar-color: var(--color-primary) transparent;
+        }
+        
+        .testimonials-grid::-webkit-scrollbar {
+            height: 8px;
+        }
+        .testimonials-grid::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+        }
+        .testimonials-grid::-webkit-scrollbar-thumb {
+            background-color: var(--color-primary);
+            border-radius: 10px;
+        }
+        
+        .testimonial-card {
+            /* Muestra exactamente 3 tarjetas por defecto */
+            flex: 0 0 calc(33.333% - 1.34rem); 
+            scroll-snap-align: start;
+            background: rgba(255,255,255,0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.2);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Cabecera de la reseña: Foto, Nombre y Fecha */
+        .testimonial-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .testimonial-photo {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .testimonial-info h4 {
+            margin: 0;
+            font-size: 1.1rem;
+            color: var(--color-primary);
+        }
+        
+        .testimonial-time {
+            font-size: 0.85rem;
+            color: #ccc;
+            margin: 0;
+        }
+        
+        /* Responsive: 2 en tablets, 1 en móviles */
+        @media (max-width: 992px) {
+            .testimonial-card { flex: 0 0 calc(50% - 1rem); }
+        }
+        @media (max-width: 768px) {
+            .testimonial-card { flex: 0 0 100%; }
+        }
+
+        #contacto { background-color: var(--color-cream); }
+
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 3rem auto 0;
+        }
+
+        .contact-info {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--color-beige);
+        }
+
+        .contact-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .contact-icon {
+            font-size: 2rem;
+            margin-right: 1.5rem;
+            min-width: 40px;
+        }
+
+        .contact-details h3 { margin-bottom: 0.5rem; }
+
+        .contact-details a {
+            color: var(--color-primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .map-container {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            height: 500px;
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        footer {
+            background-color: var(--color-dark);
+            color: var(--color-cream);
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+
+        .footer-social a {
+            color: var(--color-primary);
+            font-size: 1.8rem;
+            margin: 0 1rem;
+            text-decoration: none;
+            transition: transform 0.3s;
+            display: inline-block;
+        }
+
+        .footer-social a:hover { transform: scale(1.2); }
+
+        @media (max-width: 768px) {
+            section { padding: 3rem 1.5rem; }
+            .hero-logo img { height: 35vh; }
+            .hero-content h1 { font-size: 2.5rem; }
+            .contact-container, .gallery-grid { grid-template-columns: 1fr; }
+            .gallery-item { height: 300px; }
+        }
+
+        html { scroll-behavior: smooth; }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn i {
+            font-size: 18px;
+        }
+        
+        .btn-whatsapp {
+            background-color: #f4a940;
+            color: white;
+            border: none;
+        
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        
+            width: 100%;
+            padding: 12px 0;
+        
+            font-weight: 600;
+            text-align: center;
+        }
+
+        
+        .btn-whatsapp:hover {
+            background-color: #e0932f;
+        }
+
+        .sidebar-social a, .footer-social a {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background-color: var(--color-primary);
+            color: white;
+            font-size: 20px;
+            transition: transform 0.3s;
+        }
+        
+        .sidebar-social a:hover, .footer-social a:hover {
+            transform: scale(1.2);
+            color: white;
+        }
+
+        /* === DESCRIPCIÓN EXPANDIBLE === */
+        
+       .product-full-desc {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: 
+                max-height 0.4s ease,
+                opacity 0.3s ease;
+            margin-top: 0;
+        }
+        
+        .product-full-desc.active {
+            max-height: 500px; /* suficiente para el contenido */
+            opacity: 1;
+            margin-top: 10px;
+        }
+        
+        .view-more-btn {
+            margin-top: 8px;
+            background: none;
+            border: none;
+            color: var(--color-primary);
+            font-weight: 600;
+            cursor: pointer;
+            padding: 0;
+        }
+        
+        .view-more-btn:hover {
+            opacity: 0.9;
+        }
+        /* === DROPDOWN REDES SOCIALES === */
+        
+        .social-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .social-dropdown {
+            position: absolute;
+            top: 110%;
+            left: 0;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            padding: 8px;
+            display: none;
+            flex-direction: column;
+            min-width: 180px;
+            z-index: 1000;
+        }
+        
+        .social-dropdown a {
+            padding: 10px;
+            text-decoration: none;
+            color: var(--color-dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-radius: 8px;
+            transition: 0.2s;
+            font-weight: 600;
+        }
+        
+        .social-dropdown a i {
+            color: var(--color-primary);  /* ICONO NARANJA */
+            font-size: 18px;
+        }
+        
+        .social-dropdown a:hover {
+            background: var(--color-cream);
+        }
+        
+        .social-dropdown.show {
+            display: flex;
+        }
+        /* Iconos específicos del dropdown contacto */
+        #contactDropdown a i {
+            color: var(--color-primary);
+        }
+        /* === BOTÓN VER MÁS EN GOOGLE === */
+        .btn-google {
+            background-color: white;
+            color: var(--color-dark);
+            border: 2px solid white;
+            font-weight: 600;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.05rem;
+        }
+        
+        .btn-google i {
+            color: var(--color-primary); /* Ahora es naranja corporativo */
+            font-size: 1.3rem;
+        }
+                
+        .btn-google:hover {
+            background-color: transparent;
+            color: white;
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+        
+        .btn-google:hover i {
+            color: white; /* El icono se vuelve blanco al hacer hover */
+        }
+    </style>
 </head>
 <body>
-    <button class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
-        <span></span><span></span><span></span>
-    </button>
+    <button class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+    </button>
 
-    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
 
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <div class="sidebar-brand">
-                <h2>El Escondite Gourmet</h2>
-                <p>Ruzafa, Valencia</p>
-            </div>
-        </div>
-        <nav>
-            <ul>
-                <li><a href="#home">Inicio</a></li>
-                <li><a href="#sobre-nosotros">Sobre Nosotros</a></li>
-                <li><a href="#productos">Productos</a></li>
-                <li><a href="#galeria">Nuestro Local</a></li>
-                <li><a href="#testimonios">Reseñas</a></li>
-                <li><a href="#contacto">Contacto</a></li>
-            </ul>
-        </nav>
-        <div class="sidebar-footer">
-            <div class="sidebar-social">
-                <a href="https://instagram.com/elesconditegourmet" target="_blank"><i class="fab fa-instagram"></i></a>
-                <a href="https://www.tiktok.com/@el.escondite.gourmet" target="_blank"><i class="fab fa-tiktok"></i></a>
-                <a href="tel:+34678947545"><i class="fas fa-phone"></i></a>
-            </div>
-        </div>
-    </aside>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-brand">
+                <h2>El Escondite Gourmet</h2>
+                <p>Ruzafa, Valencia</p>
+            </div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#home">Inicio</a></li>
+                <li><a href="#sobre-nosotros">Sobre Nosotros</a></li>
+                <li><a href="#productos">Productos</a></li>
+                <li><a href="#galeria">Nuestro Local</a></li>
+                <li><a href="#testimonios">Reseñas</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+            </ul>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="sidebar-social">
+                <a href="https://instagram.com/elesconditegourmet" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.tiktok.com/@el.escondite.gourmet" target="_blank"><i class="fab fa-tiktok"></i></a>
+                <a href="tel:+34678947545"><i class="fas fa-phone"></i></a>
+            </div>
+        </div>
+    </aside>
 
-    <main>
-        <section id="home">
-            <div class="hero-logo">
-                <img src="cabecera.jpg" alt="Cabecera" class="cabecera-img">
-            </div>
-            <div class="hero-content">
-                <h1>El Escondite Gourmet</h1>
-                <p>Tu rincón gourmet en Ruzafa — vinos, sabores y momentos únicos</p>
-                <div class="cta-buttons">
-                    <a href="#productos" class="btn btn-primary">Ver Productos</a>
-                    <a href="https://www.google.com/maps/dir/?api=1&destination=C.+dels+Centelles+22,+46006+València" target="_blank" class="btn btn-secondary">
-                        Cómo Llegar
-                    </a>
-                    <div class="social-wrapper">
-                        <button class="btn btn-secondary" id="contactToggle">
-                            <i class="fa-solid fa-phone"></i> Contactar
-                        </button>
-                    
-                        <div class="social-dropdown" id="contactDropdown">
-                            <a href="tel:+34678947545">
-                                <i class="fa-solid fa-phone"></i> Llamar
-                            </a>
-                    
-                            <a href="https://wa.me/34678947545" target="_blank">
-                                <i class="fab fa-whatsapp"></i> WhatsApp
-                            </a>
-                        </div>
-                    </div>
-                    <div class="social-wrapper">
-                        <button class="btn btn-secondary" id="socialToggle">
-                            <i class="fa-solid fa-share-nodes"></i> Redes Sociales
-                        </button>
-                    
-                        <div class="social-dropdown" id="socialDropdown">
-                            <a href="https://instagram.com/elesconditegourmet" target="_blank">
-                                <i class="fab fa-instagram"></i> Instagram
-                            </a>
-                    
-                            <a href="https://www.tiktok.com/@el.escondite.gourmet" target="_blank">
-                                <i class="fab fa-tiktok"></i> TikTok
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+    <main>
+        <section id="home">
+            <div class="hero-logo">
+                <img src="cabecera.jpg" alt="Cabecera" class="cabecera-img">
+            </div>
+            <div class="hero-content">
+                <h1>El Escondite Gourmet</h1>
+                <p>Tu rincón gourmet en Ruzafa — vinos, sabores y momentos únicos</p>
+                <div class="cta-buttons">
+                    <a href="#productos" class="btn btn-primary">Ver Productos</a>
+                    <a href="https://www.google.com/maps/dir/?api=1&destination=C.+dels+Centelles+22,+46006+València" target="_blank" class="btn btn-secondary">
+                        Cómo Llegar
+                    </a>
+                    <div class="social-wrapper">
+                        <button class="btn btn-secondary" id="contactToggle">
+                            <i class="fa-solid fa-phone"></i> Contactar
+                        </button>
+                    
+                        <div class="social-dropdown" id="contactDropdown">
+                            <a href="tel:+34678947545">
+                                <i class="fa-solid fa-phone"></i> Llamar
+                            </a>
+                    
+                            <a href="https://wa.me/34678947545" target="_blank">
+                                <i class="fab fa-whatsapp"></i> WhatsApp
+                            </a>
+                        </div>
+                    </div>
+                    <div class="social-wrapper">
+                        <button class="btn btn-secondary" id="socialToggle">
+                            <i class="fa-solid fa-share-nodes"></i> Redes Sociales
+                        </button>
+                    
+                        <div class="social-dropdown" id="socialDropdown">
+                            <a href="https://instagram.com/elesconditegourmet" target="_blank">
+                                <i class="fab fa-instagram"></i> Instagram
+                            </a>
+                    
+                            <a href="https://www.tiktok.com/@el.escondite.gourmet" target="_blank">
+                                <i class="fab fa-tiktok"></i> TikTok
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-       <section id="sobre-nosotros">
-            <div class="about-content">
-                <h2>Sobre Nosotros</h2>
-                <div class="about-text-wrapper">
-                    <p>
-                        En El Escondite Gourmet creemos que el buen vivir no debería tener secretos. 
-                        Ubicados en el alma de Ruzafa, somos un refugio para los amantes del buen vino 
-                        y los productos con historia.
-                    </p>
-                    <p>
-                        Aquí no solo encontrarás una selección impecable de quesos y delicatessen, sino también la 
-                        cercanía de quien conoce y ama lo que vende. Calidad sin pretensiones y experiencias 
-                        para compartir en el corazón de nuestro barrio favorito.
-                    </p>
-                </div>
-            </div>
-        </section>
+       <section id="sobre-nosotros">
+            <div class="about-content">
+                <h2>Sobre Nosotros</h2>
+                <div class="about-text-wrapper">
+                    <p>
+                        En El Escondite Gourmet creemos que el buen vivir no debería tener secretos. 
+                        Ubicados en el alma de Ruzafa, somos un refugio para los amantes del buen vino 
+                        y los productos con historia.
+                    </p>
+                    <p>
+                        Aquí no solo encontrarás una selección impecable de quesos y delicatessen, sino también la 
+                        cercanía de quien conoce y ama lo que vende. Calidad sin pretensiones y experiencias 
+                        para compartir en el corazón de nuestro barrio favorito.
+                    </p>
+                </div>
+            </div>
+        </section>
 
-        <section id="productos">
-            <h2>Nuestros Productos</h2>
-            <div id="productsContainer"><div class="products-loading">Cargando productos...</div></div>
-            <!-- Enlace para Política de Cambios y Devoluciones -->
-            <a href="#" id="verPolitica" style="display:inline-block; margin-top:2rem; color: var(--color-primary); font-weight:600; cursor:pointer;">
-                Política de Cambios y Devoluciones
-            </a>
-        </section>
+        <section id="productos">
+            <h2>Nuestros Productos</h2>
+            <div id="productsContainer"><div class="products-loading">Cargando productos...</div></div>
+            <!-- Enlace para Política de Cambios y Devoluciones -->
+            <a href="#" id="verPolitica" style="display:inline-block; margin-top:2rem; color: var(--color-primary); font-weight:600; cursor:pointer;">
+                Política de Cambios y Devoluciones
+            </a>
+        </section>
 
-        <section id="galeria">
-            <h2>Nuestro Local</h2>
-            <p class="gallery-intro">Visítanos en el corazón de Ruzafa y descubre un espacio acogedor donde cada rincón está pensado para ofrecerte la mejor experiencia gourmet.</p>
-            <div class="gallery-grid">
-            <div class="gallery-item">
-                <img src="exterior_tienda.jpg" alt="Exterior de la tienda">
-                <div class="gallery-caption">
-                    <h3>Nuestro Local</h3>
-                    <p>En el corazón del barrio de Ruzafa</p>
-                </div>
-            </div>
-            <div class="gallery-item">
-                <img src="interior_tienda.jpg" alt="Interior de la tienda">
-                <div class="gallery-caption">
-                    <h3>Interior Acogedor</h3>
-                    <p>Ambiente gourmet creado para disfrutar</p>
-                </div>
-            </div>
-            <div class="gallery-item">
-                <img src="cata_vinos.jpg" alt="Cata de vinos">
-                <div class="gallery-caption">
-                    <h3>Cata de Vinos</h3>
-                    <p>Descubre nuestra selección de vinos</p>
-                </div>
-            </div>
-        </div>
-        </section>
+        <section id="galeria">
+            <h2>Nuestro Local</h2>
+            <p class="gallery-intro">Visítanos en el corazón de Ruzafa y descubre un espacio acogedor donde cada rincón está pensado para ofrecerte la mejor experiencia gourmet.</p>
+            <div class="gallery-grid">
+            <div class="gallery-item">
+                <img src="exterior_tienda.jpg" alt="Exterior de la tienda">
+                <div class="gallery-caption">
+                    <h3>Nuestro Local</h3>
+                    <p>En el corazón del barrio de Ruzafa</p>
+                </div>
+            </div>
+            <div class="gallery-item">
+                <img src="interior_tienda.jpg" alt="Interior de la tienda">
+                <div class="gallery-caption">
+                    <h3>Interior Acogedor</h3>
+                    <p>Ambiente gourmet creado para disfrutar</p>
+                </div>
+            </div>
+            <div class="gallery-item">
+                <img src="cata_vinos.jpg" alt="Cata de vinos">
+                <div class="gallery-caption">
+                    <h3>Cata de Vinos</h3>
+                    <p>Descubre nuestra selección de vinos</p>
+                </div>
+            </div>
+        </div>
+        </section>
 
-        <section id="testimonios">
-            <h2>Lo Que Dicen Nuestros Clientes</h2>
-            <div class="rating-overall" id="ratingOverall">⭐⭐⭐⭐⭐<br>Valoración: 0/5.0</div>
-            
-            <div class="testimonials-grid" id="testimonialsGrid">
-                <p>Cargando reseñas…</p>
-            </div>
-            
-            <div style="text-align: center; margin-top: 3rem;">
-                <a href="https://www.google.com/search?sca_esv=57d8031efe13a3fc&hl=es-ES&gl=es&sxsrf=ANbL-n4Ke31hOVYgl6eQXAdBs6vZ4TCRXA:1772194321129&si=AL3DRZEsmMGCryMMFSHJ3StBhOdZ2-6yYkXd_doETEE1OR-qOcoXD_VZ4oDequBXDpI-wZDpw84jqSOhj_cpaQiZKUEnHkNMt9wkaiP7ZbEU__9TTBATS-3SAEQiurFu2cqleAu4DurMlViOBwMD70ZOBjwKTqQqBTsxOwF2H24lA3yDcRHPRkA%3D&q=EL+ESCONDITE+-+Productos+Gourmet+Rese%C3%B1as&sa=X&ved=2ahUKEwjYne-n0vmSAxUA1wIHHa8NHzgQ0bkNegQILBAF&biw=1280&bih=598&dpr=1.5" target="_blank" class="btn btn-google">
-                    <i class="fab fa-google"></i> Ver todas las reseñas en Google
-                </a>
-            </div>
-            </section>
-        <section id="contacto">
-            <h2>Contacto</h2>
-            <div class="contact-container">
-                <div class="contact-info">
-                    <div class="contact-item">
-                        <div class="contact-icon">📍</div>
-                        <div class="contact-details">
-                            <h3>Dirección</h3>
-                            <p>C/ dels Centelles 22<br>46006 València<br><a href="https://maps.google.com/?q=C.+dels+Centelles+22,+46006+València" target="_blank">Ver en Google Maps</a></p>
-                        </div>
-                    </div>
-                    <div class="contact-item">
-                        <div class="contact-icon">☎️</div>
-                        <div class="contact-details">
-                            <h3>Teléfono</h3>
-                            <p><a href="tel:+34678947545">+34 678 94 75 45</a></p>
-                        </div>
-                    </div>
-                    <div class="contact-item">
-                        <div class="contact-icon">🕐</div>
-                        <div class="contact-details">
-                            <h3>Horario</h3>
-                            <p><strong>Lunes-Jueves:</strong> 10:30-14:00 | 16:30-20:30<br><strong>Viernes:</strong> 10:30-14:00 | 16:30-20:00 <br><strong>Sábado:</strong> 10:30-14:00 <br><strong>Dom:</strong> Cerrado</p>
-                        </div>
-                    </div>
-                    <div class="contact-item">
-                        <div class="contact-icon">📷</div>
-                        <div class="contact-details">
-                            <h3>Síguenos</h3>
-                            <p>Instagram: <a href="https://instagram.com/elesconditegourmet" target="_blank">@elesconditegourmet</a></p>
-                            <p> TikTok: <a href="https://www.tiktok.com/@el.escondite.gourmet" target="_blank">@el.escondite.gourmet</a></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="map-container">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3079.983805276487!2d-0.3690829!3d39.4626517!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd604f4cf0efb06f%3A0xb4a351011f7e1c63!2sCarrer%20dels%20Centelles%2C%2022%2C%20Extramurs%2C%2046006%20Val%C3%A8ncia!5e0!3m2!1sen!2ses!4v1234567890" allowfullscreen loading="lazy"></iframe>
-                </div>
-            </div>
-        </section>
-    </main>
+        <section id="testimonios">
+            <h2>Lo Que Dicen Nuestros Clientes</h2>
+            <div class="rating-overall" id="ratingOverall">⭐⭐⭐⭐⭐<br>Valoración: 0/5.0</div>
+            
+            <div class="testimonials-grid" id="testimonialsGrid">
+                <p>Cargando reseñas…</p>
+            </div>
+            
+            <div style="text-align: center; margin-top: 3rem;">
+                <a href="https://www.google.com/search?sca_esv=57d8031efe13a3fc&hl=es-ES&gl=es&sxsrf=ANbL-n4Ke31hOVYgl6eQXAdBs6vZ4TCRXA:1772194321129&si=AL3DRZEsmMGCryMMFSHJ3StBhOdZ2-6yYkXd_doETEE1OR-qOcoXD_VZ4oDequBXDpI-wZDpw84jqSOhj_cpaQiZKUEnHkNMt9wkaiP7ZbEU__9TTBATS-3SAEQiurFu2cqleAu4DurMlViOBwMD70ZOBjwKTqQqBTsxOwF2H24lA3yDcRHPRkA%3D&q=EL+ESCONDITE+-+Productos+Gourmet+Rese%C3%B1as&sa=X&ved=2ahUKEwjYne-n0vmSAxUA1wIHHa8NHzgQ0bkNegQILBAF&biw=1280&bih=598&dpr=1.5" target="_blank" class="btn btn-google">
+                    <i class="fab fa-google"></i> Ver todas las reseñas en Google
+                </a>
+            </div>
+            </section>
+        <section id="contacto">
+            <h2>Contacto</h2>
+            <div class="contact-container">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <div class="contact-icon">📍</div>
+                        <div class="contact-details">
+                            <h3>Dirección</h3>
+                            <p>C/ dels Centelles 22<br>46006 València<br><a href="https://maps.google.com/?q=C.+dels+Centelles+22,+46006+València" target="_blank">Ver en Google Maps</a></p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">☎️</div>
+                        <div class="contact-details">
+                            <h3>Teléfono</h3>
+                            <p><a href="tel:+34678947545">+34 678 94 75 45</a></p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">🕐</div>
+                        <div class="contact-details">
+                            <h3>Horario</h3>
+                            <p><strong>Lunes-Jueves:</strong> 10:30-14:00 | 16:30-20:30<br><strong>Viernes:</strong> 10:30-14:00 | 16:30-20:00 <br><strong>Sábado:</strong> 10:30-14:00 <br><strong>Dom:</strong> Cerrado</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">📷</div>
+                        <div class="contact-details">
+                            <h3>Síguenos</h3>
+                            <p>Instagram: <a href="https://instagram.com/elesconditegourmet" target="_blank">@elesconditegourmet</a></p>
+                            <p> TikTok: <a href="https://www.tiktok.com/@el.escondite.gourmet" target="_blank">@el.escondite.gourmet</a></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="map-container">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3079.983805276487!2d-0.3690829!3d39.4626517!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd604f4cf0efb06f%3A0xb4a351011f7e1c63!2sCarrer%20dels%20Centelles%2C%2022%2C%20Extramurs%2C%2046006%20Val%C3%A8ncia!5e0!3m2!1sen!2ses!4v1234567890" allowfullscreen loading="lazy"></iframe>
+                </div>
+            </div>
+        </section>
+    </main>
 
-    <footer>
-        <div class="footer-social">
-            <a href="https://instagram.com/elesconditegourmet" target="_blank"><i class="fab fa-instagram"></i></a>
-            <a href="https://www.tiktok.com/@el.escondite.gourmet" target="_blank"><i class="fab fa-tiktok"></i></a>
-            <a href="tel:+34678947545"><i class="fas fa-phone"></i></a>
-            <a href="https://maps.google.com/?q=C.+dels+Centelles+22,+46006+València" target="_blank"><i class="fas fa-map-marker-alt"></i></a>
-        </div>
-        <p style="margin-top: 2rem; opacity: 0.7;">© 2026 El Escondite Gourmet | Ruzafa, Valencia</p>
-    </footer>
+    <footer>
+        <div class="footer-social">
+            <a href="https://instagram.com/elesconditegourmet" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.tiktok.com/@el.escondite.gourmet" target="_blank"><i class="fab fa-tiktok"></i></a>
+            <a href="tel:+34678947545"><i class="fas fa-phone"></i></a>
+            <a href="https://maps.google.com/?q=C.+dels+Centelles+22,+46006+València" target="_blank"><i class="fas fa-map-marker-alt"></i></a>
+        </div>
+        <p style="margin-top: 2rem; opacity: 0.7;">© 2026 El Escondite Gourmet | Ruzafa, Valencia</p>
+    </footer>
 
-    <script>
-    // === LÓGICA UNIFICADA PARA DROPDOWNS (Redes / Contacto) ===
-    document.addEventListener('DOMContentLoaded', function () {
-        const socialToggle = document.getElementById('socialToggle');
-        const socialDropdown = document.getElementById('socialDropdown');
-        const contactToggle = document.getElementById('contactToggle');
-        const contactDropdown = document.getElementById('contactDropdown');
-    
-        function closeOtherDropdowns(currentDropdown) {
-            document.querySelectorAll('.social-dropdown.show').forEach(dd => {
-                if (dd !== currentDropdown) dd.classList.remove('show');
-            });
-        }
-    
-        // Helper: toggle button generic
-        function wireToggle(toggleBtn, dropdownEl) {
-            if (!toggleBtn || !dropdownEl) return;
-            toggleBtn.addEventListener('click', function (e) {
-                e.preventDefault();
-                e.stopPropagation();
-                closeOtherDropdowns(dropdownEl);
-                dropdownEl.classList.toggle('show');
-            });
-        }
-    
-        wireToggle(socialToggle, socialDropdown);
-        wireToggle(contactToggle, contactDropdown);
-    
-        // Cerrar dropdowns al hacer clic fuera de su .social-wrapper correspondiente
-        document.addEventListener('click', function (e) {
-            // Recorre dropdowns abiertos y ciérralos si el clic NO está dentro del wrapper correspondiente
-            document.querySelectorAll('.social-dropdown.show').forEach(dd => {
-                const wrapper = dd.closest('.social-wrapper');
-                if (wrapper && !wrapper.contains(e.target)) dd.classList.remove('show');
-            });
-        });
-    
-        // (Opcional, mejora accesibilidad) cerrar con ESC
-        document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape') {
-                document.querySelectorAll('.social-dropdown.show').forEach(dd => dd.classList.remove('show'));
-            }
-        });
-    });
-    
-    const GOOGLE_SHEETS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRZIDPWr-VIJEfaITAzxJ6WZo5e1volpt21j139RN6Tmrwm1BwI4hAorJ-XL2p6ZOgnSOMaBd2E7l1E/pub?gid=0&single=true&output=csv';
-    
-    /* --- CSV parser simple pero robusto (maneja comillas, comas internas) --- */
-    function parseCSV(text) {
-        const rows = [];
-        let cur = '';
-        let inQuotes = false;
-        let row = [];
-        for (let i = 0; i < text.length; i++) {
-            const ch = text[i];
-            const next = text[i+1];
-    
-            if (ch === '"' ) {
-                if (inQuotes && next === '"') { // doble comilla -> escapado
-                    cur += '"'; i++;
-                } else {
-                    inQuotes = !inQuotes;
-                }
-                continue;
-            }
-            if (ch === ',' && !inQuotes) {
-                row.push(cur);
-                cur = '';
-                continue;
-            }
-            if ((ch === '\n' || ch === '\r') && !inQuotes) {
-                if (cur !== '' || row.length) {
-                    row.push(cur);
-                    rows.push(row);
-                }
-                row = [];
-                cur = '';
-                // skip possible \r\n
-                if (ch === '\r' && text[i+1] === '\n') i++;
-                continue;
-            }
-            cur += ch;
-        }
-        if (cur !== '' || row.length) {
-            row.push(cur);
-            rows.push(row);
-        }
-        return rows;
-    }
-    
-    /* convierte enlaces de Drive a enlace directo si detecta patrón */
-    function driveToView(url) {
-        if (!url) return url;
-        const m = url.match(/\/d\/([a-zA-Z0-9_-]{10,})/) || url.match(/[?&]id=([a-zA-Z0-9_-]{10,})/);
-        // Genera el enlace directo correcto de la imagen
-        if (m && m[1]) return `https://lh3.googleusercontent.com/d/${m[1]}=w800-h800`; 
-        return url;
-    }
+    <script>
+    // === LÓGICA UNIFICADA PARA DROPDOWNS (Redes / Contacto) ===
+    document.addEventListener('DOMContentLoaded', function () {
+        const socialToggle = document.getElementById('socialToggle');
+        const socialDropdown = document.getElementById('socialDropdown');
+        const contactToggle = document.getElementById('contactToggle');
+        const contactDropdown = document.getElementById('contactDropdown');
+    
+        function closeOtherDropdowns(currentDropdown) {
+            document.querySelectorAll('.social-dropdown.show').forEach(dd => {
+                if (dd !== currentDropdown) dd.classList.remove('show');
+            });
+        }
+    
+        // Helper: toggle button generic
+        function wireToggle(toggleBtn, dropdownEl) {
+            if (!toggleBtn || !dropdownEl) return;
+            toggleBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                closeOtherDropdowns(dropdownEl);
+                dropdownEl.classList.toggle('show');
+            });
+        }
+    
+        wireToggle(socialToggle, socialDropdown);
+        wireToggle(contactToggle, contactDropdown);
+    
+        // Cerrar dropdowns al hacer clic fuera de su .social-wrapper correspondiente
+        document.addEventListener('click', function (e) {
+            // Recorre dropdowns abiertos y ciérralos si el clic NO está dentro del wrapper correspondiente
+            document.querySelectorAll('.social-dropdown.show').forEach(dd => {
+                const wrapper = dd.closest('.social-wrapper');
+                if (wrapper && !wrapper.contains(e.target)) dd.classList.remove('show');
+            });
+        });
+    
+        // (Opcional, mejora accesibilidad) cerrar con ESC
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.social-dropdown.show').forEach(dd => dd.classList.remove('show'));
+            }
+        });
+    });
+    
+    const GOOGLE_SHEETS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRZIDPWr-VIJEfaITAzxJ6WZo5e1volpt21j139RN6Tmrwm1BwI4hAorJ-XL2p6ZOgnSOMaBd2E7l1E/pub?gid=0&single=true&output=csv';
+    
+    /* --- CSV parser simple pero robusto (maneja comillas, comas internas) --- */
+    function parseCSV(text) {
+        const rows = [];
+        let cur = '';
+        let inQuotes = false;
+        let row = [];
+        for (let i = 0; i < text.length; i++) {
+            const ch = text[i];
+            const next = text[i+1];
+    
+            if (ch === '"' ) {
+                if (inQuotes && next === '"') { // doble comilla -> escapado
+                    cur += '"'; i++;
+                } else {
+                    inQuotes = !inQuotes;
+                }
+                continue;
+            }
+            if (ch === ',' && !inQuotes) {
+                row.push(cur);
+                cur = '';
+                continue;
+            }
+            if ((ch === '\n' || ch === '\r') && !inQuotes) {
+                if (cur !== '' || row.length) {
+                    row.push(cur);
+                    rows.push(row);
+                }
+                row = [];
+                cur = '';
+                // skip possible \r\n
+                if (ch === '\r' && text[i+1] === '\n') i++;
+                continue;
+            }
+            cur += ch;
+        }
+        if (cur !== '' || row.length) {
+            row.push(cur);
+            rows.push(row);
+        }
+        return rows;
+    }
+    
+    /* convierte enlaces de Drive a enlace directo si detecta patrón */
+    function driveToView(url) {
+        if (!url) return url;
+        const m = url.match(/\/d\/([a-zA-Z0-9_-]{10,})/) || url.match(/[?&]id=([a-zA-Z0-9_-]{10,})/);
+        // Genera el enlace directo correcto de la imagen
+        if (m && m[1]) return `https://lh3.googleusercontent.com/d/${m[1]}=w800-h800`; 
+        return url;
+    }
 
-    
-    /* truncador simple */
-    function shortText(text, chars=130) {
-        if (!text) return '';
-        if (text.length <= chars) return text;
-        return text.slice(0, chars).trim() + '…';
-    }
-    
-    // Controles: selector de tipo + búsqueda
-            container.innerHTML = '';
-            
-            const infoBanner = document.createElement('div');
-            infoBanner.className = 'products-info-banner';
-            infoBanner.innerHTML = `
-                <p>
-                    <i class="fa-solid fa-gift"></i> Todas nuestras cajas gourmet pueden modificarse con los productos que prefieras. 
-                    Creamos combinaciones totalmente personalizadas para regalos, eventos o detalles especiales.
-                    <br><br>
-                    <i class="fa-solid fa-truck"></i> Realizamos envíos a toda España.
-                </p>
-            `;
-            container.appendChild(infoBanner);
+    
+    /* truncador simple */
+    function shortText(text, chars=130) {
+        if (!text) return '';
+        if (text.length <= chars) return text;
+        return text.slice(0, chars).trim() + '…';
+    }
+    
+    async function loadProducts() {
+        const container = document.getElementById('productsContainer');
+        container.innerHTML = '<div class="products-loading">Cargando productos…</div>';
+        if (!GOOGLE_SHEETS_CSV_URL || GOOGLE_SHEETS_CSV_URL.includes('YOUR_GOOGLE_SHEETS_CSV_URL_HERE')) {
+            container.innerHTML = '<div class="products-error"><h3>⚠️ Configuración Pendiente</h3><p>Configura tu URL de Google Sheets</p></div>';
+            return;
+        }
+        try {
+            const res = await fetch(GOOGLE_SHEETS_CSV_URL);
+            const csvText = await res.text();
+            const rows = parseCSV(csvText);
+            if (!rows || rows.length < 2) {
+                container.innerHTML = '<div class="products-error"><h3>📦 Sin productos</h3></div>';
+                return;
+            }
+            const headers = rows[0].map(h => (h||'').trim());
+            const dataRows = rows.slice(1).filter(r => r.some(c => (c||'').trim().length));
+            const products = dataRows.map(r => {
+                const obj = {};
+                for (let i=0;i<headers.length;i++){
+                    const key = (headers[i]||('col_'+i)).trim();
+                    obj[key] = r[i] !== undefined ? r[i].trim() : '';
+                }
+                return obj;
+            });
+    
+            // Normalize mapping: intenta encontrar columnas clave en español
+            function findKey(candidates) {
+                for (const c of candidates) {
+                    const idx = headers.findIndex(h => h.toLowerCase().replace(/\s+/g,'') === c.toLowerCase().replace(/\s+/g,''));
+                    if (idx !== -1) return headers[idx];
+                }
+                return null;
+            }
+    
+            const keyId = findKey(['id','numero','numerodecajaeimagen','numero de caja e imagen']) || headers[0];
+            const keyTipo = findKey(['tipo','category','categoria']) || headers[1] || 'Tipo';
+            const keyNombre = findKey(['nombre','name']) || 'Nombre';
+            const keyDesc = findKey(['descripcion','contenido','description']) || 'Contenido';
+            const keyPrecio = findKey(['precio','price']) || 'Precio';
+            const keyImagen = findKey(['imagen','imagen de referencia','image','imageurl','link fotos','unnamed: 8']) || headers.includes('Imagen de Referencia') ? 'Imagen de Referencia' : headers[5];
+            const keyStock = findKey(['stock','cantidad']) || null;
+    
+            // Build normalized product objects
+            const normalized = products.map((p, i) => {
+                const precioRaw = (p[keyPrecio]||'').replace('€','').replace(',', '.').trim();
+                return {
+                    id: p[keyId] || String(i+1),
+                    tipo: (p[keyTipo]||'Sin categoría').trim() || 'Sin categoría',
+                    nombre: p[keyNombre] || 'Sin nombre',
+                    descripcion: p[keyDesc] || '',
+                    precio: (precioRaw ? precioRaw : (p[keyPrecio]||'')),
+                    imagen: driveToView(p[keyImagen] || p['Unnamed: 8'] || ''),
+                    stock: keyStock ? parseInt(p[keyStock]) || 0 : null
+                };
+            });
+    
+            // Agrupar por tipo
+            const groups = {};
+            normalized.forEach(prod => {
+                const t = prod.tipo || 'Sin categoría';
+                if (!groups[t]) groups[t] = [];
+                groups[t].push(prod);
+            });
+    
+            // Controles: selector de tipo + búsqueda
+            container.innerHTML = '';
+            // Banner informativo
+            const infoBanner = document.createElement('div');
+            infoBanner.className = 'products-info-banner';
+            infoBanner.innerHTML = `
+                <p>
+                    <i class="fa-solid fa-gift"></i> Todas nuestras cajas gourmet pueden modificarse con los productos que prefieras. 
+                    Creamos combinaciones totalmente personalizadas para regalos, eventos o detalles especiales.
+                    <br><br>
+                    <i class="fa-solid fa-truck"></i> Realizamos envíos a toda España.
+                </p>
+            `;
+            container.appendChild(infoBanner);
+            const controls = document.createElement('div');
+            controls.className = 'products-controls';
+            controls.innerHTML = `
+                <input type="search" id="productsSearch" placeholder="Buscar por nombre o descripción…">
+            
+                <select id="productsFilter">
+                    <option value="__all__">Mostrar todo</option>
+                </select>
+            
+                <select id="productsSort">
+                    <option value="default">Ordenar por...</option>
+                    <option value="price-asc">Precio: menor a mayor</option>
+                    <option value="price-desc">Precio: mayor a menor</option>
+                    <option value="name-asc">Nombre A-Z</option>
+                    <option value="featured">Más destacados</option>
+                </select>
+            `;
+            container.appendChild(controls);
+    
+            const filterSelect = controls.querySelector('#productsFilter');
+            Object.keys(groups).sort().forEach(t => {
+                const opt = document.createElement('option');
+                opt.value = t;
+                opt.textContent = t + ` (${groups[t].length})`;
+                filterSelect.appendChild(opt);
+            });
+    
+            const sectionsHolder = document.createElement('div');
+            container.appendChild(sectionsHolder);
+    
+            function renderSections(filter = '__all__', q = '', sort = 'default') {
+                sectionsHolder.innerHTML = '';
+                const query = (q||'').toLowerCase().trim();
+                const typesOrder = Object.keys(groups).sort((a,b) => a.localeCompare(b,'es'));
+                typesOrder.forEach(tipo => {
+                    if (filter !== '__all__' && tipo !== filter) return;
+                    const prods = groups[tipo].filter(p => {
+                        if (!query) return true;
+                        return (p.nombre||'').toLowerCase().includes(query) || (p.descripcion||'').toLowerCase().includes(query);
+                    });
+                    // ORDENACIÓN
+                    if (sort === 'price-asc') {
+                        prods.sort((a, b) => parseFloat(a.precio) - parseFloat(b.precio));
+                    }
+                    
+                    if (sort === 'price-desc') {
+                        prods.sort((a, b) => parseFloat(b.precio) - parseFloat(a.precio));
+                    }
+                    
+                    if (sort === 'name-asc') {
+                        prods.sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
+                    }
+                    
+                    if (sort === 'featured') {
+                        prods.sort((a, b) => (b.stock || 0) - (a.stock || 0));
+                    }
+                    if (!prods.length) return;
+                    const section = document.createElement('div');
+                    section.className = 'products-section';
+                    const header = document.createElement('h3');
+                    header.className = 'section-title';
+                    header.innerHTML = `<span>${tipo}</span><span class="section-count">${prods.length} producto(s)</span>`;
+                    section.appendChild(header);
+    
+                    const grid = document.createElement('div');
+                    grid.className = 'products-grid';
+    
+                    prods.forEach(p => {
+                        // 1. Configuración de WhatsApp
+                        const telefono = "34678947545"; 
+                        const mensajeTexto = `¡Hola! 👋 He visto este producto en vuestra web y me interesa: ${p.nombre}. ¿Lo tenéis disponible? ¡Gracias!`;
+                        const whatsappUrl = `https://wa.me/${telefono}?text=${encodeURIComponent(mensajeTexto)}`;
+                    
+                        // 2. Lógica de Stock
+                        const stockClass = (p.stock === 0 ? 'out-stock' : (p.stock && p.stock <= 3 ? 'low-stock' : ''));
+                        const stockText = (p.stock === null ? '' : (p.stock === 0 ? 'Agotado' : (p.stock <= 3 ? `¡Últimas ${p.stock}!` : `Stock: ${p.stock}`)));
+                    
+                        const card = document.createElement('div');
+                        card.className = 'product-card';
+                    
+                        // 3. Limpieza de URL de imagen (Asegura que use el ID de Drive para visualización directa)
+                        let finalImg = 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=800';
+                        if (p.imagen && p.imagen.includes('drive.google.com')) {
+                            finalImg = driveToView(p.imagen);
+                        } else if (p.imagen) {
+                            finalImg = p.imagen;
+                        }
+                    
+                        card.innerHTML = `
+                            <img src="${finalImg}" class="product-image" onerror="this.src='https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=800'">
+                            <div class="product-content">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                    <h3>${p.nombre}</h3>
+                                    ${stockText ? `<span class="product-stock ${stockClass}" style="font-size: 0.8rem;">${stockText}</span>` : ''}
+                                </div>
+                    
+                                <button class="view-more-btn" onclick="toggleDescription(this)">
+                                    Ver descripción
+                                </button>
+                    
+                                <div class="product-full-desc">
+                                    ${p.descripcion.replace(/\n/g, '<br>')}
+                                </div>
+                    
+                                <div class="product-footer">
+                                    <p class="product-price">${p.precio}€</p>
+                                    <a href="${whatsappUrl}" target="_blank" class="buy-btn" style="text-decoration: none;">
+                                        <i class="fab fa-whatsapp"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        `;
+                        grid.appendChild(card);
+                    });
+    
+                    section.appendChild(grid);
+                    sectionsHolder.appendChild(section);
+                });
+    
+                if (!sectionsHolder.querySelector('.products-section')) {
+                    sectionsHolder.innerHTML = '<div class="products-error"><h3>🔍 No se han encontrado productos</h3></div>';
+                }
+            }
+    
+            // Inicial render
+            renderSections();
+            
+            // Referencias
+            const sortSelect = document.getElementById('productsSort');
+            const searchInput = document.getElementById('productsSearch');
+            
+            // Event listeners
+            filterSelect.addEventListener('change', () => {
+                renderSections(
+                    filterSelect.value,
+                    searchInput.value,
+                    sortSelect.value
+                );
+            });
+            
+            searchInput.addEventListener('input', () => {
+                renderSections(
+                    filterSelect.value,
+                    searchInput.value,
+                    sortSelect.value
+                );
+            });
+            
+            sortSelect.addEventListener('change', () => {
+                renderSections(
+                    filterSelect.value,
+                    searchInput.value,
+                    sortSelect.value
+                );
+            });
+                
+        } catch (err) {
+            console.error(err);
+            container.innerHTML = '<div class="products-error"><h3>❌ Error al cargar</h3><p>Verifica tu configuración</p></div>';
+        }
+    }
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        loadProducts();
+        loadReviews();
+    });
+        function toggleDescription(button) {
+    
+        const fullDesc = button.nextElementSibling;
+    
+        fullDesc.classList.toggle("active");
+    
+        if (fullDesc.classList.contains("active")) {
+            button.textContent = "Ocultar descripción";
+        } else {
+            button.textContent = "Ver descripción";
+        }
+    }
+        function toggleMenu() {
+        const sidebar = document.getElementById("sidebar");
+        const overlay = document.getElementById("overlay");
+        const menuToggle = document.getElementById("menuToggle");
+    
+        sidebar.classList.toggle("active");
+        overlay.classList.toggle("active");
+        menuToggle.classList.toggle("active");
+    }
 
-            // Nuevos controles PRO con iconos
-            const controls = document.createElement('div');
-            controls.className = 'products-controls';
-            controls.innerHTML = `
-                <div class="search-wrapper">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="search" id="productsSearch" placeholder="Buscar por nombre o descripción…">
-                </div>
-                <div class="select-wrapper">
-                    <i class="fa-solid fa-filter"></i>
-                    <select id="productsFilter">
-                        <option value="__all__">Todas las categorías</option>
-                    </select>
-                    <i class="fa-solid fa-chevron-down arrow"></i>
-                </div>
-                <div class="select-wrapper">
-                    <i class="fa-solid fa-arrow-down-a-z"></i>
-                    <select id="productsSort">
-                        <option value="default">Ordenar por defecto</option>
-                        <option value="price-asc">Precio: de menor a mayor</option>
-                        <option value="price-desc">Precio: de mayor a menor</option>
-                        <option value="name-asc">Nombre (A-Z)</option>
-                        <option value="featured">Más destacados (Stock)</option>
-                    </select>
-                    <i class="fa-solid fa-chevron-down arrow"></i>
-                </div>
-            `;
-            container.appendChild(controls);
+   async function loadReviews() {
+        const grid = document.getElementById('testimonialsGrid');
+        const ratingEl = document.getElementById('ratingOverall');
+        if (!grid || !ratingEl) return;
+    
+        // Reseñas de respaldo por si la API falla
+        const backupReviews = [
+            { rating: 5, author_name: "Marta G.", text: "La mejor selección de vinos de Ruzafa. El trato es exquisito." },
+            { rating: 5, author_name: "Carlos P.", text: "Un rincón mágico. Los quesos son de otro planeta." },
+            { rating: 4, author_name: "Elena R.", text: "Muy recomendable para regalar algo especial y original." }
+        ];
+    
+        try {
+            const res = await fetch('/api/reviews');
+            if (!res.ok) throw new Error('API no disponible');
+            
+            const data = await res.json();
+            // Intentamos leer de data.reviews o data.result.reviews según lo que devuelva tu API
+            const reviews = data.reviews || (data.result && data.result.reviews) || backupReviews;
+            const avgRating = data.rating || (data.result && data.result.rating) || 4.9;
+    
+            renderReviews(reviews, avgRating);
+        } catch (err) {
+            console.warn("Usando reseñas de respaldo:", err.message);
+            renderReviews(backupReviews, 4.9);
+        }
+    
+        // Función mágica para calcular medias estrellas con iconos de verdad
+        function getStarsHTML(rating) {
+            const fullStars = Math.floor(rating);
+            const decimal = rating - fullStars;
+            
+            // Si el decimal está entre 0.3 y 0.7, es media estrella. Si es mayor, redondeamos arriba.
+            const halfStar = decimal >= 0.3 && decimal <= 0.7 ? 1 : 0;
+            const extraFull = decimal > 0.7 ? 1 : 0;
+            
+            const totalFull = fullStars + extraFull;
+            const emptyStars = 5 - totalFull - halfStar;
+        
+            let html = '';
+            for(let i=0; i < totalFull; i++) html += '<i class="fa-solid fa-star"></i>';
+            if(halfStar) html += '<i class="fa-solid fa-star-half-stroke"></i>';
+            for(let i=0; i < emptyStars; i++) html += '<i class="fa-regular fa-star"></i>';
+            
+            return html;
+        }
+        
+        function renderReviews(reviews, avg) {
+            const starsHTML = getStarsHTML(avg);
+            
+            // Pintar puntuación global con iconos
+            ratingEl.innerHTML = `<div style="color:var(--color-dark); font-size: 1.8rem; margin-bottom: 5px;">${starsHTML}</div> Valoración: ${parseFloat(avg).toFixed(1)}/5.0`;
+            
+            grid.innerHTML = '';
+            reviews.forEach(r => {
+                const card = document.createElement('div');
+                card.className = 'testimonial-card';
+                
+                const rating = r.rating || r.starRating || 5;
+                const cardStars = getStarsHTML(rating);
+                
+                // Si el usuario tiene foto en Google la ponemos, si no, una letra de color
+                const photoHtml = r.profile_photo_url 
+                    ? `<img src="${r.profile_photo_url}" class="testimonial-photo" alt="Foto cliente">` 
+                    : `<div class="testimonial-photo" style="background:var(--color-primary); display:flex; align-items:center; justify-content:center; color:var(--color-dark); font-weight:bold; font-size:1.2rem;">${(r.author_name||'C')[0]}</div>`;
+        
+                card.innerHTML = `
+                    <div class="testimonial-header">
+                        ${photoHtml}
+                        <div class="testimonial-info">
+                            <h4>${r.author_name || r.authorName || 'Cliente'}</h4>
+                            <p class="testimonial-time">${r.time || 'Recientemente'}</p>
+                        </div>
+                    </div>
+                    <div class="testimonial-stars" style="color:var(--color-primary); font-size: 1.1rem;">${cardStars}</div>
+                    <p class="testimonial-text" style="flex-grow:1; margin-top: 10px;">"${r.text || r.comment || 'Sin comentario'}"</p>
+                `;
+                
+                grid.appendChild(card);
+            });
+        }
+    }
+    </script>
+    <!-- Modal de Política -->
+    <div id="politicaContainer" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; 
+        background:rgba(0,0,0,0.7); z-index:2000; justify-content:center; align-items:center; padding:1rem;">
+        <div style="background:white; padding:2rem; border-radius:15px; max-width:700px; max-height:80vh; 
+            overflow-y:auto; position:relative;">
+            <button id="cerrarPolitica" style="position:absolute; top:10px; right:10px; border:none; background:none; font-size:1.5rem; cursor:pointer;">×</button>
+            <div id="contenidoPolitica" style="white-space: pre-line; color:#333; font-size:1rem;"></div>
+        </div>
+    </div>
 
-            const filterSelect = controls.querySelector('#productsFilter');
-            Object.keys(groups).sort().forEach(t => {
-                const opt = document.createElement('option');
-                opt.value = t;
-                opt.textContent = t + ` (${groups[t].length})`;
-                filterSelect.appendChild(opt);
-            });
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const verPoliticaBtn = document.getElementById('verPolitica');
+        const politicaContainer = document.getElementById('politicaContainer');
+        const cerrarPoliticaBtn = document.getElementById('cerrarPolitica');
+        const contenidoPolitica = document.getElementById('contenidoPolitica');
 
-            const sectionsHolder = document.createElement('div');
-            container.appendChild(sectionsHolder);
+        const rawUrl = 'https://raw.githubusercontent.com/davidcuestaa/elesconditegourmet/30f52c2b2cf4bdcc2d20ffd096371ba3d58d0ac0/politica-devoluciones.txt';
 
-            function renderSections(filter = '__all__', q = '', sort = 'default') {
-                sectionsHolder.innerHTML = '';
-                const query = (q||'').toLowerCase().trim();
-                
-                let groupedData = {};
+        // Función para convertir los # en títulos y ** en negritas
+        function formatearTexto(texto) {
+            return texto
+                .replace(/^### (.*$)/gim, '<h4 style="color: var(--color-primary); margin-top: 15px;">$1</h4>') // ### Título pequeño
+                .replace(/^## (.*$)/gim, '<h3 style="color: var(--color-primary); margin-top: 20px;">$1</h3>') // ## Título mediano
+                .replace(/^# (.*$)/gim, '<h2 style="color: var(--color-dark); margin-bottom: 20px;">$1</h2>')  // # Título grande
+                .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>') // **Negritas**
+                .replace(/\n/gim, '<br>'); // Respeta los saltos de línea
+        }
 
-                // LA MAGIA DE LA ORDENACIÓN GLOBAL: 
-                // Si está en "Mostrar todo" y hay un orden específico, lo juntamos todo
-                if (filter === '__all__' && sort !== 'default') {
-                    let allProds = [];
-                    Object.values(groups).forEach(arr => allProds.push(...arr));
-                    groupedData['Todos los productos'] = allProds;
-                } else if (filter !== '__all__') {
-                    if (groups[filter]) groupedData[filter] = groups[filter];
-                } else {
-                    groupedData = groups;
-                }
+        if (verPoliticaBtn && politicaContainer && contenidoPolitica) {
+            verPoliticaBtn.addEventListener('click', async function (e) {
+                e.preventDefault();
+                try {
+                    const response = await fetch(rawUrl);
+                    if (!response.ok) throw new Error('No se pudo cargar el archivo: ' + response.status);
+                    
+                    const textoRaw = await response.text();
+                    
+                    // Aquí usamos innerHTML y nuestra nueva función
+                    contenidoPolitica.innerHTML = formatearTexto(textoRaw);
+                    
+                } catch (err) {
+                    contenidoPolitica.innerHTML = '<p>⚠️ No se pudo cargar la política. Intenta más tarde.</p>';
+                    console.error("Error cargando la política:", err);
+                }
+                politicaContainer.style.display = 'flex';
+                if (cerrarPoliticaBtn) cerrarPoliticaBtn.focus();
+            });
+        }
 
-                const typesOrder = Object.keys(groupedData).sort((a,b) => a.localeCompare(b,'es'));
+        if (cerrarPoliticaBtn && politicaContainer) {
+            cerrarPoliticaBtn.addEventListener('click', function () {
+                politicaContainer.style.display = 'none';
+            });
+        }
 
-                typesOrder.forEach(tipo => {
-                    let prods = [...groupedData[tipo]]; // Copiamos el array para no romper el original
+        if (politicaContainer) {
+            politicaContainer.addEventListener('click', function (e) {
+                if (e.target === this) this.style.display = 'none';
+            });
+        }
 
-                    prods = prods.filter(p => {
-                        if (!query) return true;
-                        return (p.nombre||'').toLowerCase().includes(query) || (p.descripcion||'').toLowerCase().includes(query);
-                    });
-
-                    // ORDENACIÓN APLICADA AL GRUPO O A LA LISTA GLOBAL
-                    if (sort === 'price-asc') {
-                        prods.sort((a, b) => parseFloat(a.precio.replace(',','.')) - parseFloat(b.precio.replace(',','.')));
-                    }
-                    if (sort === 'price-desc') {
-                        prods.sort((a, b) => parseFloat(b.precio.replace(',','.')) - parseFloat(a.precio.replace(',','.')));
-                    }
-                    if (sort === 'name-asc') {
-                        prods.sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
-                    }
-                    if (sort === 'featured') {
-                        prods.sort((a, b) => (b.stock || 0) - (a.stock || 0));
-                    }
-
-                    if (!prods.length) return;
-
-                    const section = document.createElement('div');
-                    section.className = 'products-section';
-                    const header = document.createElement('h3');
-                    header.className = 'section-title';
-                    header.innerHTML = `<span>${tipo}</span><span class="section-count">${prods.length} producto(s)</span>`;
-                    section.appendChild(header);
-
-                    const grid = document.createElement('div');
-                    grid.className = 'products-grid';
-
-                    prods.forEach(p => {
-                        // 1. Configuración de WhatsApp
-                        const telefono = "34678947545"; 
-                        const mensajeTexto = `¡Hola! 👋 He visto este producto en vuestra web y me interesa: ${p.nombre}. ¿Lo tenéis disponible? ¡Gracias!`;
-                        const whatsappUrl = `https://wa.me/${telefono}?text=${encodeURIComponent(mensajeTexto)}`;
-                    
-                        // 2. Lógica de Stock
-                        const stockClass = (p.stock === 0 ? 'out-stock' : (p.stock && p.stock <= 3 ? 'low-stock' : ''));
-                        const stockText = (p.stock === null ? '' : (p.stock === 0 ? 'Agotado' : (p.stock <= 3 ? `¡Últimas ${p.stock}!` : `Stock: ${p.stock}`)));
-                    
-                        const card = document.createElement('div');
-                        card.className = 'product-card';
-                    
-                        // 3. Limpieza de URL de imagen
-                        let finalImg = 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=800';
-                        if (p.imagen && p.imagen.includes('drive.google.com')) {
-                            finalImg = driveToView(p.imagen);
-                        } else if (p.imagen) {
-                            finalImg = p.imagen;
-                        }
-                    
-                        card.innerHTML = `
-                            <img src="${finalImg}" class="product-image" onerror="this.src='https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=800'">
-                            <div class="product-content">
-                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                                    <h3>${p.nombre}</h3>
-                                    ${stockText ? `<span class="product-stock ${stockClass}" style="font-size: 0.8rem;">${stockText}</span>` : ''}
-                                </div>
-                    
-                                <button class="view-more-btn" onclick="toggleDescription(this)">
-                                    Ver descripción
-                                </button>
-                    
-                                <div class="product-full-desc">
-                                    ${p.descripcion.replace(/\n/g, '<br>')}
-                                </div>
-                    
-                                <div class="product-footer">
-                                    <p class="product-price">${p.precio}€</p>
-                                    <a href="${whatsappUrl}" target="_blank" class="buy-btn" style="text-decoration: none;">
-                                        <i class="fab fa-whatsapp"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        `;
-                        grid.appendChild(card);
-                    });
-
-                    section.appendChild(grid);
-                    sectionsHolder.appendChild(section);
-                });
-
-                if (!sectionsHolder.querySelector('.products-section')) {
-                    sectionsHolder.innerHTML = '<div class="products-error" style="text-align:center; padding: 2rem;"><h3>🔍 No hemos encontrado lo que buscas</h3><p>Prueba con otras palabras.</p></div>';
-                }
-            }
-
-            // Inicial render
-            renderSections();
-            
-            // Referencias
-            const sortSelect = document.getElementById('productsSort');
-            const searchInput = document.getElementById('productsSearch');
-            
-            // Event listeners
-            filterSelect.addEventListener('change', () => {
-                renderSections(filterSelect.value, searchInput.value, sortSelect.value);
-            });
-            
-            searchInput.addEventListener('input', () => {
-                renderSections(filterSelect.value, searchInput.value, sortSelect.value);
-            });
-            
-            sortSelect.addEventListener('change', () => {
-                renderSections(filterSelect.value, searchInput.value, sortSelect.value);
-            });
-                
-        } catch (err) {
-            console.error(err);
-            container.innerHTML = '<div class="products-error"><h3>❌ Error al cargar</h3><p>Verifica tu configuración</p></div>';
-        }
-    }
-    
-    document.addEventListener('DOMContentLoaded', () => {
-        loadProducts();
-        loadReviews();
-    });
-        function toggleDescription(button) {
-    
-        const fullDesc = button.nextElementSibling;
-    
-        fullDesc.classList.toggle("active");
-    
-        if (fullDesc.classList.contains("active")) {
-            button.textContent = "Ocultar descripción";
-        } else {
-            button.textContent = "Ver descripción";
-        }
-    }
-        function toggleMenu() {
-        const sidebar = document.getElementById("sidebar");
-        const overlay = document.getElementById("overlay");
-        const menuToggle = document.getElementById("menuToggle");
-    
-        sidebar.classList.toggle("active");
-        overlay.classList.toggle("active");
-        menuToggle.classList.toggle("active");
-    }
-
-   async function loadReviews() {
-        const grid = document.getElementById('testimonialsGrid');
-        const ratingEl = document.getElementById('ratingOverall');
-        if (!grid || !ratingEl) return;
-    
-        // Reseñas de respaldo por si la API falla
-        const backupReviews = [
-            { rating: 5, author_name: "Marta G.", text: "La mejor selección de vinos de Ruzafa. El trato es exquisito." },
-            { rating: 5, author_name: "Carlos P.", text: "Un rincón mágico. Los quesos son de otro planeta." },
-            { rating: 4, author_name: "Elena R.", text: "Muy recomendable para regalar algo especial y original." }
-        ];
-    
-        try {
-            const res = await fetch('/api/reviews');
-            if (!res.ok) throw new Error('API no disponible');
-            
-            const data = await res.json();
-            // Intentamos leer de data.reviews o data.result.reviews según lo que devuelva tu API
-            const reviews = data.reviews || (data.result && data.result.reviews) || backupReviews;
-            const avgRating = data.rating || (data.result && data.result.rating) || 4.9;
-    
-            renderReviews(reviews, avgRating);
-        } catch (err) {
-            console.warn("Usando reseñas de respaldo:", err.message);
-            renderReviews(backupReviews, 4.9);
-        }
-    
-        // Función mágica para calcular medias estrellas con iconos de verdad
-        function getStarsHTML(rating) {
-            const fullStars = Math.floor(rating);
-            const decimal = rating - fullStars;
-            
-            // Si el decimal está entre 0.3 y 0.7, es media estrella. Si es mayor, redondeamos arriba.
-            const halfStar = decimal >= 0.3 && decimal <= 0.7 ? 1 : 0;
-            const extraFull = decimal > 0.7 ? 1 : 0;
-            
-            const totalFull = fullStars + extraFull;
-            const emptyStars = 5 - totalFull - halfStar;
-        
-            let html = '';
-            for(let i=0; i < totalFull; i++) html += '<i class="fa-solid fa-star"></i>';
-            if(halfStar) html += '<i class="fa-solid fa-star-half-stroke"></i>';
-            for(let i=0; i < emptyStars; i++) html += '<i class="fa-regular fa-star"></i>';
-            
-            return html;
-        }
-        
-        function renderReviews(reviews, avg) {
-            const starsHTML = getStarsHTML(avg);
-            
-            // Pintar puntuación global con iconos
-            ratingEl.innerHTML = `<div style="color:var(--color-dark); font-size: 1.8rem; margin-bottom: 5px;">${starsHTML}</div> Valoración: ${parseFloat(avg).toFixed(1)}/5.0`;
-            
-            grid.innerHTML = '';
-            reviews.forEach(r => {
-                const card = document.createElement('div');
-                card.className = 'testimonial-card';
-                
-                const rating = r.rating || r.starRating || 5;
-                const cardStars = getStarsHTML(rating);
-                
-                // Si el usuario tiene foto en Google la ponemos, si no, una letra de color
-                const photoHtml = r.profile_photo_url 
-                    ? `<img src="${r.profile_photo_url}" class="testimonial-photo" alt="Foto cliente">` 
-                    : `<div class="testimonial-photo" style="background:var(--color-primary); display:flex; align-items:center; justify-content:center; color:var(--color-dark); font-weight:bold; font-size:1.2rem;">${(r.author_name||'C')[0]}</div>`;
-        
-                card.innerHTML = `
-                    <div class="testimonial-header">
-                        ${photoHtml}
-                        <div class="testimonial-info">
-                            <h4>${r.author_name || r.authorName || 'Cliente'}</h4>
-                            <p class="testimonial-time">${r.time || 'Recientemente'}</p>
-                        </div>
-                    </div>
-                    <div class="testimonial-stars" style="color:var(--color-primary); font-size: 1.1rem;">${cardStars}</div>
-                    <p class="testimonial-text" style="flex-grow:1; margin-top: 10px;">"${r.text || r.comment || 'Sin comentario'}"</p>
-                `;
-                
-                grid.appendChild(card);
-            });
-        }
-    }
-    </script>
-    <!-- Modal de Política -->
-    <div id="politicaContainer" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; 
-        background:rgba(0,0,0,0.7); z-index:2000; justify-content:center; align-items:center; padding:1rem;">
-        <div style="background:white; padding:2rem; border-radius:15px; max-width:700px; max-height:80vh; 
-            overflow-y:auto; position:relative;">
-            <button id="cerrarPolitica" style="position:absolute; top:10px; right:10px; border:none; background:none; font-size:1.5rem; cursor:pointer;">×</button>
-            <div id="contenidoPolitica" style="white-space: pre-line; color:#333; font-size:1rem;"></div>
-        </div>
-    </div>
-
-    <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const verPoliticaBtn = document.getElementById('verPolitica');
-        const politicaContainer = document.getElementById('politicaContainer');
-        const cerrarPoliticaBtn = document.getElementById('cerrarPolitica');
-        const contenidoPolitica = document.getElementById('contenidoPolitica');
-
-        const rawUrl = 'https://raw.githubusercontent.com/davidcuestaa/elesconditegourmet/30f52c2b2cf4bdcc2d20ffd096371ba3d58d0ac0/politica-devoluciones.txt';
-
-        // Función para convertir los # en títulos y ** en negritas
-        function formatearTexto(texto) {
-            return texto
-                .replace(/^### (.*$)/gim, '<h4 style="color: var(--color-primary); margin-top: 15px;">$1</h4>') // ### Título pequeño
-                .replace(/^## (.*$)/gim, '<h3 style="color: var(--color-primary); margin-top: 20px;">$1</h3>') // ## Título mediano
-                .replace(/^# (.*$)/gim, '<h2 style="color: var(--color-dark); margin-bottom: 20px;">$1</h2>')  // # Título grande
-                .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>') // **Negritas**
-                .replace(/\n/gim, '<br>'); // Respeta los saltos de línea
-        }
-
-        if (verPoliticaBtn && politicaContainer && contenidoPolitica) {
-            verPoliticaBtn.addEventListener('click', async function (e) {
-                e.preventDefault();
-                try {
-                    const response = await fetch(rawUrl);
-                    if (!response.ok) throw new Error('No se pudo cargar el archivo: ' + response.status);
-                    
-                    const textoRaw = await response.text();
-                    
-                    // Aquí usamos innerHTML y nuestra nueva función
-                    contenidoPolitica.innerHTML = formatearTexto(textoRaw);
-                    
-                } catch (err) {
-                    contenidoPolitica.innerHTML = '<p>⚠️ No se pudo cargar la política. Intenta más tarde.</p>';
-                    console.error("Error cargando la política:", err);
-                }
-                politicaContainer.style.display = 'flex';
-                if (cerrarPoliticaBtn) cerrarPoliticaBtn.focus();
-            });
-        }
-
-        if (cerrarPoliticaBtn && politicaContainer) {
-            cerrarPoliticaBtn.addEventListener('click', function () {
-                politicaContainer.style.display = 'none';
-            });
-        }
-
-        if (politicaContainer) {
-            politicaContainer.addEventListener('click', function (e) {
-                if (e.target === this) this.style.display = 'none';
-            });
-        }
-
-        document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape' && politicaContainer && politicaContainer.style.display === 'flex') {
-                politicaContainer.style.display = 'none';
-            }
-        });
-    });
-    </script>
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && politicaContainer && politicaContainer.style.display === 'flex') {
+                politicaContainer.style.display = 'none';
+            }
+        });
+    });
+    </script>
 </body>
 </html>
