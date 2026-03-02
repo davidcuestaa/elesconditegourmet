@@ -104,13 +104,14 @@
 
         h1, h2, h3 { font-weight: 700; }
 
-        /* Menu Toggle Button */
+       /* Fondo del botón del menú (ahora claro para que destaque en la cabecera oscura) */
         .menu-toggle {
+            /* ... el resto de tus propiedades se mantienen ... */
             position: fixed;
             top: 20px;
             left: 20px;
             z-index: 2000;
-            background-color: var(--color-primary);
+            background-color: var(--color-cream); /* <--- Cambiado a claro */
             border: none;
             padding: 1rem;
             border-radius: 12px;
@@ -121,11 +122,12 @@
 
         .menu-toggle:hover { transform: scale(1.05); }
 
+        /* Las 3 rayitas del menú (ahora oscuras) */
         .menu-toggle span {
             display: block;
             width: 25px;
             height: 3px;
-            background-color: var(--color-dark);
+            background-color: var(--color-primary); /* <--- Cambiado a oscuro */
             margin: 5px 0;
             transition: 0.3s;
             border-radius: 2px;
@@ -169,8 +171,9 @@
             margin: 0 auto 1rem auto; 
         }
 
+        /* Título dentro del menú abierto */
         .sidebar-brand h2 {
-            color: var(--color-primary);
+            color: var(--color-cream); /* <--- Cambiado a claro para que se vea sobre el fondo negro */
             font-size: 1.5rem;
             margin-bottom: 0.5rem;
             text-align: center;
@@ -196,10 +199,11 @@
             border-left: 4px solid transparent;
         }
 
+        /* Color de los enlaces del menú al pasar el ratón */
         .sidebar nav ul li a:hover {
-            background-color: rgba(244, 164, 66, 0.1);
-            border-left-color: var(--color-primary);
-            color: var(--color-primary);
+            background-color: rgba(255, 255, 255, 0.1); /* Fondo sutilmente blanco */
+            border-left-color: var(--color-accent); /* Rayita izquierda en color acento/dorado */
+            color: var(--color-cream); /* <--- El texto sigue claro, no se vuelve negro */
         }
 
         .sidebar-footer {
@@ -307,11 +311,11 @@
             max-width: 450px;
         }
         
-        /* Estilo exacto del botón del diseño */
+        /* Botón base con gap para separar el icono */
         .btn-hero {
             background-color: var(--color-cream);
-            color: var(--color-dark);
-            border: 2px solid var(--color-dark);
+            color: var(--color-primary);
+            border: 2px solid var(--color-primary);
             border-radius: 50px;
             font-family: 'Poppins', sans-serif;
             font-size: 1rem;
@@ -325,13 +329,15 @@
             display: inline-flex;
             justify-content: center;
             align-items: center;
+            gap: 10px; /* <--- Esto añade el espacio entre el icono y el texto */
         }
         
+        /* Efecto al pasar el ratón: fondo beige/gris claro en lugar de negro */
         .btn-hero:hover {
-            background-color: var(--color-dark);
-            color: var(--color-cream);
+            background-color: var(--color-beige); 
+            color: var(--color-primary); /* Mantenemos el texto oscuro */
             transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 5px 15px rgba(255,255,255,0.2); /* Sombra más suave */
         }
         
         .social-wrapper {
@@ -703,15 +709,18 @@
 
         #testimonios h2 { color: white; }
 
+         .testimonial-stars,
+        .rating-overall div {
+            color: #FFD700 !important; /* Dorado brillante */
+        }
+        
+        /* Título superior de la caja de valoración general */
         .rating-overall {
+            /* ... tus otras propiedades ... */
             text-align: center;
-            background: var(--color-primary);
-            color: var(--color-dark);
-            padding: 1.5rem;
-            border-radius: 15px;
-            margin-bottom: 3rem;
-            font-size: 1.5rem;
-            font-weight: 700;
+            background: rgba(255, 255, 255, 0.1); /* Fondo semitransparente claro */
+            color: var(--color-cream); /* <--- Texto claro */
+            /* ... */
         }
 
         .testimonials-grid {
@@ -762,10 +771,16 @@
             object-fit: cover;
         }
         
+        /* Nombre del usuario que deja la reseña */
         .testimonial-info h4 {
             margin: 0;
             font-size: 1.1rem;
-            color: var(--color-primary);
+            color: var(--color-cream); /* <--- Cambiado a claro, antes era primary (oscuro) */
+        }
+        
+        /* Texto de la reseña en sí */
+        .testimonial-text {
+            color: #e0e0e0; /* Un gris muy clarito casi blanco para que no moleste a la vista */
         }
         
         .testimonial-time {
@@ -1048,6 +1063,15 @@
         /* Ajuste para que el icono no cambie a blanco en el hover */
         .btn-google:hover i {
             color: #4285F4; 
+        }
+        #sobre-nosotros, 
+        #galeria, 
+        #contacto {
+            background-image: url('fondo-marmol.jpg'); /* Asegúrate de que el nombre del archivo coincida */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed; /* Opcional: le da un efecto chulo al hacer scroll */
         }
     </style>
 </head>
