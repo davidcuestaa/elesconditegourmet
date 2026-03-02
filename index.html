@@ -229,86 +229,141 @@
         /* Sections */
         section { padding: 5rem 3rem; }
 
-     #home {
-            background-color: #f4a442; 
+     /* =========================================
+       ESTILOS DE LA CABECERA (HERO SECTION)
+       ========================================= */
+        #home {
+            background-color: var(--color-primary);
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            text-align: center;
-            color: white;
+            padding: 6rem 2rem 4rem 2rem; 
         }
-
-       .cabecera-img {
-            width: 100%;          
-            max-width: 600px;     
-            height: auto;         
+        
+        .hero-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4rem;
+            max-width: 1100px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        
+        .hero-logo {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .cabecera-img {
+            width: 100%;
+            max-width: 420px;
+            height: auto;
             display: block;
-            margin: 0 auto 20px auto;  
-            border-radius: 0;     
         }
-
-        .hero-logo img {
-            height: 45vh;           
-            max-height: 550px;      
-            width: auto;
-            display: block;
-            margin: 0 auto 1.5rem auto;
-            filter: none !important;
-            box-shadow: none !important;
+        
+        .hero-content {
+            flex: 1;
+            text-align: left;
+            color: var(--color-dark); /* Color oscuro del texto según el diseño */
         }
-
+        
         .hero-content h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
         }
         
         .hero-content p {
-            font-size: 1.35rem;
+            font-size: 1.3rem;
             margin-bottom: 2.5rem;
-            font-weight: 300;
+            font-weight: 400;
+            line-height: 1.4;
         }
-
+        
+        /* Sistema Grid de 2x2 para los botones */
         .cta-buttons {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            justify-content: center;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            width: 100%;
+            max-width: 450px;
         }
-
-        .btn {
-            padding: 1rem 2.5rem;
-            border: none;
+        
+        /* Estilo exacto del botón del diseño */
+        .btn-hero {
+            background-color: var(--color-cream);
+            color: var(--color-dark);
+            border: 2px solid var(--color-dark);
             border-radius: 50px;
+            font-family: 'Poppins', sans-serif;
             font-size: 1rem;
+            font-weight: 600;
+            padding: 1rem 1.2rem;
+            width: 100%;
+            text-align: center;
+            transition: all 0.3s ease;
             cursor: pointer;
             text-decoration: none;
-            transition: all 0.3s;
-            font-weight: 600;
-            font-family: 'Poppins', sans-serif;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
         }
-
-        .btn-primary {
-            background-color: white;
-            color: var(--color-dark);
+        
+        .btn-hero:hover {
+            background-color: var(--color-dark);
+            color: var(--color-cream);
+            transform: translateY(-3px);
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
         
-        .btn-primary:hover {
-            background-color: #f5f5f5;
-            transform: translateY(-3px);
+        .social-wrapper {
+            width: 100%;
         }
-
-        .btn-secondary {
-            background-color: transparent;
-            color: white;
-            border: 2px solid white;
+        
+        .social-wrapper .btn-hero {
+            width: 100%;
         }
-
-        .btn-secondary:hover {
-            background-color: white;
-            color: var(--color-dark);
+        
+        /* =========================================
+           AJUSTES PARA MÓVILES (RESPONSIVE)
+           ========================================= */
+        @media (max-width: 900px) {
+            .hero-container {
+                flex-direction: column;
+                text-align: center;
+                gap: 2rem;
+                padding-top: 2rem;
+            }
+        
+            .hero-content {
+                text-align: center;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+        
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+        
+            .hero-content p {
+                font-size: 1.15rem;
+            }
+        
+            .cta-buttons {
+                margin: 0 auto;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            /* Si la pantalla es muy pequeña, apilamos los botones uno debajo de otro */
+            .cta-buttons {
+                grid-template-columns: 1fr;
+                max-width: 300px;
+            }
         }
 
         #sobre-nosotros { 
@@ -976,62 +1031,61 @@
 
     <main>
         <section id="home">
-            <div class="hero-logo">
-                <img src="cabecera.jpg" alt="Logotipo de El Escondite Gourmet - Vinos y Delicatessen" class="cabecera-img">
-            </div>
-            <div class="hero-content">
-                <h1 aria-label="Vinos y Productos Gourmet en Ruzafa - El Escondite Gourmet">El Escondite Gourmet</h1>
-                <p>Tu rincón gourmet en Ruzafa — vinos, sabores y momentos únicos</p>
-                <div class="cta-buttons">
-                    <a href="#productos" class="btn btn-primary">Ver Productos</a>
-                    <a href="https://www.google.com/maps/dir/?api=1&destination=Carrer+dels+Centelles,+22,+46006+Valencia" target="_blank" rel="noopener" class="btn btn-secondary" aria-label="Ver ruta en Google Maps">
-                        Cómo Llegar
-                    </a>
-                    <div class="social-wrapper">
-                        <button class="btn btn-secondary" id="contactToggle">
-                            <i class="fa-solid fa-phone"></i> Contactar
-                        </button>
+            <div class="hero-container">
+                <div class="hero-logo">
+                    <img src="cabecera.jpg" alt="Logotipo de El Escondite Gourmet" class="cabecera-img">
+                </div>
+                <div class="hero-content">
+                    <h1 aria-label="Vinos y Productos Gourmet en Ruzafa">El Escondite Gourmet</h1>
+                    <p>Tu rincón gourmet en Ruzafa —<br>vinos, sabores y momentos únicos</p>
                     
-                        <div class="social-dropdown" id="contactDropdown">
-                            <a href="tel:+34678947545">
-                                <i class="fa-solid fa-phone"></i> Llamar
-                            </a>
-                    
-                            <a href="https://wa.me/34678947545" target="_blank" rel="noopener" aria-label="Contactar por WhatsApp">
-                                <i class="fab fa-whatsapp"></i> WhatsApp
-                            </a>
+                    <div class="cta-buttons">
+                        <a href="#productos" class="btn-hero">Ver productos</a>
+                        <a href="https://www.google.com/maps/dir/?api=1&destination=Carrer+dels+Centelles,+22,+46006+Valencia" target="_blank" rel="noopener" class="btn-hero" aria-label="Ver ruta en Google Maps">Cómo llegar</a>
+                        
+                        <div class="social-wrapper">
+                            <button class="btn-hero" id="contactToggle">
+                                Contactar
+                            </button>
+                            <div class="social-dropdown" id="contactDropdown">
+                                <a href="tel:+34678947545"><i class="fa-solid fa-phone"></i> Llamar</a>
+                                <a href="https://wa.me/34678947545" target="_blank" rel="noopener" aria-label="Contactar por WhatsApp"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+                            </div>
                         </div>
-                    </div>
-                    <div class="social-wrapper">
-                        <button class="btn btn-secondary" id="socialToggle">
-                            <i class="fa-solid fa-share-nodes"></i> Redes Sociales
-                        </button>
-                    
-                        <div class="social-dropdown" id="socialDropdown">
-                            <a href="https://instagram.com/elesconditegourmet" target="_blank" rel="noopener" aria-label="Sigue a El Escondite Gourmet en Instagram">
-                                <i class="fab fa-instagram"></i>
-                            </a>
-                            
-                            <a href="https://www.tiktok.com/@el.escondite.gourmet" target="_blank" rel="noopener" aria-label="Síguenos en TikTok">
-                                <i class="fab fa-tiktok"></i>
-                            </a>
+                        
+                        <div class="social-wrapper">
+                            <button class="btn-hero" id="socialToggle">
+                                Redes Sociales
+                            </button>
+                            <div class="social-dropdown" id="socialDropdown">
+                                <a href="https://instagram.com/elesconditegourmet" target="_blank" rel="noopener" aria-label="Sigue a El Escondite Gourmet en Instagram"><i class="fab fa-instagram"></i></a>
+                                <a href="https://www.tiktok.com/@el.escondite.gourmet" target="_blank" rel="noopener" aria-label="Síguenos en TikTok"><i class="fab fa-tiktok"></i></a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-       <section id="sobre-nosotros">
+        <section id="sobre-nosotros">
             <div class="about-content">
                 <h2>Sobre Nosotros</h2>
-                <div class="about-text-wrapper">
+                <div class="about-text-wrapper" itemscope itemtype="https://schema.org/LocalBusiness">
+                    <meta itemprop="name" content="El Escondite Gourmet">
                     <p>
-                        En <strong>El Escondite Gourmet</strong> creemos que el buen vivir no debería ser un secreto, sino un placer compartido. 
-                        Ubicados en el alma vibrante de Ruzafa, somos ese refugio donde los amantes del vino y los sabores con historia encuentran su lugar.
+                        En pleno corazón de <strong>Ruzafa</strong>, uno de los barrios con más vida y personalidad, está <strong itemprop="description">El Escondite Gourmet</strong>: un espacio pensado para los amantes del buen comer y el buen beber.
                     </p>
                     <p>
-                        Nuestra pasión es seleccionar lo extraordinario: desde quesos artesanos y delicatessen con alma, hasta vinos de autor que cuentan historias de la tierra. 
-                        Aquí no solo vienes a comprar; vienes a descubrir la calidad sin pretensiones y la calidez de quien ama lo que vende en el corazón de nuestro barrio favorito.
+                        Somos una <strong>tienda especializada en productos artesanales y delicatessen</strong> cuidadosamente seleccionados. Apostamos por la calidad, el sabor auténtico y esos pequeños detalles que marcan la diferencia aquí encontrarás una cuidada selección de <strong>vermuts, vinos, licores y cervezas artesanales</strong> con carácter propio; <strong>conservas gourmet</strong> que elevan cualquier mesa; dulces tradicionales y creativos, chocolates irresistibles; aceites de oliva excepcionales; aceitunas y encurtidos llenos de matices; embutidos seleccionados; y snacks perfectos para acompañar cualquier momento especial.
+                    </p>
+                    <p>
+                        Además, contamos con una selección especial de <strong>productos veganos y libres de gluten</strong>, pensados para que todos puedan encontrar opciones deliciosas sin renunciar al sabor ni a la calidad.
+                    </p>
+                    <p>
+                        Cada producto que ofrecemos cuenta una historia: la de pequeños productores, recetas heredadas y procesos artesanales que respetan el tiempo y la tradición. Nuestro objetivo es acercarte sabores auténticos, ideales tanto para darte un capricho como para sorprender con un regalo original o preparar una tabla perfecta para compartir.
+                    </p>
+                    <p>
+                        Te invitamos a descubrir tu nuevo rincón favorito en <strong>Ruzafa</strong>.
                     </p>
                 </div>
             </div>
