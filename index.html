@@ -88,19 +88,29 @@
             --color-whatsapp-dark: #128C7E;
         }
 
+        /* --- AQUÍ ESTÁ EL CAMBIO CLAVE --- */
         body {
             font-family: 'Poppins', sans-serif;
             font-weight: 400;
             line-height: 1.6;
             color: var(--color-dark);
+            /* Todo el fondo del body ahora es la imagen del mármol */
             background-color: var(--color-cream);
-            /* Efecto Marmolado Sutil */
-            background-image: 
-                radial-gradient(at 0% 0%, rgba(200, 200, 200, 0.1) 0, transparent 50%), 
-                radial-gradient(at 50% 0%, rgba(180, 180, 180, 0.05) 0, transparent 50%), 
-                url("https://www.transparenttextures.com/patterns/white-wall.png"); /* Textura rugosa fina que imita piedra */
+            background-image: url('fondo-marmol.jpg'); 
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             background-attachment: fixed;
         }
+
+        /* Asegurarnos de que las secciones individuales NO tengan un fondo propio 
+           que tape el mármol del body (excepto la cabecera, testimonios y footer) */
+        section { 
+            padding: 5rem 3rem; 
+            position: relative;
+            background: transparent !important; /* Forzamos a que sean transparentes para ver el body */
+        }
+        /* ---------------------------------- */
 
         h1, h2, h3 { font-weight: 700; }
 
@@ -241,15 +251,13 @@
             visibility: visible;
         }
 
-        /* Sections */
-        section { padding: 5rem 3rem; }
-
      /* =========================================
        ESTILOS DE LA CABECERA (HERO SECTION)
        ========================================= */
         #home {
-            /* Degradado sutil de negro grisáceo a un tono más profundo */
-            background: linear-gradient(135deg, #1e1e1e 0%, #121212 100%);
+            /* Degradado sutil de negro grisáceo a un tono más profundo. 
+               El !important asegura que no sea transparente como el resto de secciones */
+            background: linear-gradient(135deg, #1e1e1e 0%, #121212 100%) !important;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -284,8 +292,8 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            align-items: center; /* Centra el bloque de botones y los textos horizontalmente */
-            text-align: center;  /* Centra el texto dentro de sus propias etiquetas */
+            align-items: center; 
+            text-align: center;  
             color: #ffffff;
         }
         
@@ -329,7 +337,7 @@
             display: inline-flex;
             justify-content: center;
             align-items: center;
-            gap: 10px; /* <--- Esto añade el espacio entre el icono y el texto */
+            gap: 10px; 
         }
         
         /* Efecto al pasar el ratón: fondo beige/gris claro en lugar de negro */
@@ -380,39 +388,12 @@
         }
         
         @media (max-width: 480px) {
-            /* Si la pantalla es muy pequeña, apilamos los botones uno debajo de otro */
             .cta-buttons {
                 grid-template-columns: 1fr;
                 max-width: 300px;
             }
         }
 
-        #sobre-nosotros { 
-            background-color: #fafafa; 
-            padding: 6rem 1.5rem; 
-        }
-
-        section { 
-            padding: 5rem 3rem; 
-            position: relative;
-            /* Superposición de 'venas' de mármol muy tenues */
-            background-image: linear-gradient(120deg, rgba(255,255,255,0) 30%, rgba(200,200,200,0.03) 45%, rgba(255,255,255,0) 50%);
-        }
-        
-        /* Ajuste específico para que el negro grisáceo luzca mejor en los botones */
-        .btn-hero {
-            background-color: var(--color-cream);
-            color: var(--color-primary);
-            border: 2px solid var(--color-primary);
-            /* ... resto del código ... */
-        }
-        
-        .btn-hero:hover {
-            background-color: var(--color-primary);
-            color: var(--color-cream);
-            /* ... resto del código ... */
-        }
-        
         .about-content {
             max-width: 800px; 
             margin: 0 auto;
@@ -451,9 +432,6 @@
             border-radius: 2px;
         }
 
-        #productos { 
-            background-color: transparent; 
-        }
         .sheets-setup {
             background: #fff3cd;
             border: 2px solid #ffc107;
@@ -624,7 +602,7 @@
             width: 44px;
             height: 44px;
             border-radius: 50%;
-            background: var(--color-whatsapp); /* Cambiado a verde */
+            background: var(--color-whatsapp); 
             border: none;
             display: flex;
             align-items: center;
@@ -640,7 +618,7 @@
         
        .buy-btn:hover {
             transform: scale(1.08);
-            background: var(--color-whatsapp-dark); /* Verde más oscuro al pasar el ratón */
+            background: var(--color-whatsapp-dark); 
             box-shadow: 0 6px 18px rgba(37, 211, 102, 0.4);
         }
 
@@ -652,8 +630,6 @@
 
         .product-stock.low-stock { color: #d9534f; font-weight: 600; }
         .product-stock.out-stock { color: #999; font-weight: 600; }
-
-        #galeria { background-color: #fafafa; }
 
         .gallery-intro {
             text-align: center;
@@ -704,7 +680,7 @@
         .gallery-caption h3 { font-size: 1.3rem; margin-bottom: 0.5rem; }
 
         #testimonios {
-            background: linear-gradient(135deg, var(--color-dark) 0%, #3a3a3a 100%);
+            background: linear-gradient(135deg, var(--color-dark) 0%, #3a3a3a 100%) !important;
             color: white;
         }
 
@@ -717,11 +693,14 @@
         
         /* Título superior de la caja de valoración general */
         .rating-overall {
-            /* ... tus otras propiedades ... */
             text-align: center;
-            background: rgba(255, 255, 255, 0.1); /* Fondo semitransparente claro */
-            color: var(--color-cream); /* <--- Texto claro */
-            /* ... */
+            background: rgba(255, 255, 255, 0.1); 
+            color: var(--color-cream); 
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 3rem;
+            font-size: 1.5rem;
+            font-weight: 700;
         }
 
         .testimonials-grid {
@@ -776,12 +755,12 @@
         .testimonial-info h4 {
             margin: 0;
             font-size: 1.1rem;
-            color: var(--color-cream); /* <--- Cambiado a claro, antes era primary (oscuro) */
+            color: var(--color-cream); 
         }
         
         /* Texto de la reseña en sí */
         .testimonial-text {
-            color: #e0e0e0; /* Un gris muy clarito casi blanco para que no moleste a la vista */
+            color: #e0e0e0; 
         }
         
         .testimonial-time {
@@ -796,8 +775,6 @@
         @media (max-width: 768px) {
             .testimonial-card { flex: 0 0 100%; }
         }
-
-        #contacto { background-color: var(--color-cream); }
 
         .contact-container {
             display: grid;
@@ -855,32 +832,12 @@
             border: none;
         }
 
-        section { 
-            padding: 5rem 3rem; 
-            position: relative;
-            /* Superposición de 'venas' de mármol muy tenues */
-            background-image: linear-gradient(120deg, rgba(255,255,255,0) 30%, rgba(200,200,200,0.03) 45%, rgba(255,255,255,0) 50%);
-        }
-        
-        /* Ajuste específico para que el negro grisáceo luzca mejor en los botones */
-        .btn-hero {
-            background-color: var(--color-cream);
-            color: var(--color-primary);
-            border: 2px solid var(--color-primary);
-            /* ... resto del código ... */
-        }
-        
-        .btn-hero:hover {
-            background-color: var(--color-primary);
-            color: var(--color-cream);
-            /* ... resto del código ... */
-        }
-
         footer {
-            background-color: var(--color-dark);
+            background-color: var(--color-dark) !important;
             color: var(--color-cream);
             text-align: center;
             padding: 3rem 2rem;
+            position: relative; /* Asegura que el footer se dibuje por encima del body */
         }
 
         .footer-social a {
@@ -1032,8 +989,8 @@
         
         .btn-google {
             background-color: #ffffff;
-            color: #5f6368; /* Gris característico de Google */
-            border: 1px solid #dadce0; /* Borde sutil de los botones de Google */
+            color: #5f6368; 
+            border: 1px solid #dadce0; 
             font-weight: 600;
             padding: 1rem 2.5rem;
             border-radius: 50px;
@@ -1047,8 +1004,6 @@
         }
         
         .btn-google i {
-            /* El icono de FontAwesome se puede colorear, 
-               aunque el logo de Google es multicolor, el azul es su primario */
             color: #4285F4; 
             font-size: 1.3rem;
         }
@@ -1061,19 +1016,8 @@
             border-color: #d2d2d2;
         }
         
-        /* Ajuste para que el icono no cambie a blanco en el hover */
         .btn-google:hover i {
             color: #4285F4; 
-        }
-        #sobre-nosotros, 
-        #galeria, 
-        #contacto
-        #productos {
-            background-image: url('fondo-marmol.jpg'); /* Asegúrate de que el nombre del archivo coincida */
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed; /* Opcional: le da un efecto chulo al hacer scroll */
         }
     </style>
 </head>
