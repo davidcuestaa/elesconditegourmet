@@ -1754,6 +1754,16 @@ function renderSections(filter = '__all__', q = '', sort = 'default') {
             });
         }
     });
+
+    // Funciones para abrir y cerrar la Política de Devoluciones
+    function abrirPolitica() {
+        // Usamos 'flex' en lugar de 'block' para que el centrado funcione correctamente
+        document.getElementById('politicaContainer').style.display = 'flex';
+    }
+    
+    function cerrarPolitica() {
+        document.getElementById('politicaContainer').style.display = 'none';
+    }
     </script>
 </body>
 </html>
