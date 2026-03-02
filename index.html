@@ -1128,9 +1128,9 @@
             <h2>Nuestra Selección Gourmet</h2>
             <p style="display:none;">Especialistas en cajas gourmet personalizadas, vinos de autor, quesos artesanos y delicatessen con envío a toda España desde el barrio de Ruzafa.</p>
             <div id="productsContainer"><div class="products-loading">Cargando productos...</div></div>
-            <a href="#" id="verPolitica" style="display:inline-block; margin-top:2rem; color: var(--color-primary); font-weight:600; cursor:pointer;">
+            <button id="verPolitica" type="button" style="background:none; border:none; padding:0; display:inline-block; margin-top:2rem; color: var(--color-primary); font-weight:600; cursor:pointer; font-family: inherit; font-size: 1rem; text-decoration: underline;">
                 Política de Cambios y Devoluciones
-            </a>
+            </button>
         </section>
 
         <section id="galeria">
@@ -1771,8 +1771,8 @@ function renderSections(filter = '__all__', q = '', sort = 'default') {
             Para visitar nuestra tienda y comprar bebidas alcohólicas, debes confirmar que eres mayor de edad según la legislación vigente.
         </p>
         <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
-            <button id="btnAgeYes" class="btn-hero" style="background-color: var(--color-cream); color: var(--color-primary); min-width: 150px;">Sí, soy mayor</button>
-            <button id="btnAgeNo" class="btn-hero" style="background-color: transparent; color: var(--color-cream); border-color: var(--color-cream); min-width: 150px;">No, salir</button>
+            <button id="btnAgeYes" type="button" style="background-color: var(--color-cream); color: var(--color-primary); padding: 1rem 2rem; border-radius: 50px; font-weight: bold; cursor: pointer; border: none; font-family: 'Poppins', sans-serif; font-size: 1rem;">Sí, soy mayor</button>
+            <button id="btnAgeNo" type="button" style="background-color: transparent; color: var(--color-cream); border: 2px solid var(--color-cream); padding: 1rem 2rem; border-radius: 50px; font-weight: bold; cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 1rem;">No, salir</button>
         </div>
     </div>
 
@@ -1780,65 +1780,61 @@ function renderSections(filter = '__all__', q = '', sort = 'default') {
         <div style="flex: 1; min-width: 250px;">
             <h4 style="margin-bottom: 0.5rem; font-size: 1.1rem;">Uso de Cookies 🍪</h4>
             <p style="font-size: 0.9rem; margin: 0; color: #ccc;">
-                Utilizamos cookies propias y de terceros para mejorar tu experiencia y analizar el tráfico de la web. 
-                <a href="#" style="color: var(--color-accent); text-decoration: underline;">Más información</a>.
+                Utilizamos cookies propias y de terceros para mejorar tu experiencia y analizar el tráfico de la web.
             </p>
         </div>
         <div style="display: flex; gap: 10px;">
-            <button id="btnCookiesAccept" style="background: var(--color-cream); color: var(--color-primary); border: none; padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s;">Aceptar</button>
-            <button id="btnCookiesReject" style="background: transparent; color: var(--color-cream); border: 1px solid rgba(255,255,255,0.3); padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s;">Rechazar</button>
+            <button id="btnCookiesAccept" type="button" style="background: var(--color-cream); color: var(--color-primary); border: none; padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s; font-family: 'Poppins', sans-serif;">Aceptar</button>
+            <button id="btnCookiesReject" type="button" style="background: transparent; color: var(--color-cream); border: 1px solid rgba(255,255,255,0.3); padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s; font-family: 'Poppins', sans-serif;">Rechazar</button>
         </div>
     </div>
 
     <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // --- LÓGICA VERIFICACIÓN DE EDAD ---
+        // --- Lógica Verificación de Edad ---
         const ageGate = document.getElementById('ageGate');
         const btnAgeYes = document.getElementById('btnAgeYes');
         const btnAgeNo = document.getElementById('btnAgeNo');
 
-        // Comprueba si ya dijo que sí en el pasado
-        if (!localStorage.getItem('ageVerified')) {
-            // Si no hay registro, bloqueamos el scroll y mostramos el pop-up
-            document.body.style.overflow = 'hidden'; 
-            ageGate.style.display = 'flex';
+        if (ageGate && btnAgeYes && btnAgeNo) {
+            if (!localStorage.getItem('ageVerified')) {
+                document.body.style.overflow = 'hidden'; // Bloquea el scroll del ratón
+                ageGate.style.display = 'flex';
+            }
+
+            btnAgeYes.addEventListener('click', () => {
+                localStorage.setItem('ageVerified', 'true');
+                ageGate.style.display = 'none';
+                document.body.style.overflow = 'auto'; // Devuelve el scroll
+            });
+
+            btnAgeNo.addEventListener('click', () => {
+                window.location.href = "https://www.google.com";
+            });
         }
 
-        btnAgeYes.addEventListener('click', () => {
-            localStorage.setItem('ageVerified', 'true');
-            ageGate.style.display = 'none';
-            document.body.style.overflow = 'auto'; // Devolvemos el scroll
-        });
-
-        btnAgeNo.addEventListener('click', () => {
-            // Lo enviamos fuera de la web
-            window.location.href = "https://www.google.com";
-        });
-
-        // --- LÓGICA DE COOKIES ---
+        // --- Lógica de Cookies ---
         const cookieBanner = document.getElementById('cookieBanner');
         const btnCookiesAccept = document.getElementById('btnCookiesAccept');
         const btnCookiesReject = document.getElementById('btnCookiesReject');
 
-        if (!localStorage.getItem('cookiesConsent')) {
-            // Si no ha elegido nada de cookies, mostramos el banner
-            // Usamos un setTimeout para que no aparezca de golpe junto con la edad
-            setTimeout(() => {
-                cookieBanner.style.display = 'flex';
-            }, 1000);
+        if (cookieBanner && btnCookiesAccept && btnCookiesReject) {
+            if (!localStorage.getItem('cookiesConsent')) {
+                setTimeout(() => {
+                    cookieBanner.style.display = 'flex';
+                }, 1000); // Aparece 1 segundo después para que no asuste
+            }
+
+            btnCookiesAccept.addEventListener('click', () => {
+                localStorage.setItem('cookiesConsent', 'accepted');
+                cookieBanner.style.display = 'none';
+            });
+
+            btnCookiesReject.addEventListener('click', () => {
+                localStorage.setItem('cookiesConsent', 'rejected');
+                cookieBanner.style.display = 'none';
+            });
         }
-
-        btnCookiesAccept.addEventListener('click', () => {
-            localStorage.setItem('cookiesConsent', 'accepted');
-            cookieBanner.style.display = 'none';
-            // Aquí en el futuro puedes activar Google Analytics
-        });
-
-        btnCookiesReject.addEventListener('click', () => {
-            localStorage.setItem('cookiesConsent', 'rejected');
-            cookieBanner.style.display = 'none';
-            // Aquí te aseguras de no cargar Analytics
-        });
     });
     </script>
 </body>
