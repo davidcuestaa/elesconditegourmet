@@ -1128,7 +1128,7 @@
             <h2>Nuestra Selección Gourmet</h2>
             <p style="display:none;">Especialistas en cajas gourmet personalizadas, vinos de autor, quesos artesanos y delicatessen con envío a toda España desde el barrio de Ruzafa.</p>
             <div id="productsContainer"><div class="products-loading">Cargando productos...</div></div>
-            <button id="verPolitica" type="button" style="background:none; border:none; padding:0; display:inline-block; margin-top:2rem; color: var(--color-primary); font-weight:600; cursor:pointer; font-family: inherit; font-size: 1rem; text-decoration: underline;">
+            <button id="verPolitica" type="button" onclick="abrirPolitica()" style="background:none; border:none; padding:0; display:inline-block; margin-top:2rem; color: var(--color-primary); font-weight:600; cursor:pointer; font-family: inherit; font-size: 1rem; text-decoration: underline;">
                 Política de Cambios y Devoluciones
             </button>
         </section>
@@ -1696,74 +1696,70 @@ function renderSections(filter = '__all__', q = '', sort = 'default') {
         }
     }
     </script>
-    <div id="politicaContainer" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; 
-        background:rgba(0,0,0,0.7); z-index:2000; justify-content:center; align-items:center; padding:1rem;">
-        <div style="background:white; padding:2rem; border-radius:15px; max-width:700px; max-height:80vh; 
-            overflow-y:auto; position:relative;">
-            <button id="cerrarPolitica" style="position:absolute; top:10px; right:10px; border:none; background:none; font-size:1.5rem; cursor:pointer;">×</button>
-            <div id="contenidoPolitica" style="white-space: pre-line; color:#333; font-size:1rem;"></div>
+    <div id="politicaContainer" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:9999; justify-content:center; align-items:center; padding:1rem;">
+        <div style="background:white; padding:2rem; border-radius:15px; max-width:700px; width: 100%; max-height:80vh; overflow-y:auto; position:relative;">
+            <button onclick="cerrarPolitica()" style="position:absolute; top:15px; right:20px; border:none; background:none; font-size:2rem; cursor:pointer; color: #333;">&times;</button>
+            <div id="contenidoPolitica" style="white-space: pre-line; color:#333; font-size:1rem;">
+                </div>
         </div>
     </div>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const verPoliticaBtn = document.getElementById('verPolitica');
+    // Función directa para abrir y cargar la política
+    async function abrirPolitica() {
         const politicaContainer = document.getElementById('politicaContainer');
-        const cerrarPoliticaBtn = document.getElementById('cerrarPolitica');
         const contenidoPolitica = document.getElementById('contenidoPolitica');
-
         const rawUrl = 'https://raw.githubusercontent.com/davidcuestaa/elesconditegourmet/30f52c2b2cf4bdcc2d20ffd096371ba3d58d0ac0/politica-devoluciones.txt';
 
-        // Función para convertir los # en títulos y ** en negritas
-        function formatearTexto(texto) {
-            return texto
-                .replace(/^### (.*$)/gim, '<h4 style="color: var(--color-primary); margin-top: 15px;">$1</h4>') // ### Título pequeño
-                .replace(/^## (.*$)/gim, '<h3 style="color: var(--color-primary); margin-top: 20px;">$1</h3>') // ## Título mediano
-                .replace(/^# (.*$)/gim, '<h2 style="color: var(--color-dark); margin-bottom: 20px;">$1</h2>')  // # Título grande
-                .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>') // **Negritas**
-                .replace(/\n/gim, '<br>'); // Respeta los saltos de línea
-        }
+        if (!politicaContainer || !contenidoPolitica) return;
 
-        if (verPoliticaBtn && politicaContainer && contenidoPolitica) {
-            verPoliticaBtn.addEventListener('click', async function (e) {
-                e.preventDefault();
-                try {
-                    const response = await fetch(rawUrl);
-                    if (!response.ok) throw new Error('No se pudo cargar el archivo: ' + response.status);
-                    
-                    const textoRaw = await response.text();
-                    
-                    // Aquí usamos innerHTML y nuestra nueva función
-                    contenidoPolitica.innerHTML = formatearTexto(textoRaw);
-                    
-                } catch (err) {
-                    contenidoPolitica.innerHTML = '<p>⚠️ No se pudo cargar la política. Intenta más tarde.</p>';
-                    console.error("Error cargando la política:", err);
-                }
-                politicaContainer.style.display = 'flex';
-                if (cerrarPoliticaBtn) cerrarPoliticaBtn.focus();
-            });
-        }
+        // 1. Mostramos la caja inmediatamente con un mensaje de carga
+        contenidoPolitica.innerHTML = '<p style="text-align:center;">⏳ Cargando política...</p>';
+        politicaContainer.style.display = 'flex';
 
-        if (cerrarPoliticaBtn && politicaContainer) {
-            cerrarPoliticaBtn.addEventListener('click', function () {
-                politicaContainer.style.display = 'none';
-            });
+        // 2. Pedimos el texto al servidor
+        try {
+            const response = await fetch(rawUrl);
+            if (!response.ok) throw new Error('Error al cargar');
+            
+            const textoRaw = await response.text();
+            
+            // 3. Le damos formato bonito
+            const formateado = textoRaw
+                .replace(/^### (.*$)/gim, '<h4 style="color: var(--color-primary); margin-top: 15px;">$1</h4>')
+                .replace(/^## (.*$)/gim, '<h3 style="color: var(--color-primary); margin-top: 20px;">$1</h3>')
+                .replace(/^# (.*$)/gim, '<h2 style="color: var(--color-dark); margin-bottom: 20px;">$1</h2>')
+                .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>')
+                .replace(/\n/gim, '<br>');
+                
+            contenidoPolitica.innerHTML = formateado;
+            
+        } catch (error) {
+            contenidoPolitica.innerHTML = '<p style="color: red;">⚠️ No se pudo cargar la política en este momento. Inténtalo de nuevo más tarde.</p>';
+            console.error(error);
         }
+    }
 
+    // Función directa para cerrar
+    function cerrarPolitica() {
+        document.getElementById('politicaContainer').style.display = 'none';
+    }
+
+    // Cerrar si haces clic fuera de la caja blanca (en el fondo oscuro)
+    document.addEventListener('DOMContentLoaded', () => {
+        const politicaContainer = document.getElementById('politicaContainer');
         if (politicaContainer) {
-            politicaContainer.addEventListener('click', function (e) {
-                if (e.target === this) this.style.display = 'none';
+            politicaContainer.addEventListener('click', function(e) {
+                if (e.target === this) cerrarPolitica();
             });
         }
-
-        document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape' && politicaContainer && politicaContainer.style.display === 'flex') {
-                politicaContainer.style.display = 'none';
-            }
+        
+        // Cerrar con la tecla ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') cerrarPolitica();
         });
     });
-
+        
     <div id="ageGate" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--color-primary); z-index: 9999; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 2rem;">
         <img src="cabecera.jpg" alt="El Escondite Gourmet Logo" style="max-width: 150px; margin-bottom: 2rem; border-radius: 10px;">
         <h2 style="color: var(--color-cream); font-size: 2.5rem; margin-bottom: 1rem;">¿Tienes más de 18 años?</h2>
