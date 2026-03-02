@@ -77,10 +77,15 @@
         }
 
         :root {
-            --color-primary: #000000; /* Negro para acentos y fondo de la cabecera */
-            --color-dark: #1a1a1a;    /* Casi negro para los textos */
-            --color-cream: #fdfdfd;   /* Blanco puro/mármol claro para el fondo principal */
-            --color-beige: #f4f4f4;   /* Gris mármol suave para fondos secundarios */
+            /* Negro grisáceo más suave y elegante */
+            --color-primary: #121212; 
+            --color-dark: #1a1a1a;    
+            --color-cream: #fdfdfd;   
+            --color-beige: #f4f4f4;   
+            /* Acento dorado suave para resaltar sobre el mármol (opcional) */
+            --color-accent: #d4af37; 
+            --color-whatsapp: #25D366;
+            --color-whatsapp-dark: #128C7E;
         }
 
         body {
@@ -89,6 +94,12 @@
             line-height: 1.6;
             color: var(--color-dark);
             background-color: var(--color-cream);
+            /* Efecto Marmolado Sutil */
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(200, 200, 200, 0.1) 0, transparent 50%), 
+                radial-gradient(at 50% 0%, rgba(180, 180, 180, 0.05) 0, transparent 50%), 
+                url("https://www.transparenttextures.com/patterns/white-wall.png"); /* Textura rugosa fina que imita piedra */
+            background-attachment: fixed;
         }
 
         h1, h2, h3 { font-weight: 700; }
@@ -233,14 +244,15 @@
        ESTILOS DE LA CABECERA (HERO SECTION)
        ========================================= */
         #home {
-            background-color: var(--color-primary);
+            /* Degradado sutil de negro grisáceo a un tono más profundo */
+            background: linear-gradient(135deg, #1e1e1e 0%, #121212 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 6rem 2rem 4rem 2rem; 
         }
-        
+                
         .hero-container {
             display: flex;
             align-items: center;
@@ -372,6 +384,27 @@
         #sobre-nosotros { 
             background-color: #fafafa; 
             padding: 6rem 1.5rem; 
+        }
+
+        section { 
+            padding: 5rem 3rem; 
+            position: relative;
+            /* Superposición de 'venas' de mármol muy tenues */
+            background-image: linear-gradient(120deg, rgba(255,255,255,0) 30%, rgba(200,200,200,0.03) 45%, rgba(255,255,255,0) 50%);
+        }
+        
+        /* Ajuste específico para que el negro grisáceo luzca mejor en los botones */
+        .btn-hero {
+            background-color: var(--color-cream);
+            color: var(--color-primary);
+            border: 2px solid var(--color-primary);
+            /* ... resto del código ... */
+        }
+        
+        .btn-hero:hover {
+            background-color: var(--color-primary);
+            color: var(--color-cream);
+            /* ... resto del código ... */
         }
         
         .about-content {
@@ -584,7 +617,7 @@
             width: 44px;
             height: 44px;
             border-radius: 50%;
-            background: var(--color-primary);
+            background: var(--color-whatsapp); /* Cambiado a verde */
             border: none;
             display: flex;
             align-items: center;
@@ -598,9 +631,10 @@
             font-size: 1rem;
         }
         
-        .buy-btn:hover {
+       .buy-btn:hover {
             transform: scale(1.08);
-            box-shadow: 0 6px 18px rgba(244,164,66,0.4);
+            background: var(--color-whatsapp-dark); /* Verde más oscuro al pasar el ratón */
+            box-shadow: 0 6px 18px rgba(37, 211, 102, 0.4);
         }
 
         .product-price {
@@ -805,6 +839,27 @@
             border: none;
         }
 
+        section { 
+            padding: 5rem 3rem; 
+            position: relative;
+            /* Superposición de 'venas' de mármol muy tenues */
+            background-image: linear-gradient(120deg, rgba(255,255,255,0) 30%, rgba(200,200,200,0.03) 45%, rgba(255,255,255,0) 50%);
+        }
+        
+        /* Ajuste específico para que el negro grisáceo luzca mejor en los botones */
+        .btn-hero {
+            background-color: var(--color-cream);
+            color: var(--color-primary);
+            border: 2px solid var(--color-primary);
+            /* ... resto del código ... */
+        }
+        
+        .btn-hero:hover {
+            background-color: var(--color-primary);
+            color: var(--color-cream);
+            /* ... resto del código ... */
+        }
+
         footer {
             background-color: var(--color-dark);
             color: var(--color-cream);
@@ -958,10 +1013,11 @@
         #contactDropdown a i {
             color: var(--color-primary);
         }
+        
         .btn-google {
-            background-color: white;
-            color: var(--color-dark);
-            border: 2px solid white;
+            background-color: #ffffff;
+            color: #5f6368; /* Gris característico de Google */
+            border: 1px solid #dadce0; /* Borde sutil de los botones de Google */
             font-weight: 600;
             padding: 1rem 2.5rem;
             border-radius: 50px;
@@ -971,22 +1027,27 @@
             align-items: center;
             gap: 12px;
             font-size: 1.05rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
         
         .btn-google i {
-            color: var(--color-primary); 
+            /* El icono de FontAwesome se puede colorear, 
+               aunque el logo de Google es multicolor, el azul es su primario */
+            color: #4285F4; 
             font-size: 1.3rem;
         }
-                
+        
         .btn-google:hover {
-            background-color: transparent;
-            color: white;
-            transform: translateY(-4px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            background-color: #f8f9fa;
+            color: #202124;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            border-color: #d2d2d2;
         }
         
+        /* Ajuste para que el icono no cambie a blanco en el hover */
         .btn-google:hover i {
-            color: white; 
+            color: #4285F4; 
         }
     </style>
 </head>
