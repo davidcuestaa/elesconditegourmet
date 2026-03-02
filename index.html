@@ -266,8 +266,11 @@
         
         .hero-content {
             flex: 1;
-            text-align: left;
-            color: var(--color-dark); /* Color oscuro del texto según el diseño */
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centra el bloque de botones y los textos horizontalmente */
+            text-align: center;  /* Centra el texto dentro de sus propias etiquetas */
+            color: var(--color-dark);
         }
         
         .hero-content h1 {
@@ -1040,12 +1043,12 @@
                     <p>Tu rincón gourmet en Ruzafa —<br>vinos, sabores y momentos únicos</p>
                     
                     <div class="cta-buttons">
-                        <a href="#productos" class="btn-hero">Ver productos</a>
-                        <a href="https://www.google.com/maps/dir/?api=1&destination=Carrer+dels+Centelles,+22,+46006+Valencia" target="_blank" rel="noopener" class="btn-hero" aria-label="Ver ruta en Google Maps">Cómo llegar</a>
+                        <a href="#productos" class="btn-hero btn-hero-primary">Ver Productos</a>
+                        <a href="https://www.google.com/maps/dir/?api=1&destination=Carrer+dels+Centelles,+22,+46006+Valencia" target="_blank" rel="noopener" class="btn-hero btn-hero-secondary" aria-label="Ver ruta en Google Maps">Cómo Llegar</a>
                         
                         <div class="social-wrapper">
-                            <button class="btn-hero" id="contactToggle">
-                                Contactar
+                            <button class="btn-hero btn-hero-secondary" id="contactToggle">
+                                <i class="fa-solid fa-phone"></i> Contactar
                             </button>
                             <div class="social-dropdown" id="contactDropdown">
                                 <a href="tel:+34678947545"><i class="fa-solid fa-phone"></i> Llamar</a>
@@ -1054,12 +1057,23 @@
                         </div>
                         
                         <div class="social-wrapper">
+                            <button class="btn-hero btn-hero-secondary" id="socialToggle">
+                                <i class="fa-solid fa-share-nodes"></i> Redes Sociales
+                            </button>
+                            <div class="social-dropdown" id="socialDropdown">
+                                <a href="https://instagram.com/elesconditegourmet" target="_blank" rel="noopener" aria-label="Sigue a El Escondite Gourmet en Instagram"><i class="fab fa-instagram"></i> Instagram</a>
+                                <a href="https://www.tiktok.com/@el.escondite.gourmet" target="_blank" rel="noopener" aria-label="Síguenos en TikTok"><i class="fab fa-tiktok"></i> TikTok</a>
+                            </div>
+                        </div>
+                    </div>
+                        
+                        <div class="social-wrapper">
                             <button class="btn-hero" id="socialToggle">
                                 Redes Sociales
                             </button>
                             <div class="social-dropdown" id="socialDropdown">
-                                <a href="https://instagram.com/elesconditegourmet" target="_blank" rel="noopener" aria-label="Sigue a El Escondite Gourmet en Instagram"><i class="fab fa-instagram"></i></a>
-                                <a href="https://www.tiktok.com/@el.escondite.gourmet" target="_blank" rel="noopener" aria-label="Síguenos en TikTok"><i class="fab fa-tiktok"></i></a>
+                                <a href="https://instagram.com/elesconditegourmet" target="_blank" rel="noopener" aria-label="Sigue a El Escondite Gourmet en Instagram"><i class="fab fa-instagram"></i> Instagram</a>
+                                <a href="https://www.tiktok.com/@el.escondite.gourmet" target="_blank" rel="noopener" aria-label="Síguenos en TikTok"><i class="fab fa-tiktok"></i> TikTok</a>
                             </div>
                         </div>
                     </div>
