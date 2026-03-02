@@ -88,19 +88,29 @@
             --color-whatsapp-dark: #128C7E;
         }
 
-        /* --- AQUÍ ESTÁ EL CAMBIO CLAVE --- */
+        /* --- AQUÍ ESTÁ EL CAMBIO CLAVE (ACTUALIZADO) --- */
         body {
             font-family: 'Poppins', sans-serif;
             font-weight: 400;
             line-height: 1.6;
             color: var(--color-dark);
-            /* Todo el fondo del body ahora es la imagen del mármol */
             background-color: var(--color-cream);
+            /* Quitamos la imagen de fondo de aquí */
+        }
+
+        /* Creamos una capa fija de fondo que funciona perfecto en móviles */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
             background-image: url('fondo-marmol.jpg'); 
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            background-attachment: fixed;
+            z-index: -1; /* Lo manda al fondo de todo */
         }
 
         /* Asegurarnos de que las secciones individuales NO tengan un fondo propio 
