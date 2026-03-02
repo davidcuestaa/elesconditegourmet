@@ -123,7 +123,7 @@
             z-index: 2000;
             background-color: var(--color-cream); /* <--- Cambiado a claro */
             border: none;
-            padding: 1rem;
+            padding: 0.75rem;
             border-radius: 12px;
             cursor: pointer;
             box-shadow: 0 5px 20px rgba(0,0,0,0.3);
@@ -1697,138 +1697,60 @@ function renderSections(filter = '__all__', q = '', sort = 'default') {
     }
     </script>
     <div id="politicaContainer" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:9999; justify-content:center; align-items:center; padding:1rem;">
-        <div style="background:white; padding:2rem; border-radius:15px; max-width:700px; width: 100%; max-height:80vh; overflow-y:auto; position:relative;">
-            <button onclick="cerrarPolitica()" style="position:absolute; top:15px; right:20px; border:none; background:none; font-size:2rem; cursor:pointer; color: #333;">&times;</button>
-            <div id="contenidoPolitica" style="white-space: pre-line; color:#333; font-size:1rem;">
-                </div>
-        </div>
-    </div>
-
-    <script>
-    // Función directa para abrir y cargar la política
-    async function abrirPolitica() {
-        const politicaContainer = document.getElementById('politicaContainer');
-        const contenidoPolitica = document.getElementById('contenidoPolitica');
-        const rawUrl = 'https://raw.githubusercontent.com/davidcuestaa/elesconditegourmet/30f52c2b2cf4bdcc2d20ffd096371ba3d58d0ac0/politica-devoluciones.txt';
-
-        if (!politicaContainer || !contenidoPolitica) return;
-
-        // 1. Mostramos la caja inmediatamente con un mensaje de carga
-        contenidoPolitica.innerHTML = '<p style="text-align:center;">⏳ Cargando política...</p>';
-        politicaContainer.style.display = 'flex';
-
-        // 2. Pedimos el texto al servidor
-        try {
-            const response = await fetch(rawUrl);
-            if (!response.ok) throw new Error('Error al cargar');
-            
-            const textoRaw = await response.text();
-            
-            // 3. Le damos formato bonito
-            const formateado = textoRaw
-                .replace(/^### (.*$)/gim, '<h4 style="color: var(--color-primary); margin-top: 15px;">$1</h4>')
-                .replace(/^## (.*$)/gim, '<h3 style="color: var(--color-primary); margin-top: 20px;">$1</h3>')
-                .replace(/^# (.*$)/gim, '<h2 style="color: var(--color-dark); margin-bottom: 20px;">$1</h2>')
-                .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>')
-                .replace(/\n/gim, '<br>');
+        <div style="background:white; padding:2rem; border-radius:15px; max-width:700px; width: 100%; max-height:80vh; overflow-y:auto; position:relative; text-align: left;">
+            <button onclick="cerrarPolitica()" style="position:absolute; top:15px; right:20px; border:none; background:none; font-size:2rem; cursor:pointer; color: #333;">×</button>
+            <div id="contenidoPolitica" style="color:#333; font-size:1rem; line-height: 1.6;">
+                <h2 style="color: var(--color-dark); margin-bottom: 20px; text-align: center; font-size: 1.8rem;">Política de Cambios y Devoluciones</h2>
+                <p>En El Escondite Gourmet queremos que tu experiencia sea perfecta. Al tratarse de productos de alimentación y bebidas, nuestra política se ajusta a la normativa vigente para garantizar la máxima seguridad y calidad.</p>
                 
-            contenidoPolitica.innerHTML = formateado;
-            
-        } catch (error) {
-            contenidoPolitica.innerHTML = '<p style="color: red;">⚠️ No se pudo cargar la política en este momento. Inténtalo de nuevo más tarde.</p>';
-            console.error(error);
-        }
-    }
-
-    // Función directa para cerrar
-    function cerrarPolitica() {
-        document.getElementById('politicaContainer').style.display = 'none';
-    }
-
-    // Cerrar si haces clic fuera de la caja blanca (en el fondo oscuro)
-    document.addEventListener('DOMContentLoaded', () => {
-        const politicaContainer = document.getElementById('politicaContainer');
-        if (politicaContainer) {
-            politicaContainer.addEventListener('click', function(e) {
-                if (e.target === this) cerrarPolitica();
-            });
-        }
-        
-        // Cerrar con la tecla ESC
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') cerrarPolitica();
-        });
-    });
-        
-    <div id="ageGate" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--color-primary); z-index: 9999; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 2rem;">
-        <img src="cabecera.jpg" alt="El Escondite Gourmet Logo" style="max-width: 150px; margin-bottom: 2rem; border-radius: 10px;">
-        <h2 style="color: var(--color-cream); font-size: 2.5rem; margin-bottom: 1rem;">¿Tienes más de 18 años?</h2>
-        <p style="color: var(--color-beige); margin-bottom: 2rem; max-width: 500px; font-size: 1.1rem;">
-            Para visitar nuestra tienda y comprar bebidas alcohólicas, debes confirmar que eres mayor de edad según la legislación vigente.
-        </p>
-        <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
-            <button id="btnAgeYes" type="button" style="background-color: var(--color-cream); color: var(--color-primary); padding: 1rem 2rem; border-radius: 50px; font-weight: bold; cursor: pointer; border: none; font-family: 'Poppins', sans-serif; font-size: 1rem;">Sí, soy mayor</button>
-            <button id="btnAgeNo" type="button" style="background-color: transparent; color: var(--color-cream); border: 2px solid var(--color-cream); padding: 1rem 2rem; border-radius: 50px; font-weight: bold; cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 1rem;">No, salir</button>
+                <h3 style="color: var(--color-primary); margin-top: 20px; font-size: 1.2rem;">1. Devoluciones por producto defectuoso o rotura</h3>
+                <p>Si tu pedido llega dañado, con roturas (ej. botellas de vino) o en mal estado, nos hacemos cargo de todo. Dispones de <strong>48 horas</strong> desde la recepción para notificárnoslo vía WhatsApp adjuntando fotografías del producto y del embalaje. Procederemos a la sustitución o reembolso sin coste adicional.</p>
+                
+                <h3 style="color: var(--color-primary); margin-top: 20px; font-size: 1.2rem;">2. Derecho de Desistimiento</h3>
+                <p>Por razones de protección de la salud y de higiene, <strong>no se admiten devoluciones de productos de alimentación o bebidas</strong> que hayan sido desprecintados tras la entrega.</p>
+                <p>Para productos no perecederos y que mantengan su embalaje y precinto original intacto, dispones de un plazo de 14 días naturales para ejercer tu derecho de desistimiento. Los gastos de envío de la devolución correrán a cargo del cliente.</p>
+                
+                <h3 style="color: var(--color-primary); margin-top: 20px; font-size: 1.2rem;">3. Modificaciones o Cancelaciones</h3>
+                <p>Si te has equivocado al hacer el pedido, contáctanos lo antes posible. Si el pedido aún no ha salido de nuestra tienda, podremos modificarlo o cancelarlo sin problema.</p>
+            </div>
         </div>
     </div>
 
-    <div id="cookieBanner" style="display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 800px; background: var(--color-dark); color: var(--color-cream); padding: 1.5rem 2rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 9000; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; border: 1px solid rgba(255,255,255,0.1);">
-        <div style="flex: 1; min-width: 250px;">
-            <h4 style="margin-bottom: 0.5rem; font-size: 1.1rem;">Uso de Cookies 🍪</h4>
-            <p style="font-size: 0.9rem; margin: 0; color: #ccc;">
-                Utilizamos cookies propias y de terceros para mejorar tu experiencia y analizar el tráfico de la web.
-            </p>
-        </div>
-        <div style="display: flex; gap: 10px;">
-            <button id="btnCookiesAccept" type="button" style="background: var(--color-cream); color: var(--color-primary); border: none; padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s; font-family: 'Poppins', sans-serif;">Aceptar</button>
-            <button id="btnCookiesReject" type="button" style="background: transparent; color: var(--color-cream); border: 1px solid rgba(255,255,255,0.3); padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s; font-family: 'Poppins', sans-serif;">Rechazar</button>
+    <div id="ageGate" style="display: none; position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(18, 18, 18, 0.95); backdrop-filter: blur(10px); z-index: 9999; padding: 1.5rem; box-shadow: 0 -5px 20px rgba(0,0,0,0.3); border-top: 1px solid rgba(255,255,255,0.1);">
+        <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 1.5rem; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <span style="font-size: 2.5rem;">🍷</span>
+                <div>
+                    <h3 style="color: var(--color-cream); font-size: 1.2rem; margin: 0;">Confirmación de edad</h3>
+                    <p style="color: var(--color-beige); margin: 0; font-size: 0.95rem;">Para comprar bebidas alcohólicas en nuestra tienda debes ser mayor de 18 años.</p>
+                </div>
+            </div>
+            <div style="display: flex; gap: 1rem;">
+                <button id="btnAgeNo" type="button" style="background-color: transparent; color: var(--color-cream); border: 1px solid rgba(255,255,255,0.3); padding: 0.8rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s;">Soy menor</button>
+                <button id="btnAgeYes" type="button" style="background-color: var(--color-cream); color: var(--color-primary); border: none; padding: 0.8rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s;">Sí, tengo más de 18</button>
+            </div>
         </div>
     </div>
-
     <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // --- Lógica Verificación de Edad ---
+        // --- Lógica Verificación de Edad (Barra Inferior) ---
         const ageGate = document.getElementById('ageGate');
         const btnAgeYes = document.getElementById('btnAgeYes');
         const btnAgeNo = document.getElementById('btnAgeNo');
 
         if (ageGate && btnAgeYes && btnAgeNo) {
             if (!localStorage.getItem('ageVerified')) {
-                document.body.style.overflow = 'hidden'; // Bloquea el scroll del ratón
-                ageGate.style.display = 'flex';
+                // Aparece como barra inferior sin bloquear el scroll
+                ageGate.style.display = 'block';
             }
 
             btnAgeYes.addEventListener('click', () => {
                 localStorage.setItem('ageVerified', 'true');
                 ageGate.style.display = 'none';
-                document.body.style.overflow = 'auto'; // Devuelve el scroll
             });
 
             btnAgeNo.addEventListener('click', () => {
                 window.location.href = "https://www.google.com";
-            });
-        }
-
-        // --- Lógica de Cookies ---
-        const cookieBanner = document.getElementById('cookieBanner');
-        const btnCookiesAccept = document.getElementById('btnCookiesAccept');
-        const btnCookiesReject = document.getElementById('btnCookiesReject');
-
-        if (cookieBanner && btnCookiesAccept && btnCookiesReject) {
-            if (!localStorage.getItem('cookiesConsent')) {
-                setTimeout(() => {
-                    cookieBanner.style.display = 'flex';
-                }, 1000); // Aparece 1 segundo después para que no asuste
-            }
-
-            btnCookiesAccept.addEventListener('click', () => {
-                localStorage.setItem('cookiesConsent', 'accepted');
-                cookieBanner.style.display = 'none';
-            });
-
-            btnCookiesReject.addEventListener('click', () => {
-                localStorage.setItem('cookiesConsent', 'rejected');
-                cookieBanner.style.display = 'none';
             });
         }
     });
