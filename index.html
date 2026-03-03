@@ -13,7 +13,7 @@
     <meta property="og:url" content="https://elesconditegourmet.com">
     <meta property="og:type" content="website">
     
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="icon" href="cabecera.jpg" type="image/jpeg">
 
     <script type="application/ld+json">
     {
@@ -1047,12 +1047,12 @@
         </div>
         <nav>
             <ul>
-                <li><a href="#home">Inicio</a></li>
-                <li><a href="#sobre-nosotros">Sobre Nosotros</a></li>
-                <li><a href="#productos">Productos</a></li>
-                <li><a href="#galeria">Nuestro Local</a></li>
-                <li><a href="#testimonios">Reseñas</a></li>
-                <li><a href="#contacto">Contacto</a></li>
+                <li><a href="#home" onclick="toggleMenu()">Inicio</a></li>
+                <li><a href="#sobre-nosotros" onclick="toggleMenu()">Sobre Nosotros</a></li>
+                <li><a href="#productos" onclick="toggleMenu()">Productos</a></li>
+                <li><a href="#galeria" onclick="toggleMenu()">Nuestro Local</a></li>
+                <li><a href="#testimonios" onclick="toggleMenu()">Reseñas</a></li>
+                <li><a href="#contacto" onclick="toggleMenu()">Contacto</a></li>
             </ul>
         </nav>
         <div class="sidebar-footer">
@@ -1706,7 +1706,7 @@ function renderSections(filter = '__all__', q = '', sort = 'default') {
         }
     }
     </script>
-    <div id="politicaContainer" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:9999; justify-content:center; align-items:center; padding:1rem;">
+    <div id="politicaContainer" onclick="if(event.target === this) cerrarPolitica()" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:9999; justify-content:center; align-items:center; padding:1rem;">
         <div style="background:white; padding:2rem; border-radius:15px; max-width:700px; width: 100%; max-height:80vh; overflow-y:auto; position:relative; text-align: left;">
             <button onclick="cerrarPolitica()" style="position:absolute; top:15px; right:20px; border:none; background:none; font-size:2rem; cursor:pointer; color: #333;">×</button>
             <div id="contenidoPolitica" style="color:#333; font-size:1rem; line-height: 1.6;">
