@@ -1031,9 +1031,52 @@
         .btn-google:hover i {
             color: #4285F4; 
         }
+        /* =========================================
+           ESTILOS DEL BANNER PROMOCIONAL DINÁMICO
+           ========================================= */
+        .promo-banner {
+            background: linear-gradient(90deg, var(--color-accent), #f4c242);
+            color: var(--color-primary);
+            text-align: center;
+            padding: 12px 20px;
+            font-weight: 700;
+            font-size: 1rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 3000; /* Por encima de todo */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            
+            /* Animación para que baje suavemente */
+            transform: translateY(-100%);
+            transition: transform 0.4s ease-in-out;
+        }
+        
+        .promo-banner.show {
+            transform: translateY(0);
+        }
+        
+        .promo-banner i {
+            font-size: 1.2rem;
+        }
+        
+        /* Si el banner está activo, bajamos el botón del menú para que no se tapen */
+        .menu-toggle.banner-active {
+            top: 60px;
+        }
     </style>
 </head>
 <body>
+    <div id="promoBanner" class="promo-banner"></div>
+    
+    <button class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+    </button>
     <button class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
         <span></span><span></span><span></span>
     </button>
@@ -1400,7 +1443,50 @@
                     stock: keyStock ? parseInt(p[keyStock]) || 0 : null
                 };
             });
-    
+
+            // --- INICIO LÓGICA BANNER DINÁMICO CON FECHA ---
+            const bannerIndex = normalized.findIndex(p => p.tipo.toUpperCase() === 'BANNER_PROMO');
+            
+            if (bannerIndex !== -1) {
+                const bannerData = normalized[bannerIndex];
+                const bannerEl = document.getElementById('promoBanner');
+                const menuBtn = document.getElementById('menuToggle');
+                
+                // Comprobamos la fecha límite (usamos la columna "Precio" del Excel para esto)
+                let expirado = false;
+                if (bannerData.precio && bannerData.precio.trim() !== '') {
+                    // Formato esperado: AAAA-MM-DD (ej: 2026-03-20)
+                    // Se añade "T23:59:59" para que caduque al final del día indicado
+                    const fechaLimite = new Date(`${bannerData.precio}T23:59:59`);
+                    const hoy = new Date();
+                    
+                    if (!isNaN(fechaLimite) && hoy > fechaLimite) {
+                        expirado = true;
+                    }
+                }
+                
+                if (!expirado) {
+                    // Inyectamos el texto
+                    bannerEl.innerHTML = `<i class="fa-solid fa-gift"></i> <span>${bannerData.nombre} ${bannerData.descripcion}</span>`;
+                    bannerEl.classList.add('show');
+                    if (menuBtn) menuBtn.classList.add('banner-active');
+                } else {
+                    // Si está expirado, nos aseguramos de ocultarlo
+                    if (bannerEl) bannerEl.classList.remove('show');
+                    if (menuBtn) menuBtn.classList.remove('banner-active');
+                }
+                
+                // Eliminamos la fila del array para que no salga en la cuadrícula de productos
+                normalized.splice(bannerIndex, 1);
+            } else {
+                // Limpieza por si borran la fila
+                const bannerEl = document.getElementById('promoBanner');
+                const menuBtn = document.getElementById('menuToggle');
+                if (bannerEl) bannerEl.classList.remove('show');
+                if (menuBtn) menuBtn.classList.remove('banner-active');
+            }
+            // --- FIN LÓGICA BANNER DINÁMICO CON FECHA ---
+                
             // Agrupar por tipo
             const groups = {};
             normalized.forEach(prod => {
