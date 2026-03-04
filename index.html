@@ -1077,10 +1077,7 @@
     <button class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
         <span></span><span></span><span></span>
     </button>
-    <button class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
-        <span></span><span></span><span></span>
-    </button>
-
+   
     <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
 
     <aside class="sidebar" id="sidebar">
@@ -1467,7 +1464,8 @@
                 
                 if (!expirado) {
                     // Inyectamos el texto
-                    bannerEl.innerHTML = `<i class="fa-solid fa-gift"></i> <span>${bannerData.nombre} ${bannerData.descripcion}</span>`;
+                    // Nueva línea con el enlace a productos:
+                    bannerEl.innerHTML = `<a href="#productos" style="color: inherit; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%;"><i class="fa-solid fa-gift"></i> <span>${bannerData.nombre} ${bannerData.descripcion}</span></a>`;
                     bannerEl.classList.add('show');
                     if (menuBtn) menuBtn.classList.add('banner-active');
                 } else {
