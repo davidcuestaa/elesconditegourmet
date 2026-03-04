@@ -1083,7 +1083,7 @@
 <body>
     <div id="promoBanner" class="promo-banner"></div>
     
-    <button class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
+    <button class="menu-toggle" id="menuToggle" onclick="toggleMenu()" aria-label="Abrir menú principal">
         <span></span><span></span><span></span>
     </button>
    
@@ -1108,11 +1108,11 @@
         </nav>
         <div class="sidebar-footer">
             <div class="sidebar-social">
-                <a href="https://instagram.com/elesconditegourmet" target="_blank" rel="noopener" aria-label="Sigue a El Escondite Gourmet en Instagram">
+                <a href="https://instagram.com/elesconditegourmet" target="_blank" rel="noopener noreferrer" aria-label="Sigue a El Escondite Gourmet en Instagram">
                     <i class="fab fa-instagram"></i>
                 </a>
                 
-                <a href="https://www.tiktok.com/@el.escondite.gourmet" target="_blank" rel="noopener" aria-label="Síguenos en TikTok">
+                <a href="https://www.tiktok.com/@el.escondite.gourmet" target="_blank" rel="noopener noreferrer" aria-label="Síguenos en TikTok">
                     <i class="fab fa-tiktok"></i>
                 </a>
                 
@@ -1127,7 +1127,7 @@
         <section id="home">
             <div class="hero-container">
                 <div class="hero-logo">
-                    <img src="cabecera.webp" alt="Logotipo de El Escondite Gourmet" class="cabecera-img">
+                    <img src="cabecera.webp" alt="Logotipo de El Escondite Gourmet" class="cabecera-img" width="420" height="590" fetchpriority="high">
                 </div>
                 <div class="hero-content">
                     <h1>El Escondite Gourmet</h1>
@@ -1135,7 +1135,7 @@
                     
                     <div class="cta-buttons">
                         <a href="#productos" class="btn-hero btn-hero-primary">Ver Productos</a>
-                        <a href="https://www.google.com/maps/place/Carrer+dels+Centelles,+22,+Valencia" target="_blank" rel="noopener" class="btn-hero btn-hero-secondary" aria-label="Ver ruta en Google Maps">Cómo Llegar</a>
+                        <a href="https://www.google.com/maps/place/Carrer+dels+Centelles,+22,+Valencia" target="_blank" rel="noopener noreferrer" class="btn-hero btn-hero-secondary" aria-label="Ver ruta en Google Maps">Cómo Llegar</a>
                         
                         <div class="social-wrapper">
                             <button class="btn-hero btn-hero-secondary" id="contactToggle">
@@ -1143,7 +1143,7 @@
                             </button>
                             <div class="social-dropdown" id="contactDropdown">
                                 <a href="tel:+34678947545"><i class="fa-solid fa-phone"></i> Llamar</a>
-                                <a href="https://wa.me/34678947545" target="_blank" rel="noopener" aria-label="Contactar por WhatsApp"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+                                <a href="https://wa.me/34678947545" target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp"><i class="fab fa-whatsapp"></i> WhatsApp</a>
                             </div>
                         </div>
                         
@@ -1152,8 +1152,8 @@
                                 <i class="fa-solid fa-share-nodes"> </i> Redes Sociales
                             </button>
                             <div class="social-dropdown" id="socialDropdown">
-                                <a href="https://instagram.com/elesconditegourmet" target="_blank" rel="noopener" aria-label="Sigue a El Escondite Gourmet en Instagram"><i class="fab fa-instagram"></i> Instagram</a>
-                                <a href="https://www.tiktok.com/@el.escondite.gourmet" target="_blank" rel="noopener" aria-label="Síguenos en TikTok"><i class="fab fa-tiktok"></i> TikTok</a>
+                                <a href="https://instagram.com/elesconditegourmet" target="_blank" rel="noopener noreferrer" aria-label="Sigue a El Escondite Gourmet en Instagram"><i class="fab fa-instagram"></i> Instagram</a>
+                                <a href="https://www.tiktok.com/@el.escondite.gourmet" target="_blank" rel="noopener noreferrer" aria-label="Síguenos en TikTok"><i class="fab fa-tiktok"></i> TikTok</a>
                             </div>
                         </div>
                     </div>
@@ -1188,7 +1188,7 @@
             <h2>Nuestra Selección Gourmet</h2>
             <p style="display:none;">Especialistas en cajas gourmet personalizadas, vinos de autor, quesos artesanos y delicatessen con envío a toda España desde el barrio de Ruzafa.</p>
             <div id="productsContainer"><div class="products-loading">Cargando productos...</div></div>
-            <button id="verPolitica" type="button" onclick="abrirPolitica()" style="background:none; border:none; padding:0; display:inline-block; margin-top:2rem; color: var(--color-primary); font-weight:600; cursor:pointer; font-family: inherit; font-size: 1rem; text-decoration: underline;">
+            <button id="verPolitica" type="button" onclick="abrirPolitica()" aria-label="Leer política de cambios y devoluciones" style="background:none; border:none; padding:0; display:inline-block; margin-top:2rem; color: var(--color-primary); font-weight:600; cursor:pointer; font-family: inherit; font-size: 1rem; text-decoration: underline;">
                 Política de Cambios y Devoluciones
             </button>
         </section>
@@ -1519,13 +1519,13 @@
             const controls = document.createElement('div');
             controls.className = 'products-controls';
             controls.innerHTML = `
-                <input type="search" id="productsSearch" placeholder="Buscar por nombre o descripción…">
+                <input type="search" id="productsSearch" placeholder="Buscar por nombre o descripción…" aria-label="Buscar productos">
             
-                <select id="productsFilter">
+                <select id="productsFilter" aria-label="Filtrar por categoría">
                     <option value="__all__">Mostrar todo</option>
                 </select>
             
-                <select id="productsSort">
+                <select id="productsSort" aria-label="Ordenar productos">
                     <option value="default">Ordenar por...</option>
                     <option value="price-asc">Precio: menor a mayor</option>
                     <option value="price-desc">Precio: mayor a menor</option>
